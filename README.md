@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SIFED Frontend (Portal & Dashboard)
 
-## Getting Started
+Interfaz de usuario para el Sistema de Gestión Académica - Facultad de Educación UNCP.
+Construido con **Next.js 16**, **Tailwind CSS v4** y **React 19**.
 
-First, run the development server:
+> ⚠️ **ACCESO RESTRINGIDO:** Este es un repositorio privado. El código es propiedad exclusiva de Sudolabs Perú.
 
+## 🚀 Guía de Instalación para Desarrolladores
+
+### 1. Prerrequisitos
+- Node.js 18 o superior (Recomendado: LTS).
+- Git.
+
+### 2. Clonar el Repositorio
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/SudolabsDigital/sifed-front.git
+cd sifed-front
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Instalar Dependencias
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Configurar Entorno
+Crea un archivo `.env.local` en la raíz del proyecto:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```ini
+# URL de la API (Backend)
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
 
-## Learn More
+# URL base del Backend (para cookies CSRF)
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 5. Ejecutar en Desarrollo
+```bash
+npm run dev
+```
+El frontend estará disponible en: `http://localhost:3000`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Estructura del Proyecto
 
-## Deploy on Vercel
+- `/app`: Rutas y páginas (App Router).
+  - `/admin`: Dashboard administrativo.
+  - `/docente`: Portal del docente.
+  - `/estudiante`: Aula virtual.
+  - `/login`: Hub de servicios y autenticación.
+- `/components`: Componentes reutilizables.
+  - `/ui`: Elementos base (botones, cards).
+  - `/layout`: Header, Sidebar, Shells.
+  - `/auth`: Formularios y lógica de protección.
+- `/hooks`: Hooks personalizados (`useAuth`, `useMediaQuery`).
+- `/lib`: Utilidades y configuración de API (Axios).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Sistema de Diseño
+
+Usamos variables CSS semánticas (definidas en `globals.css`):
+- **Primary:** `bg-brand-600` (Azul Institucional)
+- **Secondary:** `bg-brand-50` (Fondos suaves)
+- **Accent:** `text-uncp-gold` (Dorado)
+
+---
+
+## 🔒 Seguridad
+
+El acceso a carpetas protegidas (`/admin`, etc.) está controlado por el componente `RoleGuard`.
+El token de sesión se almacena en `localStorage` y se inyecta automáticamente en las peticiones via `lib/api.ts`.
