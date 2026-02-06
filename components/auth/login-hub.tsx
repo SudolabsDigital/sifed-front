@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import LoginForm from "@/components/auth/login-form";
 import ServiceCard from "@/components/home/service-card";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { 
   GraduationCap, 
   FileText, 
@@ -20,27 +21,26 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+interface User {
+  name: string;
+  email: string;
+  roles: string[];
+  foto_url?: string;
+}
+
 export default function LoginHub() {
   const loginRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useLocalStorage<User | null>("user", null);
 
-  useEffect(() => {
-    setMounted(true);
-    // Verificar si ya hay una sesión activa
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+  // Ya no necesitamos useEffect para mounted ni user loading
+  // useLocalStorage maneja la hidratación segura
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     setUser(null);
   };
 
-  const handleLoginSuccess = (userData: any) => {
+  const handleLoginSuccess = (userData: User) => {
     setUser(userData);
   };
 
@@ -81,7 +81,7 @@ export default function LoginHub() {
         title: "Noticias y Eventos",
         description: "Comunicados oficiales recientes y vida universitaria.",
         icon: Newspaper,
-        href: "/en-construccion",
+        href: "/noticias",
         requiresAuth: false,
         color: "green" as const
       },
@@ -125,8 +125,6 @@ export default function LoginHub() {
 
     return baseServices;
   };
-
-  if (!mounted) return null;
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-background">

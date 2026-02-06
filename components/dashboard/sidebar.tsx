@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LucideIcon, X, ChevronDown, ChevronRight, LogOut, User as UserIcon, Settings } from "lucide-react";
+import { LucideIcon, X, ChevronRight, LogOut, User as UserIcon, Settings } from "lucide-react";
 import Image from "next/image";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 export interface NavItem {
   title: string;
@@ -14,6 +15,11 @@ export interface NavItem {
   icon: LucideIcon;
   disabled?: boolean;
   children?: NavItem[];
+}
+
+interface User {
+  name: string;
+  email: string;
 }
 
 interface SidebarProps {
@@ -25,25 +31,37 @@ interface SidebarProps {
 export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useLocalStorage<User | null>("user", null);
 
-  useEffect(() => {
-    // Cargar usuario del storage
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-
-    // Expandir menú activo
-    const newOpenMenus: Record<string, boolean> = {};
+  // Calcular menús abiertos iniciales (Lazy State Initialization)
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
+    const initialMenus: Record<string, boolean> = {};
     items.forEach(item => {
       if (item.children?.some(child => pathname.startsWith(child.href))) {
-        newOpenMenus[item.title] = true;
+        initialMenus[item.title] = true;
       }
     });
-    setOpenMenus(prev => ({ ...prev, ...newOpenMenus }));
-  }, [pathname, items]);
+    return initialMenus;
+  });
+
+  // Sincronizar menús si cambia la ruta (esto sí requiere efecto, pero es reactivo a pathname)
+  useEffect(() => {
+    const newMenus: Record<string, boolean> = {};
+    let changed = false;
+    
+    items.forEach(item => {
+      const shouldOpen = item.children?.some(child => pathname.startsWith(child.href));
+      if (shouldOpen && !openMenus[item.title]) {
+        newMenus[item.title] = true;
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      setOpenMenus(prev => ({ ...prev, ...newMenus }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, items]); // openMenus no es dependencia intencionalmente
 
   const toggleMenu = (title: string) => {
     setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));
@@ -51,7 +69,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    setUser(null); // Actualiza vía hook
     router.push("/login");
   };
 
@@ -138,7 +156,6 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
                     {isMenuOpen && (
                       <div className="relative ml-4 pl-4 border-l border-brand-800 space-y-1 animate-in slide-in-from-top-1 duration-200">
                         {item.children?.map((child) => {
-                          const ChildIcon = child.icon;
                           const isChildActive = pathname === child.href;
                           return (
                             <Link

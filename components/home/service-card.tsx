@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Lock, ArrowRight, LucideIcon } from "lucide-react";
+import { Lock, LucideIcon } from "lucide-react";
 
 interface ServiceCardProps {
   title: string;
@@ -27,13 +27,6 @@ export default function ServiceCard({
 }: ServiceCardProps) {
   
   const isLocked = requiresAuth && !isLoggedIn;
-
-  // Variaciones de color para el icono
-  const colorStyles = {
-    brand: "text-brand-600 bg-brand-50 group-hover:bg-brand-600 group-hover:text-white",
-    gold: "text-uncp-gold bg-yellow-50 group-hover:bg-uncp-gold group-hover:text-white",
-    green: "text-uncp-green bg-green-50 group-hover:bg-uncp-green group-hover:text-white",
-  };
 
   const CardContent = (
     <div className={cn(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
-import { BookOpen, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { Clock, BookOpen, AlertCircle } from "lucide-react";
 
 export default function EstudianteDashboardPage() {
   const { user } = useAuth();

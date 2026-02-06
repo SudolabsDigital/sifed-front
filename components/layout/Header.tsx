@@ -98,7 +98,7 @@ const menuItems = [
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border font-sans transition-all">
+    <header className="relative z-50 w-full bg-background border-b border-border font-sans">
       <div className="mx-auto flex h-24 max-w-[1920px] items-center justify-between px-6 lg:px-12 relative z-50">
         
         {/* BRAND */}
@@ -116,6 +116,15 @@ export default function Header() {
 
         {/* MEGA MENU NAVIGATION */}
         <nav className="hidden lg:flex h-full items-center gap-2">
+          
+          {/* Enlace Directo: Noticias (Funcional) */}
+          <Link 
+            href="/noticias" 
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-muted-foreground hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-all"
+          >
+            Noticias
+          </Link>
+
           {menuItems.map((item) => (
             <div key={item.label} className="group h-full flex items-center">
               {/* Menu Trigger */}
@@ -135,7 +144,7 @@ export default function Header() {
                                 <span className="text-xs font-bold text-brand-600 uppercase tracking-widest mb-4 block">Destacado</span>
                                 <h3 className="font-serif text-2xl font-bold text-brand-950 mb-3">{item.featured.title}</h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">{item.featured.desc}</p>
-                                <Link href={item.featured.link} className="inline-flex items-center gap-2 text-sm font-bold text-brand-950 hover:text-brand-600 transition-colors group/link">
+                                <Link href="/en-construccion" className="inline-flex items-center gap-2 text-sm font-bold text-brand-950 hover:text-brand-600 transition-colors group/link">
                                     Ver más <ChevronRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
                                 </Link>
                             </div>
@@ -155,7 +164,7 @@ export default function Header() {
                                  <ul className="space-y-2.5">
                                     {col.links.map((link) => (
                                        <li key={link}>
-                                          <Link href="#" className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1">
+                                          <Link href="/en-construccion" className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1">
                                              {link}
                                           </Link>
                                        </li>

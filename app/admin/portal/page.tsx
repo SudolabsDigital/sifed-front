@@ -7,7 +7,8 @@ import {
   Library, 
   Image as ImageIcon, 
   FileText,
-  ArrowRight
+  ArrowRight,
+  Newspaper
 } from "lucide-react";
 
 export default function PortalManagementPage() {
@@ -18,6 +19,13 @@ export default function PortalManagementPage() {
       icon: School,
       href: "/admin/portal/unidad",
       color: "text-blue-600 bg-blue-50"
+    },
+    {
+      title: "Noticias y Novedades",
+      description: "Gestión de noticias, comunicados y agenda de eventos.",
+      icon: Newspaper,
+      href: "/admin/portal/noticias",
+      color: "text-red-600 bg-red-50"
     },
     {
       title: "Maestrías",
