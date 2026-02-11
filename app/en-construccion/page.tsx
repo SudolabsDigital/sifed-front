@@ -1,19 +1,19 @@
 import StatusCard from "@/components/ui/status-card";
-import { Hammer } from "lucide-react";
+import { HardHat } from "lucide-react";
 
 export const metadata = {
-  title: "En Desarrollo | SIFED",
+  title: "Página en Construcción | SIFED",
 };
 
-export default function BuildingPage() {
+export default function EnConstruccionPage() {
   return (
     <StatusCard
-      icon={Hammer}
+      icon={HardHat}
       title="Estamos trabajando"
-      description="Este módulo se encuentra actualmente en desarrollo o mantenimiento. Estamos construyendo nuevas funcionalidades para ti."
+      description="Esta sección estará disponible muy pronto. Estamos construyendo una mejor experiencia académica para ti."
       color="gold"
-      actionLabel="Regresar"
-      actionHref="/login"
+      actionLabel="Volver al Portal"
+      actionHref="/"
     />
   );
 }

@@ -1,8 +1,8 @@
-import { Bell, BookOpen, TrendingUp, FileText, ArrowRight } from "lucide-react";
+import { FileText, Bell, ArrowRight, TrendingUp } from "lucide-react";
 
 export default function InfoSection() {
   return (
-    <section className="w-full bg-background min-h-screen flex items-center py-24 px-6 lg:px-12 border-b border-border">
+    <section className="w-full bg-amber-50 h-screen flex items-center py-12 px-6 lg:px-12 border-b border-border overflow-hidden">
        <div className="max-w-7xl mx-auto w-full flex flex-col justify-center">
           
           <div className="grid lg:grid-cols-4 gap-8 md:gap-10">

@@ -6,16 +6,14 @@ import {
   GraduationCap, 
   Users, 
   FileText, 
-  Settings,
-  BookOpen,
+  Settings, 
+  Image as ImageIcon,
   Globe,
   School,
   Scale,
-  Image as ImageIcon,
-  Library
-} from "lucide-react";
-
-const adminNavItems = [
+  Library,
+  Newspaper
+} from "lucide-react";const adminNavItems = [
   {
     title: "Dashboard",
     href: "/admin/dashboard",
@@ -30,6 +28,11 @@ const adminNavItems = [
         title: "Unidad de Posgrado",
         href: "/admin/portal/unidad",
         icon: School,
+      },
+      {
+        title: "Noticias",
+        href: "/admin/portal/noticias",
+        icon: Newspaper,
       },
       {
         title: "Maestrías",

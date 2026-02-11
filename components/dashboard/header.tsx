@@ -1,7 +1,6 @@
 "use client";
 
-import { Menu, Bell } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Bell, Menu } from "lucide-react";
 
 interface HeaderProps {
   setSidebarOpen: (open: boolean) => void;

@@ -1,5 +1,6 @@
 import Header from "@/components/layout/Header";
 import HeroSection from "@/components/landing/hero-section";
+import { NewsCollage } from "@/components/portal/news/NewsCollage";
 import EcosistemaSection from "@/components/landing/ecosistema-section";
 import InfoSection from "@/components/landing/info-section";
 import Image from "next/image";
@@ -25,6 +26,7 @@ export default function Home() {
 
       <main className="flex-1 w-full max-w-[1920px] mx-auto flex flex-col">
         <HeroSection />
+        <NewsCollage />
         <EcosistemaSection />
         <InfoSection />
       </main>

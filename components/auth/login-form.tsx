@@ -1,70 +1,51 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import api from "@/lib/api";
+import { AuthService } from "@/lib/services/auth-service";
 import { cn } from "@/lib/utils";
 import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 
+interface User {
+  name: string;
+  email: string;
+  roles: string[];
+  token: string;
+  foto_url?: string;
+}
+
 interface LoginFormProps {
-  onLoginSuccess?: (user: any) => void;
+  onLoginSuccess: (userData: User) => void;
 }
 
 export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError("");
 
     try {
-      // 1. Obtener cookie CSRF
-      await api.get("/sanctum/csrf-cookie", { 
-        baseURL: process.env.NEXT_PUBLIC_BACKEND_URL 
-      });
-
-      // 2. Realizar Login
-      const response = await api.post("/login", {
-        email: formData.email,
-        password: formData.password,
-        device_name: "web-client",
-      });
-
-      // 3. Guardar Token y Usuario
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // 4. Informar al padre si existe el callback, sino redirigir
-      if (onLoginSuccess) {
-        onLoginSuccess(user);
-      } else {
-        if (user.roles.includes("admin")) {
-          router.push("/admin");
-        } else if (user.roles.includes("docente")) {
-          router.push("/docente");
-        } else {
-          router.push("/estudiante");
-        }
-      }
+      const result = await AuthService.login(email, password);
       
-    } catch (err: any) {
-      console.error("Login error:", err);
-      if (err.response?.status === 422) {
-        setError(err.response.data.message || "Credenciales inválidas.");
-      } else if (err.response?.status === 401) {
-        setError("Usuario no autorizado o cuenta inactiva.");
+      if (result.user && result.token) {
+        // Guardar token y usuario
+        localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
+        
+        onLoginSuccess({ ...result.user, token: result.token });
       } else {
-        setError("Ocurrió un error al intentar iniciar sesión. Intente nuevamente.");
+        setError("Error en la respuesta del servidor");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+         setError(err.message);
+      } else {
+         setError("Credenciales inválidas o error de conexión");
       }
     } finally {
       setLoading(false);
@@ -102,8 +83,8 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
           required
           placeholder="nombre@uncp.edu.pe"
           className="w-full px-4 py-3 rounded-lg border border-input bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all placeholder:text-muted-foreground"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
@@ -129,10 +110,8 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
             required
             placeholder="••••••••"
             className="w-full px-4 py-3 rounded-lg border border-input bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all placeholder:text-muted-foreground pr-10"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="button"

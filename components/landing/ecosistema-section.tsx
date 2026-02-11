@@ -4,7 +4,7 @@ import { Newspaper, MonitorPlay, ArrowRight } from "lucide-react";
 
 export default function EcosistemaSection() {
   return (
-    <section className="w-full bg-brand-50 min-h-screen flex items-center pt-24 pb-12 px-6 lg:px-12 border-b border-border">
+    <section className="w-full bg-brand-50 h-screen flex items-center py-12 px-6 lg:px-12 border-b border-border overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
             <div className="mb-8 flex flex-col md:flex-row justify-between items-end gap-4 text-center md:text-left">
                <div>
