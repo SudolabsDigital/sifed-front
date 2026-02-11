@@ -28,7 +28,6 @@ export default function RoleGuard({ children, allowedRoles }: RoleGuardProps) {
   }, [user, loading, allowedRoles, router]);
 
   // Mientras carga o si no hay usuario/rol, mostrar loader o null
-  // (La redirección sucederá en el useEffect, aquí solo protegemos el render visual)
   if (loading || !user || !user.roles.some((r) => allowedRoles.includes(r))) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center bg-brand-50">

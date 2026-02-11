@@ -32,9 +32,6 @@ export default function LoginHub() {
   const loginRef = useRef<HTMLDivElement>(null);
   const [user, setUser] = useLocalStorage<User | null>("user", null);
 
-  // Ya no necesitamos useEffect para mounted ni user loading
-  // useLocalStorage maneja la hidratación segura
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
