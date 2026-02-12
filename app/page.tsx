@@ -2,6 +2,7 @@ import Header from "@/components/layout/Header";
 import HeroSection from "@/components/landing/hero-section";
 import { NewsCollage } from "@/components/portal/news/NewsCollage";
 import EcosistemaSection from "@/components/landing/ecosistema-section";
+import PosgradoSection from "@/components/landing/posgrado-section";
 import InfoSection from "@/components/landing/info-section";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +29,7 @@ export default function Home() {
         <HeroSection />
         <NewsCollage />
         <EcosistemaSection />
+        <PosgradoSection />
         <InfoSection />
       </main>
 
