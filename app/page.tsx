@@ -81,7 +81,7 @@ export default function Home() {
                 <li><button className="hover:text-brand-600 transition-colors">Nosotros</button></li>
                 <li><button className="hover:text-brand-600 transition-colors">Autoridades</button></li>
                 <li><button className="hover:text-brand-600 transition-colors">Transparencia</button></li>
-                <li><button className="hover:text-brand-600 transition-colors">Documentos Normativos</button></li>
+                <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors">Documentos Normativos</Link></li>
               </ul>
             </div>
 

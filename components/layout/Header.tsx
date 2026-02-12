@@ -21,7 +21,7 @@ const menuItems = [
       },
       {
         title: "Gestión",
-        links: ["Autoridades", "Consejo de Facultad", "Documentos de Gestión", "Directorio"]
+        links: ["Autoridades", "Consejo de Facultad", "Documentos Normativos", "Directorio"]
       },
       {
         title: "Oficinas",
@@ -164,7 +164,10 @@ export default function Header() {
                                  <ul className="space-y-2.5">
                                     {col.links.map((link) => (
                                        <li key={link}>
-                                          <Link href="/en-construccion" className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1">
+                                          <Link 
+                                            href={link === "Documentos Normativos" ? "/documentos-normativos" : "/en-construccion"} 
+                                            className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
+                                          >
                                              {link}
                                           </Link>
                                        </li>
