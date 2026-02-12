@@ -165,7 +165,15 @@ export default function Header() {
                                     {col.links.map((link) => (
                                        <li key={link}>
                                           <Link 
-                                            href={link === "Documentos Normativos" ? "/documentos-normativos" : "/en-construccion"} 
+                                            href={
+                                              link === "Documentos Normativos" 
+                                                ? "/documentos-normativos" 
+                                                : link === "Maestría en Educación"
+                                                  ? "/maestria"
+                                                  : link === "Maestrías"
+                                                    ? "/maestria"
+                                                    : "/en-construccion"
+                                            } 
                                             className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
                                           >
                                              {link}
