@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-import { GraduationCap, Award, BookOpen, ArrowRight, Info } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import Link from "next/link";
 
 /**
@@ -142,7 +142,7 @@ export default function PosgradoSection() {
                 <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
                   Descubre nuestra visión institucional y el compromiso con el desarrollo científico y profesional de nuestros egresados.
                 </p>
-                <Link href="/en-construccion" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                <Link href="/posgrado" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
                   Conoce más de nosotros <Info className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                 </Link>
               </motion.div>
