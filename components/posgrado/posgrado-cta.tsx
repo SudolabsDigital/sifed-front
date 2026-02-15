@@ -39,7 +39,7 @@ export default function PosgradoCTA() {
             transition={{ duration: 0.8 }}
             className="group"
           >
-            <Link href="/maestria" className="block h-full">
+            <Link href="/posgrado/maestrias" className="block h-full">
               <div className="relative h-full bg-brand-50 rounded-[2rem] p-8 lg:p-10 border border-brand-100 shadow-xl shadow-brand-950/5 transition-all duration-500 hover:shadow-2xl hover:shadow-brand-600/10 hover:-translate-y-1 overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-brand-950 group-hover:scale-110 transition-transform duration-700">
                   <GraduationCap size={180} strokeWidth={1} />
