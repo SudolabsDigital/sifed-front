@@ -58,7 +58,7 @@ export default function LoginHub() {
     {
       title: "Programas de Posgrado",
       subtitle: "Oferta Académica",
-      href: "/programas",
+      href: "/posgrado",
       requiresAuth: false,
       imageSrc: "/images/logoeducacion.webp"
     },

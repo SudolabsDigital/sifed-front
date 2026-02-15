@@ -19,6 +19,20 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/maestria',
+        destination: '/posgrado/maestrias',
+        permanent: true,
+      },
+      {
+        source: '/programas',
+        destination: '/posgrado',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
