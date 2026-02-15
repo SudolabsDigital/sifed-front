@@ -31,6 +31,16 @@ const nextConfig: NextConfig = {
         destination: '/posgrado',
         permanent: true,
       },
+      {
+        source: '/normativa',
+        destination: '/documentos-normativos/normativa',
+        permanent: true,
+      },
+      {
+        source: '/formatos',
+        destination: '/documentos-normativos/formatos',
+        permanent: true,
+      },
     ];
   },
 };

@@ -63,9 +63,9 @@ export default function LoginHub() {
       imageSrc: "/images/logoeducacion.webp"
     },
     {
-      title: "Trámites Digitales",
-      subtitle: "Gestión Administrativa",
-      href: "/en-construccion",
+      title: "Documentos y Trámites",
+      subtitle: "Normativas y Formatos",
+      href: "/documentos-normativos",
       requiresAuth: false,
       imageSrc: UNCP_LOGO
     },
