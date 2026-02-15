@@ -55,52 +55,52 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center mb-6">
-        <h3 className="text-xl font-serif font-black text-brand-950">
-          Bienvenido al <span className="text-brand-600">Campus Virtual</span>
+        <h3 className="text-xl font-serif font-black text-brand-950 tracking-tighter">
+          Acceso al <span className="text-brand-600">Campus Virtual</span>
         </h3>
-        <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider mt-1">
+        <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5">
           Facultad de Educación - SIFED
         </p>
       </div>
 
       {error && (
-        <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 text-destructive text-sm animate-in fade-in slide-in-from-top-2">
-          <AlertCircle className="h-5 w-5 shrink-0" />
+        <div className="p-3 rounded-xl bg-destructive/5 border border-destructive/10 flex items-start gap-2.5 text-destructive text-[11px] font-bold animate-in fade-in slide-in-from-top-2">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <p>{error}</p>
         </div>
       )}
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="email"
-          className="text-sm font-bold text-brand-950 block"
+          className="text-[9px] font-black text-brand-950 uppercase tracking-widest ml-1"
         >
-          Correo Electrónico
+          Correo Institucional
         </label>
         <input
           id="email"
           type="email"
           required
-          placeholder="nombre@uncp.edu.pe"
-          className="w-full px-4 py-3 rounded-lg border border-input bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all placeholder:text-muted-foreground"
+          placeholder="usuario@uncp.edu.pe"
+          className="w-full px-4 py-3.5 rounded-2xl border border-border bg-brand-50/30 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 transition-all placeholder:text-muted-foreground/50 font-medium"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between ml-1">
           <label
             htmlFor="password"
-            className="text-sm font-bold text-brand-950 block"
+            className="text-[9px] font-black text-brand-950 uppercase tracking-widest"
           >
             Contraseña
           </label>
           <a
             href="#"
-            className="text-xs font-semibold text-brand-600 hover:text-brand-800 hover:underline"
+            className="text-[9px] font-black text-brand-600 hover:text-brand-800 transition-colors uppercase tracking-wider"
           >
-            ¿Olvidaste tu contraseña?
+            ¿Olvidaste tu clave?
           </a>
         </div>
         <div className="relative">
@@ -109,19 +109,19 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
             type={showPassword ? "text" : "password"}
             required
             placeholder="••••••••"
-            className="w-full px-4 py-3 rounded-lg border border-input bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all placeholder:text-muted-foreground pr-10"
+            className="w-full px-4 py-3.5 rounded-2xl border border-border bg-brand-50/30 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 transition-all placeholder:text-muted-foreground/50 pr-12 font-medium"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-brand-950 transition-colors"
           >
             {showPassword ? (
-              <EyeOff className="h-5 w-5" />
+              <EyeOff className="h-4 w-4" />
             ) : (
-              <Eye className="h-5 w-5" />
+              <Eye className="h-4 w-4" />
             )}
           </button>
         </div>
@@ -131,28 +131,28 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
         type="submit"
         disabled={loading}
         className={cn(
-          "w-full flex items-center justify-center py-3.5 px-4 rounded-xl font-bold text-white transition-all shadow-lg shadow-brand-600/20",
+          "w-full flex items-center justify-center py-4.5 px-6 rounded-2xl font-black text-[9px] uppercase tracking-[0.2em] text-white transition-all shadow-xl shadow-brand-600/20",
           loading
             ? "bg-brand-300 cursor-not-allowed"
-            : "bg-brand-600 hover:bg-brand-800 hover:-translate-y-0.5 hover:shadow-xl"
+            : "bg-brand-600 hover:bg-brand-950 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-950/20"
         )}
       >
         {loading ? (
           <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Iniciando sesión...
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Validando...
           </>
         ) : (
           "Ingresar a la Plataforma"
         )}
       </button>
 
-      <div className="text-center pt-2">
-        <p className="text-sm text-muted-foreground">
-          ¿No tienes una cuenta?{" "}
+      <div className="text-center pt-4 border-t border-brand-100">
+        <p className="text-[10px] text-muted-foreground font-medium">
+          ¿No tienes acceso?{" "}
           <a
             href="#"
-            className="font-bold text-brand-600 hover:text-brand-800 hover:underline"
+            className="font-black text-brand-600 hover:text-brand-950 transition-colors uppercase tracking-tighter"
           >
             Solicita tu registro aquí
           </a>
