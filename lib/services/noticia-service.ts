@@ -1,5 +1,6 @@
 import api from '@/lib/api';
 import { Noticia, NoticiaResponse } from '@/types/noticia';
+import { NoticiaCategoria } from '@/types/noticia-categoria';
 
 // Helper para normalizar respuestas de API
 function unwrapResponse<T>(response: unknown): T {
@@ -17,9 +18,9 @@ function unwrapResponse<T>(response: unknown): T {
 
 export const NoticiaService = {
   // Public Portal Methods
-  getAllPublic: async (page = 1): Promise<NoticiaResponse> => {
-    const { data } = await api.get<unknown>(`/portal/noticias?page=${page}`);
-    // Para colecciones, normalizamos asegurando que siempre haya un array en data
+  getAllPublic: async (page = 1, categoria?: string): Promise<NoticiaResponse> => {
+    const url = `/portal/noticias?page=${page}${categoria ? `&categoria=${categoria}` : ''}`;
+    const { data } = await api.get<unknown>(url);
     if (Array.isArray(data)) {
         return { data: data as Noticia[], meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, links: { first: '', last: '', prev: null, next: null } };
     }
@@ -31,11 +32,25 @@ export const NoticiaService = {
     return unwrapResponse<Noticia>(data);
   },
 
+  getCategoriesWithNews: async (): Promise<NoticiaCategoria[]> => {
+    const { data } = await api.get<NoticiaCategoria[]>('/portal/noticias-categorias');
+    return data;
+  },
+
   // Admin Methods
   getAllAdmin: async (page = 1): Promise<NoticiaResponse> => {
-    const { data } = await api.get<unknown>(`/admin/noticias?page=${page}`);
+    const { data } = await api.get<any>(`/admin/noticias?page=${page}`);
+    // Laravel Resource Collection devuelve { data: [], links: {}, meta: {} }
+    if (data && data.data && data.meta) {
+        return data as NoticiaResponse;
+    }
+    // Fallback si por alguna razón viene el array directo
     if (Array.isArray(data)) {
-        return { data: data as Noticia[], meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, links: { first: '', last: '', prev: null, next: null } };
+        return { 
+          data: data as Noticia[], 
+          meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, 
+          links: { first: '', last: '', prev: null, next: null } 
+        };
     }
     return data as NoticiaResponse;
   },
@@ -66,5 +81,36 @@ export const NoticiaService = {
 
   delete: async (id: number): Promise<void> => {
     await api.delete(`/admin/noticias/${id}`);
+  },
+
+  // Category Admin Methods
+  getAllCategories: async (): Promise<NoticiaCategoria[]> => {
+    const { data } = await api.get<any>('/admin/noticias-categorias');
+    // Laravel Resource Collection devuelve { data: [] }
+    if (data && data.data) {
+        return data.data as NoticiaCategoria[];
+    }
+    // Fallback
+    return (Array.isArray(data) ? data : []) as NoticiaCategoria[];
+  },
+
+  getCategoryById: async (id: number): Promise<NoticiaCategoria> => {
+    const { data } = await api.get<unknown>(`/admin/noticias-categorias/${id}`);
+    const unwrapped = unwrapResponse<NoticiaCategoria>(data);
+    return unwrapped;
+  },
+
+  createCategory: async (category: Partial<NoticiaCategoria>): Promise<NoticiaCategoria> => {
+    const { data } = await api.post<unknown>('/admin/noticias-categorias', category);
+    return unwrapResponse<NoticiaCategoria>(data);
+  },
+
+  updateCategory: async (id: number, category: Partial<NoticiaCategoria>): Promise<NoticiaCategoria> => {
+    const { data } = await api.put<unknown>(`/admin/noticias-categorias/${id}`, category);
+    return unwrapResponse<NoticiaCategoria>(data);
+  },
+
+  deleteCategory: async (id: number): Promise<void> => {
+    await api.delete(`/admin/noticias-categorias/${id}`);
   },
 };

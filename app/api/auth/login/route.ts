@@ -3,11 +3,12 @@ import { AUTH_COOKIE_NAME, USER_COOKIE_NAME, COOKIE_OPTIONS, USER_COOKIE_OPTIONS
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    const { email, password } = await request.json();
+    
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    const targetUrl = `${baseUrl}/login`;
 
-    // Llamada al backend de Laravel
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+    const response = await fetch(targetUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,31 +17,36 @@ export async function POST(request: Request) {
       body: JSON.stringify({ email, password }),
     });
 
+    // Capturamos la respuesta del backend
     const data = await response.json();
 
     if (!response.ok) {
-      return Response.json(
-        { message: data.message || "Credenciales inválidas" },
-        { status: response.status }
-      );
+      return new Response(JSON.stringify({ 
+        message: data.message || "Credenciales inválidas",
+        errors: data.errors 
+      }), { 
+        status: response.status,
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
-    // Configuración de cookies seguras
+    // Configuración de cookies seguras desde el servidor
     const cookieStore = await cookies();
-    
-    // 1. Token de sesión (HttpOnly para máxima seguridad)
     cookieStore.set(AUTH_COOKIE_NAME, data.token, COOKIE_OPTIONS);
-    
-    // 2. Datos del usuario (Accesibles por el cliente para la UI)
     cookieStore.set(USER_COOKIE_NAME, JSON.stringify(data.user), USER_COOKIE_OPTIONS);
 
-    return Response.json({ success: true, user: data.user });
+    return new Response(JSON.stringify({ success: true, user: data.user }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    });
     
-  } catch (error) {
-    console.error("Login Route Error:", error);
-    return Response.json(
-      { message: "Error interno en el servidor de autenticación" },
-      { status: 500 }
-    );
+  } catch (error: any) {
+    return new Response(JSON.stringify({ 
+      message: "Error en el servidor de autenticación (BFF)",
+      detail: error.message 
+    }), { 
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
 }

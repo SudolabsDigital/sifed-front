@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import { Noticia } from "@/types/noticia";
-import { Save, Upload, ImageIcon, Loader2 } from "lucide-react";
+import { NoticiaCategoria } from "@/types/noticia-categoria";
+import { Save, Upload, ImageIcon, Loader2, Clock, User, Hash } from "lucide-react";
 
 interface NoticiaFormProps {
   initialData?: Noticia;
@@ -15,8 +16,26 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(initialData?.imagen_url || null);
+  const [categorias, setCategorias] = useState<NoticiaCategoria[]>([]);
   
   const isEditing = !!initialData;
+
+  useEffect(() => {
+    // Cargamos categorías para el selector
+    const fetchCategories = async () => {
+        try {
+            const data = await NoticiaService.getAllCategories();
+            setCategorias(data);
+        } catch (error: any) {
+            console.error("Error detallado al cargar categorías:", {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status
+            });
+        }
+    };
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +90,11 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-border shadow-sm p-6 md:p-8 space-y-8">
+    <form 
+      key={initialData?.id || 'new-noticia'}
+      onSubmit={handleSubmit} 
+      className="bg-white rounded-xl border border-border shadow-sm p-6 md:p-8 space-y-8"
+    >
       
       {/* Título */}
       <div className="space-y-2">
@@ -84,6 +107,54 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
           placeholder="Ej: Ceremonia de Graduación 2026"
           className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Categoría Dinámica */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-brand-950 flex items-center gap-2">
+            <Hash className="h-3.5 w-3.5 text-brand-600" /> Categoría Editorial
+          </label>
+          <select 
+            name="noticia_categoria_id"
+            required
+            defaultValue={initialData?.noticia_categoria_id?.toString() || ""}
+            className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+          >
+            <option value="" disabled>Seleccionar categoría...</option>
+            {categorias.map(cat => (
+                <option key={cat.id} value={cat.id.toString()}>{cat.nombre}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Autor */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-brand-950 flex items-center gap-2">
+            <User className="h-3.5 w-3.5 text-brand-600" /> Nombre del Autor
+          </label>
+          <input 
+            name="autor_nombre"
+            type="text" 
+            defaultValue={initialData?.autor_nombre || ""}
+            placeholder="Ej: Dr. Pérez"
+            className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 outline-none"
+          />
+        </div>
+
+        {/* Tiempo Lectura */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-brand-950 flex items-center gap-2">
+            <Clock className="h-3.5 w-3.5 text-brand-600" /> Tiempo de Lectura (min)
+          </label>
+          <input 
+            name="tiempo_lectura"
+            type="number" 
+            defaultValue={initialData?.tiempo_lectura || ""}
+            placeholder="Ej: 5"
+            className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 outline-none"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
