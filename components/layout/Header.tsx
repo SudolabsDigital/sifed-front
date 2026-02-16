@@ -91,6 +91,10 @@ const menuItems = [
       {
         title: "Sistemas",
         links: ["CTI Vitae", "Docentes Renacyt", "Grupos de Investigación"]
+      },
+      {
+        title: "Galeria de fotos",
+        links: ["Fotos de eventos", "Sustentaciones", "Investigación en acción"]
       }
     ]
   }
@@ -164,20 +168,39 @@ export default function Header() {
                                  <ul className="space-y-2.5">
                                     {col.links.map((link) => (
                                        <li key={link}>
-                                          <Link 
-                                            href={
-                                              link === "Documentos Normativos" 
-                                                ? "/documentos-normativos" 
-                                                : link === "Maestría en Educación"
-                                                  ? "/maestria"
-                                                  : link === "Maestrías"
-                                                    ? "/maestria"
-                                                    : "/en-construccion"
-                                            } 
-                                            className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
-                                          >
-                                             {link}
-                                          </Link>
+                                        <Link
+  href={
+    /* ---------- LA FACULTAD ---------- */
+    link === "Documentos Normativos"
+      ? "/documentos-normativos"
+
+    /* ---------- POSGRADO ---------- */
+    : link === "Maestría en Educación" || link === "Maestrías"
+      ? "/maestria"
+
+    : link === "Doctorado en Ciencias" || link === "Doctorados"
+      ? "/posgrado/doctorados"
+
+    /* ---------- GALERÍA ---------- */
+    : link === "Fotos de eventos"
+      ? "/galeria-fotos/eventos"
+
+    : link === "Sustentaciones"
+      ? "/galeria-fotos/sustentaciones"
+
+    : link === "Investigación en acción"
+      ? "/galeria-fotos/investigacion"
+
+    /* ---------- DEFAULT ---------- */
+    : "/en-construccion"
+  }
+  className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
+>
+  {link}
+</Link>
+
+                                          
+
                                        </li>
                                     ))}
                                  </ul>
