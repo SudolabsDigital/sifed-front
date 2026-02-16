@@ -3,16 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
 import { Noticia } from "@/types/noticia";
-import { cn } from "@/lib/utils";
 
 interface EditorialCardProps {
   noticia: Noticia;
-  isFeatured?: boolean;
 }
 
-export default function EditorialCard({ noticia, isFeatured = false }: EditorialCardProps) {
+export default function EditorialCard({ noticia }: EditorialCardProps) {
   // Normalización de la URL de la imagen para asegurar que sea absoluta
   const getFullImageUrl = (url: string | null) => {
     if (!url) return null;

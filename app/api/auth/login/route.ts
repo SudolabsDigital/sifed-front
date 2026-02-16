@@ -40,10 +40,11 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" }
     });
     
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Error desconocido";
     return new Response(JSON.stringify({ 
       message: "Error en el servidor de autenticación (BFF)",
-      detail: error.message 
+      detail: message 
     }), { 
       status: 500,
       headers: { "Content-Type": "application/json" }

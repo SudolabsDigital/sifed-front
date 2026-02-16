@@ -26,12 +26,9 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
         try {
             const data = await NoticiaService.getAllCategories();
             setCategorias(data);
-        } catch (error: any) {
-            console.error("Error detallado al cargar categorías:", {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            });
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Error desconocido";
+            console.error("Error detallado al cargar categorías:", message);
         }
     };
     fetchCategories();

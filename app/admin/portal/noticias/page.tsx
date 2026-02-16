@@ -10,11 +10,8 @@ import {
   Plus,
   Pencil,
   Trash2,
-  CheckCircle,
-  Calendar,
   Layers,
   Newspaper,
-  Hash,
   Layout
 } from "lucide-react";
 
@@ -24,7 +21,7 @@ export default function AdminNoticiasPage() {
   const [activeTab, setActiveTab] = useState<'noticias' | 'categorias'>('noticias');
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [meta, setMeta] = useState<any>(null);
+  const [meta, setMeta] = useState<{ current_page: number; last_page: number; total: number } | null>(null);
 
   const fetchNoticias = async (page = 1) => {
     try {
@@ -32,8 +29,9 @@ export default function AdminNoticiasPage() {
       setNoticias(response.data);
       setMeta(response.meta);
       setCurrentPage(page);
-    } catch (error: any) {
-      console.error("Error al cargar noticias:", error?.response?.data || error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Error desconocido";
+      console.error("Error al cargar noticias:", message);
       setNoticias([]);
     }
   };
@@ -42,19 +40,20 @@ export default function AdminNoticiasPage() {
     try {
       const data = await NoticiaService.getAllCategories();
       setCategorias(data);
-    } catch (error: any) {
-      console.error("Error al cargar categorías:", error?.response?.data || error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Error desconocido";
+      console.error("Error al cargar categorías:", message);
     }
   };
 
-  const loadData = async () => {
-    setLoading(true);
-    await Promise.all([fetchNoticias(currentPage), fetchCategorias()]);
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+        setLoading(true);
+        await Promise.all([fetchNoticias(currentPage), fetchCategorias()]);
+        setLoading(false);
+    };
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDeleteNoticia = async (id: number) => {
@@ -73,8 +72,9 @@ export default function AdminNoticiasPage() {
       try {
         await NoticiaService.deleteCategory(cat.id);
         fetchCategorias();
-      } catch (error: any) {
-        alert(error.response?.data?.message || "Error al eliminar categoría");
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Error al eliminar categoría";
+        alert(message);
       }
     }
   };

@@ -39,24 +39,25 @@ export const NoticiaService = {
 
   // Admin Methods
   getAllAdmin: async (page = 1): Promise<NoticiaResponse> => {
-    const { data } = await api.get<any>(`/admin/noticias?page=${page}`);
+    const { data } = await api.get<{ data: Noticia[]; meta: unknown; links: unknown }>(`/admin/noticias?page=${page}`);
     // Laravel Resource Collection devuelve { data: [], links: {}, meta: {} }
     if (data && data.data && data.meta) {
-        return data as NoticiaResponse;
+        return data as unknown as NoticiaResponse;
     }
     // Fallback si por alguna razón viene el array directo
-    if (Array.isArray(data)) {
+    const rawData = data as unknown;
+    if (Array.isArray(rawData)) {
         return { 
-          data: data as Noticia[], 
-          meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, 
+          data: rawData as Noticia[], 
+          meta: { current_page: 1, last_page: 1, per_page: 100, total: rawData.length }, 
           links: { first: '', last: '', prev: null, next: null } 
         };
     }
-    return data as NoticiaResponse;
+    return data as unknown as NoticiaResponse;
   },
 
   getByIdAdmin: async (id: number): Promise<Noticia> => {
-    const { data } = await api.get<unknown>(`/admin/noticias/${id}`);
+    const { data } = await api.get<{ data: Noticia }>(`/admin/noticias/${id}`);
     return unwrapResponse<Noticia>(data);
   },
 
@@ -85,13 +86,20 @@ export const NoticiaService = {
 
   // Category Admin Methods
   getAllCategories: async (): Promise<NoticiaCategoria[]> => {
-    const { data } = await api.get<any>('/admin/noticias-categorias');
-    // Laravel Resource Collection devuelve { data: [] }
-    if (data && data.data) {
-        return data.data as NoticiaCategoria[];
+    const response = await api.get<unknown>('/admin/noticias-categorias');
+    const data = response.data;
+    
+    // Si es la estructura de Laravel Resource { data: [] }
+    if (data && typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
+        return (data as { data: NoticiaCategoria[] }).data;
     }
-    // Fallback
-    return (Array.isArray(data) ? data : []) as NoticiaCategoria[];
+    
+    // Si es un array plano
+    if (Array.isArray(data)) {
+        return data as NoticiaCategoria[];
+    }
+    
+    return [];
   },
 
   getCategoryById: async (id: number): Promise<NoticiaCategoria> => {

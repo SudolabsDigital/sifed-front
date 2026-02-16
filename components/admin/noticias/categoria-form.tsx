@@ -20,11 +20,10 @@ const STYLE_OPTIONS = [
 ];
 
 export function CategoriaForm({ initialData }: CategoriaFormProps) {
-  console.log("DEBUG - CategoriaForm initialData:", initialData);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [categoriasExistentes, setCategoriasExistentes] = useState<NoticiaCategoria[]>([]);
-  const [estiloSeleccionado, setEstiloSeleccionado] = useState(initialData?.estilo_visual || 'green');
+  const [estiloSeleccionado, setEstiloSeleccionado] = useState<NoticiaCategoria['estilo_visual']>(initialData?.estilo_visual || 'green');
   
   const isEditing = !!initialData;
 
@@ -39,7 +38,7 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
             if (initialData?.estilo_visual) {
                 setEstiloSeleccionado(initialData.estilo_visual);
             }
-        } catch (error) {
+        } catch (error: unknown) {
             console.error("Error al cargar datos del formulario:", error);
         }
     };
@@ -139,7 +138,7 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
                         <button
                             key={style.id}
                             type="button"
-                            onClick={() => setEstiloSeleccionado(style.id as any)}
+                            onClick={() => setEstiloSeleccionado(style.id as NoticiaCategoria['estilo_visual'])}
                             title={style.label}
                             className={cn(
                                 "h-10 w-10 rounded-xl transition-all border-2",
