@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { AUTH_COOKIE_NAME } from './auth-config';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -6,13 +8,14 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  withCredentials: true, // Importante para Sanctum si usamos cookies (aunque usaremos token bearer) <= dejenlo servira para pruebas en postman
+  withCredentials: true,
 });
 
 // Interceptor para agregar el token automáticamente a cada petición
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
+    // Obtenemos el token de la cookie
+    const token = Cookies.get(AUTH_COOKIE_NAME);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

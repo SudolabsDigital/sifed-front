@@ -151,6 +151,7 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
         <div className="border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center justify-center bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-pointer relative overflow-hidden group h-64">
           
           {preview ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover opacity-90 transition-opacity" />
           ) : null}
 

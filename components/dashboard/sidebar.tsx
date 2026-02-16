@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LucideIcon, X, ChevronRight, LogOut, User as UserIcon, Settings } from "lucide-react";
+import { LucideIcon, X, ChevronRight, LogOut, User as UserIcon, Settings, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { AuthService } from "@/lib/services/auth-service";
 
 export interface NavItem {
   title: string;
@@ -30,8 +30,7 @@ interface SidebarProps {
 
 export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [user, setUser] = useLocalStorage<User | null>("user", null);
+  const [user] = useLocalStorage<User | null>("user", null);
 
   // Calcular menús abiertos iniciales (Lazy State Initialization)
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>(() => {
@@ -67,10 +66,9 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
     setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null); // Actualiza vía hook
-    router.push("/login");
+  const handleLogout = async () => {
+    localStorage.removeItem("user"); // Limpiamos rastro local
+    await AuthService.logout();
   };
 
   return (
@@ -211,17 +209,24 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
                  </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 mb-2">
                  <Link href="/admin/configuracion" className="flex items-center justify-center gap-2 py-1.5 rounded-lg bg-brand-800/50 text-[10px] font-bold text-brand-300 hover:bg-brand-700 hover:text-white transition-colors">
                     <Settings className="h-3 w-3" /> Config
                  </Link>
-                 <button 
-                    onClick={handleLogout}
-                    className="flex items-center justify-center gap-2 py-1.5 rounded-lg bg-red-500/10 text-[10px] font-bold text-red-400 hover:bg-red-500 hover:text-white transition-colors border border-transparent hover:border-red-500/50"
+                 <Link 
+                    href="/login"
+                    className="flex items-center justify-center gap-2 py-1.5 rounded-lg bg-brand-800/50 text-[10px] font-bold text-brand-300 hover:bg-brand-700 hover:text-white transition-colors"
                  >
-                    <LogOut className="h-3 w-3" /> Salir
-                 </button>
+                    <ArrowLeft className="h-3 w-3" /> Salir
+                 </Link>
               </div>
+              
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-red-500/10 text-[10px] font-black uppercase tracking-wider text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 border border-red-500/20 hover:border-red-500"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Cerrar sesión
+              </button>
            </div>
         </div>
       </aside>

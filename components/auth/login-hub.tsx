@@ -4,36 +4,27 @@ import { useRef } from "react";
 import Image from "next/image";
 import LoginForm from "@/components/auth/login-form";
 import ServiceCard from "@/components/ui/service-card";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useAuth } from "@/hooks/use-auth";
 import { 
   ArrowLeft,
-  LogOut,
-  User as UserIcon,
-  Calendar
+  User as UserIcon
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface User {
-  name: string;
-  email: string;
-  roles: string[];
-  foto_url?: string;
-}
 
 const UNCP_LOGO = "/images/Escudo_UNCP.webp";
 
 export default function LoginHub() {
   const loginRef = useRef<HTMLDivElement>(null);
-  const [user, setUser] = useLocalStorage<User | null>("user", null);
+  const { user, logout } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const handleLogout = async () => {
+    await logout();
   };
 
-  const handleLoginSuccess = (userData: User) => {
-    setUser(userData);
+  const handleLoginSuccess = () => {
+    // La cookie ya se encargó de la persistencia, forzamos recarga para que useAuth capte el nuevo estado
+    window.location.reload();
   };
 
   const focusLogin = () => {
