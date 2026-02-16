@@ -71,7 +71,7 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
     } catch (error: unknown) {
       console.error("Error saving noticia:", error);
       
-      const axiosError = error as any;
+      const axiosError = error as { response?: { status: number; data: { errors: Record<string, string[]> } } };
       if (axiosError.response?.status === 422) {
         setFormErrors(axiosError.response.data.errors || {});
         showToast("Error de validación. Revisa los campos marcados.", "error");

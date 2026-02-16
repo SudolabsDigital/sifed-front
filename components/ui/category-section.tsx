@@ -71,11 +71,10 @@ export default function CategorySection({
       {/* COLUMNA DE CONTENIDO (SCROLLABLE CON SNAP) */}
       <div className="flex-1 snap-y snap-mandatory overflow-y-auto">
         <div className="flex flex-col">
-          {noticias.map((noticia, idx) => (
+          {noticias.map((noticia) => (
             <div key={noticia.id} className="snap-start snap-always">
                 <EditorialCard 
                     noticia={noticia} 
-                    isFeatured={idx === 0} 
                 />
             </div>
           ))}

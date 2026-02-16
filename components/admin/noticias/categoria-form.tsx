@@ -75,7 +75,7 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
     } catch (error: unknown) {
       console.error("Error saving category:", error);
       
-      const axiosError = error as any; // Casting temporal controlado para acceder a response
+      const axiosError = error as { response?: { status: number; data: { errors: Record<string, string[]> } } };
       if (axiosError.response?.status === 422) {
         setFormErrors(axiosError.response.data.errors || {});
         showToast("Error de validación. Revisa el nombre o el orden.", "error");
