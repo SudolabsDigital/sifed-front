@@ -6,7 +6,9 @@ import Link from "next/link";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import { Noticia } from "@/types/noticia";
 import { NoticiaCategoria } from "@/types/noticia-categoria";
-import { Save, Upload, ImageIcon, Loader2, Clock, User, Hash } from "lucide-react";
+import { Save, Upload, ImageIcon, Loader2, Clock, User, Hash, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface NoticiaFormProps {
   initialData?: Noticia;
@@ -14,9 +16,12 @@ interface NoticiaFormProps {
 
 export function NoticiaForm({ initialData }: NoticiaFormProps) {
   const router = useRouter();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const [preview, setPreview] = useState<string | null>(initialData?.imagen_url || null);
   const [categorias, setCategorias] = useState<NoticiaCategoria[]>([]);
+  const [selectedCategoriaId, setSelectedCategoriaId] = useState<string>(initialData?.noticia_categoria_id?.toString() || "");
   
   const isEditing = !!initialData;
 
@@ -26,17 +31,23 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
         try {
             const data = await NoticiaService.getAllCategories();
             setCategorias(data);
+            
+            // Si estamos editando y ya tenemos el ID inicial, aseguramos que el estado se mantenga
+            if (initialData?.noticia_categoria_id) {
+                setSelectedCategoriaId(initialData.noticia_categoria_id.toString());
+            }
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : "Error desconocido";
             console.error("Error detallado al cargar categorías:", message);
         }
     };
     fetchCategories();
-  }, []);
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setFormErrors({});
 
     const formData = new FormData(e.currentTarget);
     
@@ -50,14 +61,23 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
     try {
       if (isEditing && initialData) {
         await NoticiaService.update(initialData.id, formData);
+        showToast("¡Noticia actualizada correctamente!", "success");
       } else {
         await NoticiaService.create(formData);
+        showToast("¡Noticia publicada con éxito!", "success");
       }
       router.push("/admin/portal/noticias");
       router.refresh();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error saving noticia:", error);
-      alert("Error al guardar la noticia. Verifica los campos.");
+      
+      const axiosError = error as any;
+      if (axiosError.response?.status === 422) {
+        setFormErrors(axiosError.response.data.errors || {});
+        showToast("Error de validación. Revisa los campos marcados.", "error");
+      } else {
+        showToast("Ocurrió un error inesperado al guardar.", "error");
+      }
     } finally {
       setLoading(false);
     }
@@ -90,8 +110,19 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
     <form 
       key={initialData?.id || 'new-noticia'}
       onSubmit={handleSubmit} 
-      className="bg-white rounded-xl border border-border shadow-sm p-6 md:p-8 space-y-8"
+      className={cn(
+        "bg-white rounded-xl border border-border shadow-sm p-6 md:p-8 space-y-8 relative overflow-hidden",
+        loading && "opacity-60 pointer-events-none transition-opacity"
+      )}
     >
+      {loading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/40 backdrop-blur-[1px]">
+            <div className="bg-brand-950 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in zoom-in duration-300">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span className="text-sm font-bold">Procesando Crónica...</span>
+            </div>
+        </div>
+      )}
       
       {/* Título */}
       <div className="space-y-2">
@@ -102,8 +133,16 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
           type="text" 
           defaultValue={initialData?.titulo}
           placeholder="Ej: Ceremonia de Graduación 2026"
-          className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+          className={cn(
+            "w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-brand-500 outline-none transition-all",
+            formErrors.titulo ? "border-red-500 bg-red-50/30" : "border-input"
+          )}
         />
+        {formErrors.titulo && (
+          <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+            <AlertCircle className="h-3 w-3" /> {formErrors.titulo[0]}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -115,14 +154,23 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
           <select 
             name="noticia_categoria_id"
             required
-            defaultValue={initialData?.noticia_categoria_id?.toString() || ""}
-            className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 outline-none bg-white"
+            value={selectedCategoriaId}
+            onChange={(e) => setSelectedCategoriaId(e.target.value)}
+            className={cn(
+              "w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-brand-500 outline-none bg-white",
+              formErrors.noticia_categoria_id ? "border-red-500 bg-red-50/30" : "border-input"
+            )}
           >
             <option value="" disabled>Seleccionar categoría...</option>
             {categorias.map(cat => (
                 <option key={cat.id} value={cat.id.toString()}>{cat.nombre}</option>
             ))}
           </select>
+          {formErrors.noticia_categoria_id && (
+            <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
+              <AlertCircle className="h-3 w-3" /> {formErrors.noticia_categoria_id[0]}
+            </p>
+          )}
         </div>
 
         {/* Autor */}

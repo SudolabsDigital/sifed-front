@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import { NoticiaCategoria } from "@/types/noticia-categoria";
-import { Save, Layout, Palette, ListOrdered, Loader2, Info } from "lucide-react";
+import { Save, Layout, Palette, ListOrdered, Loader2, Info, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface CategoriaFormProps {
   initialData?: NoticiaCategoria;
@@ -21,7 +22,9 @@ const STYLE_OPTIONS = [
 
 export function CategoriaForm({ initialData }: CategoriaFormProps) {
   const router = useRouter();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const [categoriasExistentes, setCategoriasExistentes] = useState<NoticiaCategoria[]>([]);
   const [estiloSeleccionado, setEstiloSeleccionado] = useState<NoticiaCategoria['estilo_visual']>(initialData?.estilo_visual || 'green');
   
@@ -48,6 +51,7 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setFormErrors({});
 
     const formData = new FormData(e.currentTarget);
     const data = {
@@ -61,14 +65,23 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
     try {
       if (isEditing && initialData) {
         await NoticiaService.updateCategory(initialData.id, data);
+        showToast("¡Sección actualizada correctamente!", "success");
       } else {
         await NoticiaService.createCategory(data);
+        showToast("¡Nueva sección creada!", "success");
       }
       router.push("/admin/portal/noticias");
       router.refresh();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error saving category:", error);
-      alert("Error al guardar la sección. Verifica los campos.");
+      
+      const axiosError = error as any; // Casting temporal controlado para acceder a response
+      if (axiosError.response?.status === 422) {
+        setFormErrors(axiosError.response.data.errors || {});
+        showToast("Error de validación. Revisa el nombre o el orden.", "error");
+      } else {
+        showToast("Error inesperado al guardar la sección.", "error");
+      }
     } finally {
       setLoading(false);
     }
@@ -93,8 +106,16 @@ export function CategoriaForm({ initialData }: CategoriaFormProps) {
                 type="text" 
                 defaultValue={initialData?.nombre}
                 placeholder="Ej: Investigación Avanzada"
-                className="w-full px-6 py-4 rounded-2xl border border-brand-100 bg-brand-50/30 focus:ring-4 focus:ring-brand-600/10 focus:border-brand-600 outline-none transition-all font-bold text-brand-950"
+                className={cn(
+                    "w-full px-6 py-4 rounded-2xl border bg-brand-50/30 focus:ring-4 focus:ring-brand-600/10 outline-none transition-all font-bold text-brand-950",
+                    formErrors.nombre ? "border-red-500 bg-red-50" : "border-brand-100 focus:border-brand-600"
+                )}
             />
+            {formErrors.nombre && (
+              <p className="text-[10px] text-red-500 flex items-center gap-1 font-bold uppercase tracking-wider">
+                <AlertCircle className="h-3 w-3" /> {formErrors.nombre[0]}
+              </p>
+            )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
