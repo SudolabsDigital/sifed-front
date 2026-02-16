@@ -84,6 +84,7 @@ import {
 ];
 
 import RoleGuard from "@/components/auth/role-guard";
+import { ToastProvider } from "@/hooks/use-toast";
 
 export default function AdminLayout({
   children,
@@ -92,9 +93,11 @@ export default function AdminLayout({
 }) {
   return (
     <RoleGuard allowedRoles={['admin']}>
-      <DashboardShell navItems={adminNavItems} title="Panel de Administración">
-        {children}
-      </DashboardShell>
+      <ToastProvider>
+        <DashboardShell navItems={adminNavItems} title="Panel de Administración">
+          {children}
+        </DashboardShell>
+      </ToastProvider>
     </RoleGuard>
   );
 }

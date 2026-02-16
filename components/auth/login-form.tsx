@@ -4,14 +4,7 @@ import { useState } from "react";
 import { AuthService } from "@/lib/services/auth-service";
 import { cn } from "@/lib/utils";
 import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
-
-interface User {
-  name: string;
-  email: string;
-  roles: string[];
-  token: string;
-  foto_url?: string;
-}
+import { User } from "@/hooks/use-auth";
 
 interface LoginFormProps {
   onLoginSuccess: (userData: User) => void;
@@ -32,12 +25,11 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
     try {
       const result = await AuthService.login(email, password);
       
-      if (result.user && result.token) {
-        // Guardar token y usuario
-        localStorage.setItem("token", result.token);
+      if (result.success && result.user) {
+        // Guardar solo metadata del usuario para la UI
         localStorage.setItem("user", JSON.stringify(result.user));
         
-        onLoginSuccess({ ...result.user, token: result.token });
+        onLoginSuccess(result.user);
       } else {
         setError("Error en la respuesta del servidor");
       }

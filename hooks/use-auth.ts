@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { USER_COOKIE_NAME } from "@/lib/auth-config";
 
 export interface User {
   id: number;
@@ -16,19 +18,18 @@ export function useAuth() {
   const router = useRouter();
 
   useEffect(() => {
-    // Simular pequeña carga para evitar parpadeos
     const loadUser = () => {
       try {
-        const storedUser = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
+        // Leemos de la cookie que configuramos como no-HttpOnly
+        const storedUser = Cookies.get(USER_COOKIE_NAME);
 
-        if (storedUser && token) {
+        if (storedUser) {
           setUser(JSON.parse(storedUser));
         } else {
           setUser(null);
         }
       } catch (error) {
-        console.error("Error parsing user data", error);
+        console.error("Error parsing user data from cookies", error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -38,11 +39,16 @@ export function useAuth() {
     loadUser();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/login");
+  const logout = async () => {
+    try {
+      // Llamamos al route handler para limpiar cookies en el servidor
+      await fetch("/api/auth/logout", { method: "POST" });
+      setUser(null);
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout error", error);
+    }
   };
 
   return { user, loading, logout };
