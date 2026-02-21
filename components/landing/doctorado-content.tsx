@@ -8,8 +8,6 @@ import {
   BadgeCheck,
   BookOpen,
   Brain,
-  Building2,
-  BrainCircuit,
   Calendar,
   CheckCircle2,
   ChevronDown,
@@ -22,12 +20,11 @@ import {
   Lightbulb,
   ListChecks,
   MessageCircle,
-  Presentation,
+  Microscope,
   Sparkles,
   Target,
   TrendingUp,
   Users,
-  Zap,
 } from "lucide-react";
 
 /* ─── TIPOS ─────────────────────────────────────────────────── */
@@ -40,219 +37,93 @@ type Ciclo = { titulo: string; total: string; items: CursoItem[] };
 const c = (nombre: string, creditos: number): CursoRegular => ({ tipo: "curso", nombre, creditos });
 const e = (creditos: number, opciones: string[]): CursoElectivo => ({ tipo: "electivo", creditos, opciones });
 
-const menciones = [
+const ciclosDoctorado: Ciclo[] = [
   {
-    slug: "gestion-educativa",
-    numero: "01",
-    nombre: "Gestión Educativa",
-    slogan: "Lidera instituciones y transforma resultados",
-    resumen:
-      "Dirigida a profesionales que desean liderar instituciones, optimizar procesos académicos y diseñar proyectos de mejora educativa.",
-    icono: Building2,
-    idealPara: "Directivos, coordinadores y profesionales con enfoque en gestión institucional.",
-    perfil: [
-      "Gestiona instituciones y equipos con enfoque en calidad educativa.",
-      "Formula proyectos educativos innovadores y de inversión.",
-      "Aplica análisis de datos para la toma de decisiones en gestión.",
+    titulo: "Ciclo I",
+    total: "12 créditos",
+    items: [
+      c("Filosofía e historia de la Educación", 4),
+      c("Epistemología", 4),
+      c("Seminario de Taller de tesis I", 4),
     ],
-    ciclos: [
-      {
-        titulo: "Ciclo I", total: "19 créditos",
-        items: [
-          c("Teorías científicas de la educación", 5),
-          c("Seminario taller de tesis", 4),
-          c("Liderazgo, inteligencia emocional y cultura organizacional", 5),
-          c("Planificación y organización educativa", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo II", total: "19 créditos",
-        items: [
-          c("Asesoramiento de tesis I", 4),
-          c("Proyectos educativos, innovadores y de inversión", 5),
-          c("Análisis de datos cuantitativos y cualitativos", 5),
-          c("Gestión de recursos humanos", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo III", total: "11 créditos",
-        items: [
-          c("Asesoramiento de tesis II", 7),
-          e(4, [
-            "Evaluación, supervisión y asesoramiento educacional",
-            "Sistemas de evaluación de la calidad institucional",
-            "Enfoques y técnicas cualitativas en investigación",
-          ]),
-        ],
-      },
-    ] as Ciclo[],
   },
   {
-    slug: "educacion-superior",
-    numero: "02",
-    nombre: "Educación Superior",
-    slogan: "Potencia tu impacto en aulas universitarias",
-    resumen:
-      "Enfocada en docencia universitaria de alto nivel, innovación didáctica y fortalecimiento de competencias para la formación profesional.",
-    icono: Presentation,
-    idealPara: "Docentes universitarios y profesionales que desean especializarse en enseñanza superior.",
-    perfil: [
-      "Diseña experiencias de aprendizaje para educación superior.",
-      "Integra didáctica universitaria y evaluación por competencias.",
-      "Sustenta propuestas pedagógicas con evidencia e investigación.",
+    titulo: "Ciclo II",
+    total: "12 créditos",
+    items: [
+      c("Sociología y ética de la Educación", 4),
+      c("Seminario de Taller de Tesis II", 4),
+      c("Seminario de Investigación Cualitativa I", 4),
     ],
-    ciclos: [
-      {
-        titulo: "Ciclo I", total: "19 créditos",
-        items: [
-          c("Teorías científicas de la educación", 5),
-          c("Seminario taller de tesis", 4),
-          c("Filosofía de la educación superior", 5),
-          c("Andragogía", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo II", total: "19 créditos",
-        items: [
-          c("Asesoramiento de tesis I", 4),
-          c("Didáctica en la educación superior", 5),
-          c("Análisis de datos cuantitativos y cualitativos", 5),
-          c("Técnicas y estrategias para el desarrollo de la inteligencia emocional", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo III", total: "11 créditos",
-        items: [
-          c("Asesoramiento de tesis II", 7),
-          e(4, [
-            "Currículo y evaluación educativa",
-            "Sistemas de evaluación de la calidad institucional",
-            "Enfoques y técnicas cualitativas en investigación",
-          ]),
-        ],
-      },
-    ] as Ciclo[],
   },
   {
-    slug: "psicologia-educativa",
-    numero: "03",
-    nombre: "Psicología Educativa",
-    slogan: "Comprende el aprendizaje desde la ciencia",
-    resumen:
-      "Ideal para especialistas interesados en cognición, aprendizaje y estrategias de intervención para mejorar el rendimiento académico.",
-    icono: BrainCircuit,
-    idealPara: "Profesionales de educación y psicología orientados a intervención pedagógica.",
-    perfil: [
-      "Analiza procesos cognitivos y socioemocionales del aprendizaje.",
-      "Diseña estrategias para atender problemas de aprendizaje.",
-      "Propone intervenciones basadas en neuropsicología educativa.",
+    titulo: "Ciclo III",
+    total: "12 créditos",
+    items: [
+      c("Evaluación de la calidad de los sistemas educacionales", 4),
+      c("Seminario de taller de tesis III", 4),
+      c("Seminario de Investigación cualitativa II", 4),
     ],
-    ciclos: [
-      {
-        titulo: "Ciclo I", total: "19 créditos",
-        items: [
-          c("Teorías científicas de la educación", 5),
-          c("Seminario taller de tesis", 4),
-          c("Psicología cognitiva", 5),
-          c("Teorías y estrategias de aprendizaje", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo II", total: "19 créditos",
-        items: [
-          c("Asesoramiento de tesis I", 4),
-          c("Fundamentos neuropsicológicos de la cognición", 5),
-          c("Problemas de aprendizaje", 5),
-          c("Análisis de datos cuantitativos y cualitativos", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo III", total: "11 créditos",
-        items: [
-          c("Asesoramiento de tesis II", 7),
-          e(4, [
-            "Currículo y evaluación educativa",
-            "Técnicas y estrategias para el desarrollo de las inteligencias múltiples",
-            "Enfoques y técnicas cualitativas en investigación",
-          ]),
-        ],
-      },
-    ] as Ciclo[],
   },
   {
-    slug: "ensenanza-estrategica",
-    numero: "04",
-    nombre: "Enseñanza Estratégica",
-    slogan: "Diseña experiencias que realmente enseñan",
-    resumen:
-      "Potencia tu práctica docente con herramientas de pensamiento crítico, neurociencia aplicada y metodologías activas para el aula.",
-    icono: Users,
-    idealPara: "Docentes que buscan innovar en metodologías y elevar el desempeño de sus estudiantes.",
-    perfil: [
-      "Diseña procesos de enseñanza centrados en competencias.",
-      "Aplica recursos didácticos innovadores en distintos contextos.",
-      "Fortalece el pensamiento creativo, crítico y reflexivo.",
+    titulo: "Ciclo IV",
+    total: "12 créditos",
+    items: [
+      c("Seminario taller de evaluación y formulación de currículo", 4),
+      c("Análisis de datos cuantitativos y cualitativos", 4),
+      c("Sistemas educativos y pensamiento pedagógico", 4),
     ],
-    ciclos: [
-      {
-        titulo: "Ciclo I", total: "19 créditos",
-        items: [
-          c("Teorías científicas de la educación", 5),
-          c("Seminario taller de tesis", 4),
-          c("Herramientas del pensamiento creativo, crítico y reflexivo", 5),
-          c("Fundamentos neuropsicológicos de la cognición", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo II", total: "19 créditos",
-        items: [
-          c("Asesoramiento de tesis I", 4),
-          c("Técnicas y estrategias para el desarrollo de la inteligencia emocional", 5),
-          c("Recursos didácticos para el aprendizaje", 5),
-          c("Teorías y estrategias de aprendizaje", 5),
-        ],
-      },
-      {
-        titulo: "Ciclo III", total: "11 créditos",
-        items: [
-          c("Asesoramiento de tesis II", 7),
-          e(4, [
-            "Currículo y evaluación educativa",
-            "Técnicas y estrategias para el desarrollo de la inteligencia lógico-matemática",
-            "Enfoques y técnicas cualitativas en investigación",
-          ]),
-        ],
-      },
-    ] as Ciclo[],
+  },
+  {
+    titulo: "Ciclo V",
+    total: "12 créditos",
+    items: [
+      c("Neurociencia y cognición", 4),
+      c("Política y gestión educativa", 4),
+      c("Asesoría de Tesis I", 4),
+    ],
+  },
+  {
+    titulo: "Ciclo VI",
+    total: "12 créditos",
+    items: [
+      c("Educación para el desarrollo sostenible", 4),
+      c("Asesoramiento de tesis II", 4),
+      e(4, [
+        "Investigación de las TIC en Educación",
+        "Investigación del liderazgo en la gestión del cambio",
+        "Investigación de la gestión del conocimiento",
+      ]),
+    ],
   },
 ];
 
 const stats = [
-  { numero: "4", etiqueta: "Menciones", sub: "especializaciones" },
-  { numero: "49", etiqueta: "Créditos", sub: "académicos totales" },
-  { numero: "3", etiqueta: "Semestres", sub: "año y medio" },
+  { numero: "6", etiqueta: "Ciclos", sub: "semestres académicos" },
+  { numero: "72", etiqueta: "Créditos", sub: "académicos totales" },
+  { numero: "3", etiqueta: "Años", sub: "de formación" },
   { numero: "2026‑I", etiqueta: "Convocatoria", sub: "nueva cohorte" },
 ];
 
 const propuestaValor = [
   {
-    titulo: "Formación para liderar",
-    descripcion: "Desarrolla capacidades de gestión, investigación y toma de decisiones en escenarios educativos reales.",
-    icono: Target,
+    titulo: "Formación investigadora",
+    descripcion: "Desarrolla capacidades de investigación científica de alto impacto en el campo educativo.",
+    icono: Microscope,
   },
   {
-    titulo: "Investigación aplicada",
-    descripcion: "Conecta tu formación con proyectos de tesis y soluciones concretas para instituciones educativas.",
+    titulo: "Producción científica",
+    descripcion: "Genera conocimiento original y publica en revistas académicas indexadas.",
     icono: Brain,
   },
   {
     titulo: "Docentes de alto nivel",
-    descripcion: "Aprende con una plana académica especializada en educación, innovación y desarrollo profesional.",
+    descripcion: "Aprende con una plana académica especializada en investigación y ciencias de la educación.",
     icono: Award,
   },
   {
-    titulo: "Enfoque estratégico",
-    descripcion: "Integra pensamiento crítico, creatividad y análisis de datos para potenciar tu perfil.",
+    titulo: "Liderazgo académico",
+    descripcion: "Dirige proyectos educativos y equipos de investigación a nivel nacional e internacional.",
     icono: Lightbulb,
   },
 ];
@@ -261,45 +132,45 @@ const pasosPostulacion = [
   {
     paso: "01",
     titulo: "Realiza el pago de inscripción",
-    detalle: "Caja Huancayo o Banco de la Nación. Derecho de inscripción: S/ 211.00 (código 1671, consignando DNI).",
+    detalle: "Pago por derecho de inscripción consignando el N° de DNI del postulante al doctorado. S/. 231.00 al código 1672.",
     icono: CreditCard,
   },
   {
     paso: "02",
     titulo: "Ubica usuario y clave en tu voucher",
-    detalle: "Con esos datos podrás continuar la inscripción en línea. Conserva tu comprobante de pago.",
+    detalle: "Identifique en su voucher de pago su USUARIO y CLAVE para continuar con la inscripción en línea.",
     icono: FileText,
   },
   {
     paso: "03",
     titulo: "Desarrolla tu perfil de investigación",
-    detalle: "Descarga el formato oficial y prepara tu perfil según los lineamientos solicitados.",
+    detalle: "Descarga el formato oficial del perfil de proyecto de investigación, desarrolla el perfil según lo que se solicita y guárdalo en formato Word.",
     icono: Download,
   },
   {
     paso: "04",
     titulo: "Inscríbete en la plataforma de admisión",
-    detalle: "Completa tu inscripción en línea luego de 24 horas de realizado el pago.",
+    detalle: "Luego que hayan transcurrido 24 horas desde que realizó el pago, inscríbase en línea en la plataforma oficial.",
     icono: GraduationCap,
   },
   {
     paso: "05",
     titulo: "Descarga tu constancia de inscripción",
-    detalle: "Al finalizar el registro podrás guardar la constancia para tu expediente.",
+    detalle: "Cuando haya culminado su inscripción le saldrá una opción para descargar/guardar la constancia. Active dicha opción y guarde el documento.",
     icono: BadgeCheck,
   },
   {
     paso: "06",
     titulo: "Envía tu expediente en un solo PDF",
-    detalle: "Incluye DNI, bachiller, perfil, CV descriptivo, voucher y constancia según el orden establecido.",
+    detalle: "Incluye: DNI, diploma de bachiller, perfil del proyecto, CV descriptivo (máx. 1 página), voucher de pago y constancia de inscripción, en ese orden.",
     icono: ListChecks,
   },
 ];
 
-export default function MaestriaContent() {
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const toggle = (slug: string) =>
-    setExpanded((prev) => (prev === slug ? null : slug));
+export default function DoctoradoContent() {
+  const [expandedCiclo, setExpandedCiclo] = useState<string | null>(null);
+  const toggleCiclo = (titulo: string) =>
+    setExpandedCiclo((prev) => (prev === titulo ? null : titulo));
 
   return (
     <main className="flex-1 w-full bg-background text-foreground">
@@ -318,19 +189,19 @@ export default function MaestriaContent() {
               </span>
 
               <h1 className="mt-5 font-serif text-5xl font-black leading-[1.08] tracking-tight text-white md:text-6xl xl:text-7xl">
-                Maestría en
+                Doctorado en
                 <span className="block text-uncp-gold">Ciencias de la</span>
                 <span className="block">Educación</span>
               </h1>
 
               <p className="mt-6 max-w-lg text-base leading-relaxed text-brand-50/80 md:text-lg">
-                Formación de posgrado orientada a liderazgo, investigación e innovación educativa. Cuatro menciones diseñadas para transformar tu carrera.
+                Formación doctoral orientada a la investigación científica, producción académica y liderazgo en el campo de las ciencias de la educación.
               </p>
 
               <div className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-brand-50">
                 <Calendar className="h-4 w-4 text-uncp-gold" />
                 Inscripciones hasta el{" "}
-                <strong className="text-uncp-gold">27 de marzo de 2026</strong>
+                <strong className="text-uncp-gold">28 de marzo de 2026</strong>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -343,7 +214,7 @@ export default function MaestriaContent() {
                   Inscribirme ahora <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
-                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20las%20Maestr%C3%ADas%20en%20Educaci%C3%B3n"
+                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20el%20Doctorado%20en%20Educaci%C3%B3n"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
@@ -370,14 +241,14 @@ export default function MaestriaContent() {
 
               <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
                 <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-uncp-gold">
-                  ¿Por qué esta maestría?
+                  ¿Por qué este doctorado?
                 </p>
                 <ul className="space-y-2 text-sm text-brand-50/90">
                   {[
-                    "Acompañamiento académico durante toda la maestría",
-                    "Malla curricular orientada a resultados reales",
-                    "Formación con enfoque en liderazgo e investigación",
-                    "Plana docente de alto nivel especializada",
+                    "Formación doctoral con rigor científico y metodológico",
+                    "Talleres de tesis integrados en cada semestre",
+                    "Programa orientado a la producción científica",
+                    "Plana docente especializada en investigación educativa",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2.5">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-uncp-gold" />
@@ -416,87 +287,75 @@ export default function MaestriaContent() {
         </div>
       </section>
 
-      {/* ── MENCIONES ─────────────────────────────────────── */}
-      <section className="bg-white py-20 md:py-24" id="menciones">
+      {/* ── PLAN DE ESTUDIOS ──────────────────────────────── */}
+      <section className="bg-white py-20 md:py-24" id="plan-estudios">
         <div className="container mx-auto max-w-7xl px-6 lg:px-12">
           <div className="mb-14 max-w-2xl">
             <p className="text-xs font-black uppercase tracking-[0.25em] text-brand-600">
-              4 Especializaciones
+              6 Ciclos Académicos
             </p>
             <h2 className="mt-3 font-serif text-4xl font-black leading-tight text-brand-950 md:text-5xl">
-              Elige la mención que
+              Plan de estudios
               <br />
-              <span className="text-brand-600">impulsa tu carrera</span>
+              <span className="text-brand-600">del doctorado</span>
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              Cada mención tiene malla propia, perfil de egreso y enfoque diferenciado. Despliega cualquier tarjeta para ver la malla curricular completa.
+              Seis semestres de formación doctoral con enfoque en investigación, análisis y producción científica. Despliega cada ciclo para ver las asignaturas.
             </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {menciones.map((m) => {
-              const Icono = m.icono;
-              const isOpen = expanded === m.slug;
+            {ciclosDoctorado.map((ciclo, index) => {
+              const isOpen = expandedCiclo === ciclo.titulo;
+              const cicloNum = index + 1;
 
               return (
                 <article
-                  key={m.slug}
+                  key={ciclo.titulo}
                   className="overflow-hidden rounded-[2rem] border border-border bg-white shadow-sm transition-all duration-300 hover:border-brand-200 hover:shadow-xl"
                 >
                   {/* CABECERA OSCURA */}
                   <div className="relative bg-brand-950 p-7">
                     <span className="absolute right-6 top-5 select-none text-5xl font-black text-white/6">
-                      {m.numero}
+                      {String(cicloNum).padStart(2, "0")}
                     </span>
                     <div className="flex items-center gap-3">
                       <div className="rounded-xl border border-white/20 bg-white/12 p-3">
-                        <Icono className="h-6 w-6 text-uncp-gold" />
+                        <BookOpen className="h-6 w-6 text-uncp-gold" />
                       </div>
                       <span className="text-[10px] font-black uppercase tracking-widest text-brand-50/50">
-                        Mención {m.numero}
+                        Semestre {cicloNum}
                       </span>
                     </div>
                     <h3 className="mt-4 font-serif text-2xl font-black text-white md:text-3xl">
-                      {m.nombre}
+                      {ciclo.titulo}
                     </h3>
-                    <p className="mt-1.5 text-sm font-bold text-uncp-gold">{m.slogan}</p>
+                    <p className="mt-1.5 text-sm font-bold text-uncp-gold">{ciclo.total}</p>
                   </div>
 
                   {/* CUERPO */}
                   <div className="p-7">
-                    <p className="text-sm leading-relaxed text-muted-foreground">{m.resumen}</p>
-
-                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3">
-                      <Zap className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                    <div className="flex items-center gap-3 rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3">
+                      <Target className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
                       <div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-brand-600">
-                          Ideal para
+                          Asignaturas
                         </p>
-                        <p className="mt-0.5 text-sm text-brand-950">{m.idealPara}</p>
+                        <p className="mt-0.5 text-sm text-brand-950">
+                          {ciclo.items.filter((i) => i.tipo === "curso").length} asignaturas
+                          {ciclo.items.some((i) => i.tipo === "electivo") ? " + 1 electivo" : ""}
+                          {" · "}12 créditos totales
+                        </p>
                       </div>
                     </div>
 
-                    <div className="mt-6">
-                      <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-600">
-                        <BadgeCheck className="h-3.5 w-3.5" /> Perfil de egreso
-                      </p>
-                      <ul className="space-y-2.5">
-                        {m.perfil.map((p) => (
-                          <li key={p} className="flex items-start gap-2.5 text-sm text-brand-950">
-                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-uncp-green" />
-                            {p}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
                     <button
-                      onClick={() => toggle(m.slug)}
+                      onClick={() => toggleCiclo(ciclo.titulo)}
                       className="mt-6 flex w-full items-center justify-between rounded-2xl border border-brand-200 bg-brand-50/40 px-5 py-3.5 text-sm font-black text-brand-950 transition hover:border-brand-400 hover:bg-brand-50"
                     >
                       <span className="flex items-center gap-2">
                         <BookOpen className="h-4 w-4 text-brand-600" />
-                        {isOpen ? "Ocultar malla curricular" : "Ver malla curricular completa"}
+                        {isOpen ? "Ocultar asignaturas" : "Ver asignaturas del ciclo"}
                       </span>
                       <ChevronDown
                         className={`h-4 w-4 text-brand-600 transition-transform duration-300 ${
@@ -507,65 +366,58 @@ export default function MaestriaContent() {
 
                     {isOpen && (
                       <div className="mt-5 space-y-4 border-t border-brand-100 pt-5">
-                        {m.ciclos.map((ciclo) => (
-                          <div key={ciclo.titulo} className="rounded-2xl border border-border bg-background">
-                            {/* cabecera del ciclo */}
-                            <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
-                              <p className="text-xs font-black uppercase tracking-widest text-brand-950">
-                                {ciclo.titulo}
-                              </p>
-                              <span className="rounded-lg bg-brand-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white">
-                                {ciclo.total}
-                              </span>
-                            </div>
+                        <div className="rounded-2xl border border-border bg-background">
+                          <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+                            <p className="text-xs font-black uppercase tracking-widest text-brand-950">
+                              {ciclo.titulo}
+                            </p>
+                            <span className="rounded-lg bg-brand-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white">
+                              {ciclo.total}
+                            </span>
+                          </div>
 
-                            {/* items */}
-                            <div className="divide-y divide-border">
-                              {ciclo.items.map((item, idx) =>
-                                item.tipo === "curso" ? (
-                                  /* ── curso regular ── */
-                                  <div key={idx} className="flex items-center justify-between gap-4 px-5 py-3">
-                                    <p className="text-sm text-brand-950">{item.nombre}</p>
-                                    <span className="shrink-0 rounded-lg border border-brand-100 bg-brand-50 px-2.5 py-1 text-[11px] font-black text-brand-600">
-                                      {item.creditos} cr.
+                          <div className="divide-y divide-border">
+                            {ciclo.items.map((item, idx) =>
+                              item.tipo === "curso" ? (
+                                <div key={idx} className="flex items-center justify-between gap-4 px-5 py-3">
+                                  <p className="text-sm text-brand-950">{item.nombre}</p>
+                                  <span className="shrink-0 rounded-lg border border-brand-100 bg-brand-50 px-2.5 py-1 text-[11px] font-black text-brand-600">
+                                    {item.creditos} cr.
+                                  </span>
+                                </div>
+                              ) : (
+                                <div key={idx} className="px-5 py-4">
+                                  <div className="mb-3 flex items-center gap-2">
+                                    <span className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-700">
+                                      Elige 1 electivo · {item.creditos} cr.
                                     </span>
                                   </div>
-                                ) : (
-                                  /* ── electivo ── */
-                                  <div key={idx} className="px-5 py-4">
-                                    <div className="mb-3 flex items-center gap-2">
-                                      <span className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-700">
-                                        Elige 1 electivo · {item.creditos} cr.
-                                      </span>
-                                    </div>
-                                    <div className="space-y-2">
-                                      {item.opciones.map((op, i) => (
-                                        <div
-                                          key={i}
-                                          className="flex items-center gap-3 rounded-xl border border-dashed border-brand-200 bg-brand-50/40 px-4 py-2.5"
-                                        >
-                                          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-brand-300 text-[10px] font-black text-brand-600">
-                                            {String.fromCharCode(65 + i)}
-                                          </span>
-                                          <p className="text-sm text-brand-950">{op}</p>
-                                        </div>
-                                      ))}
-                                    </div>
-                                    <p className="mt-2 text-[11px] text-muted-foreground">
-                                      * El maestrando elige una de las tres asignaturas electivas.
-                                    </p>
+                                  <div className="space-y-2">
+                                    {item.opciones.map((op, i) => (
+                                      <div
+                                        key={i}
+                                        className="flex items-center gap-3 rounded-xl border border-dashed border-brand-200 bg-brand-50/40 px-4 py-2.5"
+                                      >
+                                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-brand-300 text-[10px] font-black text-brand-600">
+                                          {String.fromCharCode(65 + i)}
+                                        </span>
+                                        <p className="text-sm text-brand-950">{op}</p>
+                                      </div>
+                                    ))}
                                   </div>
-                                )
-                              )}
-                            </div>
+                                  <p className="mt-2 text-[11px] text-muted-foreground">
+                                    * El doctorando elige una de las tres asignaturas electivas.
+                                  </p>
+                                </div>
+                              )
+                            )}
                           </div>
-                        ))}
+                        </div>
                         <div className="flex items-center justify-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/50 py-3">
                           <p className="text-[11px] font-black uppercase tracking-widest text-brand-600">
-                            Total plan de estudios
+                            Total {ciclo.titulo}
                           </p>
-                          <span className="rounded-lg bg-brand-600 px-3 py-1 text-[11px] font-black text-white">49 créditos</span>
-                          <span className="text-[11px] text-muted-foreground">· 3 semestres</span>
+                          <span className="rounded-lg bg-brand-600 px-3 py-1 text-[11px] font-black text-white">12 créditos</span>
                         </div>
                       </div>
                     )}
@@ -573,6 +425,15 @@ export default function MaestriaContent() {
                 </article>
               );
             })}
+          </div>
+
+          {/* resumen total */}
+          <div className="mt-8 flex items-center justify-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/50 py-4">
+            <p className="text-[11px] font-black uppercase tracking-widest text-brand-600">
+              Total plan de estudios
+            </p>
+            <span className="rounded-lg bg-brand-600 px-3 py-1 text-[11px] font-black text-white">72 créditos</span>
+            <span className="text-[11px] text-muted-foreground">· 6 semestres · 3 años</span>
           </div>
         </div>
       </section>
@@ -583,17 +444,17 @@ export default function MaestriaContent() {
           <div className="grid gap-10 lg:grid-cols-2">
             <div className="flex flex-col justify-center">
               <p className="text-xs font-black uppercase tracking-[0.25em] text-uncp-gold">
-                Tu transformación profesional
+                Tu transformación académica
               </p>
               <h2 className="mt-4 font-serif text-4xl font-black leading-tight text-white md:text-5xl">
-                Lo que vas a construir con esta maestría
+                Lo que vas a construir con este doctorado
               </h2>
               <p className="mt-5 text-base leading-relaxed text-brand-50/75">
-                No es solo un grado. Es el siguiente nivel en tu trayectoria como educador, gestor o investigador.
+                No es solo un título. Es el más alto grado académico, respaldado por investigación científica y liderazgo en educación.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
-                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20las%20Maestr%C3%ADas"
+                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20el%20Doctorado%20en%20Educaci%C3%B3n"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-6 py-3 text-sm font-black uppercase tracking-wider text-brand-950 transition hover:brightness-110"
@@ -615,22 +476,22 @@ export default function MaestriaContent() {
               {[
                 {
                   icono: TrendingUp,
-                  titulo: "Perfil profesional diferenciado",
-                  desc: "Mayor competitividad para ascenso, dirección de instituciones y nuevos retos docentes.",
+                  titulo: "Perfil investigador avanzado",
+                  desc: "Mayor competitividad para la academia, la investigación y la dirección de proyectos educativos.",
                 },
                 {
                   icono: Brain,
-                  titulo: "Capacidad investigadora",
-                  desc: "Diseño y ejecución de proyectos de tesis con rigor metodológico reconocido.",
+                  titulo: "Capacidad científica",
+                  desc: "Diseño y ejecución de investigaciones doctorales con rigor metodológico reconocido.",
                 },
                 {
-                  icono: Building2,
-                  titulo: "Liderazgo institucional",
-                  desc: "Gestión de equipos, proyectos de mejora y toma de decisiones basada en evidencia.",
+                  icono: Users,
+                  titulo: "Liderazgo en educación",
+                  desc: "Gestión de equipos académicos y toma de decisiones basada en evidencia científica.",
                 },
                 {
                   icono: Award,
-                  titulo: "Grado de Magíster",
+                  titulo: "Grado de Doctor",
                   desc: "Titulación oficial por la UNCP con pleno reconocimiento académico nacional.",
                 },
               ].map((l) => {
@@ -749,17 +610,16 @@ export default function MaestriaContent() {
                 <div className="px-7 py-6">
                   <ul className="divide-y divide-white/10">
                     {[
-                      { concepto: "Inscripción (único pago)", monto: "S/ 211.00", detalle: "Banco Nación · cód. 1671" },
-                      { concepto: "Matrícula (c/semestre)", monto: "S/ 101.00", detalle: "Por cada ciclo" },
-                      { concepto: "Pensión (4 cuotas)", monto: "S/ 401.00", detalle: "Por cuota, por semestre" },
-                      { concepto: "Propedéutica", monto: "S/ 121.00", detalle: "Único pago al inicio" },
-                    ].map((c) => (
-                      <li key={c.concepto} className="flex items-start justify-between gap-3 py-3.5">
+                      { concepto: "Inscripción (único pago)", monto: "S/ 231.00", detalle: "Banco Nación · cód. 1672 + DNI" },
+                      { concepto: "Matrícula (c/semestre)", monto: "S/ 201.00", detalle: "Por cada ciclo" },
+                      { concepto: "Pensión (4 cuotas)", monto: "S/ 501.00", detalle: "Por cuota, por semestre" },
+                    ].map((item) => (
+                      <li key={item.concepto} className="flex items-start justify-between gap-3 py-3.5">
                         <div>
-                          <p className="text-sm font-bold text-brand-50">{c.concepto}</p>
-                          <p className="text-[11px] text-brand-50/50">{c.detalle}</p>
+                          <p className="text-sm font-bold text-brand-50">{item.concepto}</p>
+                          <p className="text-[11px] text-brand-50/50">{item.detalle}</p>
                         </div>
-                        <span className="shrink-0 text-base font-black text-uncp-gold">{c.monto}</span>
+                        <span className="shrink-0 text-base font-black text-uncp-gold">{item.monto}</span>
                       </li>
                     ))}
                   </ul>
@@ -772,9 +632,9 @@ export default function MaestriaContent() {
                 </p>
                 <ul className="space-y-4 text-sm">
                   {[
-                    { icono: Landmark, texto: "Estudios en 3 semestres (año y medio)." },
-                    { icono: Calendar, texto: "Pago de inscripción hasta el 27 de marzo 2026." },
-                    { icono: GraduationCap, texto: "Inscripción en línea hasta el 28 de marzo 2026." },
+                    { icono: Landmark, texto: "Estudios en 6 semestres (tres años)." },
+                    { icono: Calendar, texto: "Inscripción hasta el 28 de marzo de 2026." },
+                    { icono: GraduationCap, texto: "Inscripción en línea luego de 24 h del pago." },
                     { icono: Award, texto: "Entrevista virtual vía Microsoft Teams." },
                   ].map((f) => {
                     const Icono = f.icono;
@@ -840,7 +700,7 @@ export default function MaestriaContent() {
             <span className="block text-uncp-gold">empieza con una decisión</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-brand-50/75 md:text-lg">
-            Únete a la Maestría en Ciencias de la Educación de la UNCP. Formación orientada a resultados, con acompañamiento académico en cada etapa.
+            Únete al Doctorado en Ciencias de la Educación de la UNCP. Formación orientada a la investigación científica, con acompañamiento académico en cada etapa.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a

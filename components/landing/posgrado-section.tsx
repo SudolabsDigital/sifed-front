@@ -157,7 +157,7 @@ export default function PosgradoSection() {
                 <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
                   Especialización diseñada para liderar procesos de cambio pedagógico y administrativo en el sector educativo nacional.
                 </p>
-                <Link href="/en-construccion" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                <Link href="/posgrado/maestrias" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
                   Ver Maestrías <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
                 </Link>
               </motion.div>
