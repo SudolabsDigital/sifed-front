@@ -12,48 +12,39 @@ import Autoplay from "embla-carousel-autoplay";
 const slides = [
   {
     id: 1,
-    src: "/images/portada-1.webp",
-    alt: "Estudiantes en Campus",
-    title: "Excelencia en Formación Docente",
-    description: "La plataforma oficial SIFED centraliza matrículas, cursos y trámites. Diseñada para docentes y estudiantes de la Facultad de Educación.",
-    cta: "Acceder al Aula",
-    link: "/nosotros"
+    src: "/images/portada-2.webp",
+    alt: "Admisión Maestría",
+    title: "Admisión Maestría",
+    description: "Eleva tu perfil profesional con nuestras maestrías especializadas. Modalidad semipresencial diseñada para bachilleres que buscan la excelencia.",
+    cta: "Ver Requisitos",
+    link: "/posgrado/admision/maestria"
   },
   {
     id: 2,
-    src: "/images/portada-2.webp",
-    alt: "Afiche de Admisión",
-    title: "Admisión 2026 Abierta",
-    description: "Postula a nuestros programas de posgrado. Inscripciones abiertas hasta el 30 de Marzo. ¡Forma parte de la excelencia!",
-    cta: "Ver Requisitos",
-    link: "/admision"
+    src: "/images/portada-3.webp",
+    alt: "Admisión Doctorado",
+    title: "Admisión Doctorado",
+    description: "Alcanza el máximo grado académico con el Doctorado en Ciencias de la Educación. Programa orientado a la investigación avanzada y liderazgo.",
+    cta: "Postular Ahora",
+    link: "/posgrado/admision/doctorado"
   },
   {
     id: 3,
-    src: "/images/portada-3.webp",
-    alt: "Conferencia Magistral",
-    title: "Comunidad Académica Conectada",
-    description: "Accede a todos los servicios de la facultad desde cualquier dispositivo. Gestión simplificada para tu vida universitaria.",
-    cta: "Portal Informativo",
-    link: "/login"
+    src: "/images/portada-4.webp",
+    alt: "Planes de Estudio",
+    title: "Planes de Estudio Actualizados",
+    description: "Mallas curriculares diseñadas para responder a los desafíos educativos actuales. Formación integral en Gestión, Docencia y Psicología.",
+    cta: "Ver Mallas",
+    link: "/posgrado/planes-estudio"
   },
   {
     id: 4,
-    src: "/images/portada-4.webp",
-    alt: "Investigación y Desarrollo",
-    title: "Investigación de Alto Impacto",
-    description: "Fomentamos la producción científica y la innovación pedagógica en nuestros laboratorios y grupos de investigación.",
-    cta: "Conocer Más",
-    link: "/investigacion"
-  },
-  {
-    id: 5,
     src: "/images/portada-5.webp",
-    alt: "Infraestructura Moderna",
-    title: "Infraestructura Moderna",
-    description: "Espacios diseñados para el aprendizaje colaborativo y el desarrollo profesional de nuestros estudiantes.",
-    cta: "Ver Galería",
-    link: "/nosotros"
+    alt: "Plana Docente",
+    title: "Plana Docente de Excelencia",
+    description: "Formación impartida por un equipo de doctores y magísteres con amplia trayectoria académica y compromiso con la investigación.",
+    cta: "Conocer Docentes",
+    link: "/posgrado/plana-docente"
   }
 ];
 
