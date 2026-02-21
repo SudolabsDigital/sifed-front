@@ -1,244 +1,414 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-import { 
-  GraduationCap,
-  BookOpen,
-  Target,
+import {
+  ArrowRight,
   Award,
-  Clock,
-  Users,
-  CheckCircle,
-  Calendar,
-  FileText,
-  TrendingUp,
-  Lightbulb,
+  BadgeCheck,
+  BookOpen,
   Brain,
-  Globe,
-  MessageSquare,
-  BarChart,
-  PenTool
+  Building2,
+  BrainCircuit,
+  Calendar,
+  CheckCircle2,
+  ChevronDown,
+  Clock3,
+  CreditCard,
+  Download,
+  FileText,
+  GraduationCap,
+  Landmark,
+  Lightbulb,
+  ListChecks,
+  MessageCircle,
+  Presentation,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Users,
+  Zap,
 } from "lucide-react";
-import FacebookSection from "./facebook-section";
 
-// Datos del programa
-const perfilEgreso = [
+/* ─── TIPOS ─────────────────────────────────────────────────── */
+type CursoRegular = { tipo: "curso"; nombre: string; creditos: number };
+type CursoElectivo = { tipo: "electivo"; creditos: number; opciones: string[] };
+type CursoItem = CursoRegular | CursoElectivo;
+type Ciclo = { titulo: string; total: string; items: CursoItem[] };
+
+/* ─── HELPER ─────────────────────────────────────────────────── */
+const c = (nombre: string, creditos: number): CursoRegular => ({ tipo: "curso", nombre, creditos });
+const e = (creditos: number, opciones: string[]): CursoElectivo => ({ tipo: "electivo", creditos, opciones });
+
+const menciones = [
   {
-    id: 1,
-    titulo: "Liderazgo Pedagógico",
-    descripcion: "Lidera procesos de transformación educativa con visión estratégica e innovadora.",
-    icon: Target,
-    color: "bg-blue-50 text-blue-600 border-blue-200"
+    slug: "gestion-educativa",
+    numero: "01",
+    nombre: "Gestión Educativa",
+    slogan: "Lidera instituciones y transforma resultados",
+    resumen:
+      "Dirigida a profesionales que desean liderar instituciones, optimizar procesos académicos y diseñar proyectos de mejora educativa.",
+    icono: Building2,
+    idealPara: "Directivos, coordinadores y profesionales con enfoque en gestión institucional.",
+    perfil: [
+      "Gestiona instituciones y equipos con enfoque en calidad educativa.",
+      "Formula proyectos educativos innovadores y de inversión.",
+      "Aplica análisis de datos para la toma de decisiones en gestión.",
+    ],
+    ciclos: [
+      {
+        titulo: "Ciclo I", total: "19 créditos",
+        items: [
+          c("Teorías científicas de la educación", 5),
+          c("Seminario taller de tesis", 4),
+          c("Liderazgo, inteligencia emocional y cultura organizacional", 5),
+          c("Planificación y organización educativa", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo II", total: "19 créditos",
+        items: [
+          c("Asesoramiento de tesis I", 4),
+          c("Proyectos educativos, innovadores y de inversión", 5),
+          c("Análisis de datos cuantitativos y cualitativos", 5),
+          c("Gestión de recursos humanos", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo III", total: "11 créditos",
+        items: [
+          c("Asesoramiento de tesis II", 7),
+          e(4, [
+            "Evaluación, supervisión y asesoramiento educacional",
+            "Sistemas de evaluación de la calidad institucional",
+            "Enfoques y técnicas cualitativas en investigación",
+          ]),
+        ],
+      },
+    ] as Ciclo[],
   },
   {
-    id: 2,
-    titulo: "Investigación Educativa",
-    descripcion: "Diseña y ejecuta investigaciones aplicadas que contribuyen al avance del conocimiento pedagógico.",
-    icon: Brain,
-    color: "bg-purple-50 text-purple-600 border-purple-200"
+    slug: "educacion-superior",
+    numero: "02",
+    nombre: "Educación Superior",
+    slogan: "Potencia tu impacto en aulas universitarias",
+    resumen:
+      "Enfocada en docencia universitaria de alto nivel, innovación didáctica y fortalecimiento de competencias para la formación profesional.",
+    icono: Presentation,
+    idealPara: "Docentes universitarios y profesionales que desean especializarse en enseñanza superior.",
+    perfil: [
+      "Diseña experiencias de aprendizaje para educación superior.",
+      "Integra didáctica universitaria y evaluación por competencias.",
+      "Sustenta propuestas pedagógicas con evidencia e investigación.",
+    ],
+    ciclos: [
+      {
+        titulo: "Ciclo I", total: "19 créditos",
+        items: [
+          c("Teorías científicas de la educación", 5),
+          c("Seminario taller de tesis", 4),
+          c("Filosofía de la educación superior", 5),
+          c("Andragogía", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo II", total: "19 créditos",
+        items: [
+          c("Asesoramiento de tesis I", 4),
+          c("Didáctica en la educación superior", 5),
+          c("Análisis de datos cuantitativos y cualitativos", 5),
+          c("Técnicas y estrategias para el desarrollo de la inteligencia emocional", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo III", total: "11 créditos",
+        items: [
+          c("Asesoramiento de tesis II", 7),
+          e(4, [
+            "Currículo y evaluación educativa",
+            "Sistemas de evaluación de la calidad institucional",
+            "Enfoques y técnicas cualitativas en investigación",
+          ]),
+        ],
+      },
+    ] as Ciclo[],
   },
   {
-    id: 3,
-    titulo: "Gestión Curricular",
-    descripcion: "Diseña, implementa y evalúa propuestas curriculares innovadoras alineadas a estándares internacionales.",
-    icon: BookOpen,
-    color: "bg-green-50 text-green-600 border-green-200"
+    slug: "psicologia-educativa",
+    numero: "03",
+    nombre: "Psicología Educativa",
+    slogan: "Comprende el aprendizaje desde la ciencia",
+    resumen:
+      "Ideal para especialistas interesados en cognición, aprendizaje y estrategias de intervención para mejorar el rendimiento académico.",
+    icono: BrainCircuit,
+    idealPara: "Profesionales de educación y psicología orientados a intervención pedagógica.",
+    perfil: [
+      "Analiza procesos cognitivos y socioemocionales del aprendizaje.",
+      "Diseña estrategias para atender problemas de aprendizaje.",
+      "Propone intervenciones basadas en neuropsicología educativa.",
+    ],
+    ciclos: [
+      {
+        titulo: "Ciclo I", total: "19 créditos",
+        items: [
+          c("Teorías científicas de la educación", 5),
+          c("Seminario taller de tesis", 4),
+          c("Psicología cognitiva", 5),
+          c("Teorías y estrategias de aprendizaje", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo II", total: "19 créditos",
+        items: [
+          c("Asesoramiento de tesis I", 4),
+          c("Fundamentos neuropsicológicos de la cognición", 5),
+          c("Problemas de aprendizaje", 5),
+          c("Análisis de datos cuantitativos y cualitativos", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo III", total: "11 créditos",
+        items: [
+          c("Asesoramiento de tesis II", 7),
+          e(4, [
+            "Currículo y evaluación educativa",
+            "Técnicas y estrategias para el desarrollo de las inteligencias múltiples",
+            "Enfoques y técnicas cualitativas en investigación",
+          ]),
+        ],
+      },
+    ] as Ciclo[],
   },
   {
-    id: 4,
-    titulo: "Pensamiento Crítico",
-    descripcion: "Analiza críticamente problemáticas educativas complejas y propone soluciones fundamentadas.",
-    icon: Lightbulb,
-    color: "bg-amber-50 text-amber-600 border-amber-200"
+    slug: "ensenanza-estrategica",
+    numero: "04",
+    nombre: "Enseñanza Estratégica",
+    slogan: "Diseña experiencias que realmente enseñan",
+    resumen:
+      "Potencia tu práctica docente con herramientas de pensamiento crítico, neurociencia aplicada y metodologías activas para el aula.",
+    icono: Users,
+    idealPara: "Docentes que buscan innovar en metodologías y elevar el desempeño de sus estudiantes.",
+    perfil: [
+      "Diseña procesos de enseñanza centrados en competencias.",
+      "Aplica recursos didácticos innovadores en distintos contextos.",
+      "Fortalece el pensamiento creativo, crítico y reflexivo.",
+    ],
+    ciclos: [
+      {
+        titulo: "Ciclo I", total: "19 créditos",
+        items: [
+          c("Teorías científicas de la educación", 5),
+          c("Seminario taller de tesis", 4),
+          c("Herramientas del pensamiento creativo, crítico y reflexivo", 5),
+          c("Fundamentos neuropsicológicos de la cognición", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo II", total: "19 créditos",
+        items: [
+          c("Asesoramiento de tesis I", 4),
+          c("Técnicas y estrategias para el desarrollo de la inteligencia emocional", 5),
+          c("Recursos didácticos para el aprendizaje", 5),
+          c("Teorías y estrategias de aprendizaje", 5),
+        ],
+      },
+      {
+        titulo: "Ciclo III", total: "11 créditos",
+        items: [
+          c("Asesoramiento de tesis II", 7),
+          e(4, [
+            "Currículo y evaluación educativa",
+            "Técnicas y estrategias para el desarrollo de la inteligencia lógico-matemática",
+            "Enfoques y técnicas cualitativas en investigación",
+          ]),
+        ],
+      },
+    ] as Ciclo[],
   },
-  {
-    id: 5,
-    titulo: "Comunicación Efectiva",
-    descripcion: "Comunica ideas complejas de manera clara y persuasiva en diversos contextos académicos.",
-    icon: MessageSquare,
-    color: "bg-pink-50 text-pink-600 border-pink-200"
-  },
-  {
-    id: 6,
-    titulo: "Visión Global",
-    descripcion: "Comprende y aplica tendencias educativas internacionales al contexto local.",
-    icon: Globe,
-    color: "bg-cyan-50 text-cyan-600 border-cyan-200"
-  }
 ];
 
-const mallaCurricular = [
-  {
-    ciclo: 1,
-    semestre: "I - II",
-    asignaturas: [
-      { nombre: "Epistemología de la Educación", creditos: 4 },
-      { nombre: "Metodología de la Investigación Educativa", creditos: 4 },
-      { nombre: "Teorías Contemporáneas del Aprendizaje", creditos: 3 },
-      { nombre: "Diseño Curricular y Evaluación", creditos: 3 },
-      { nombre: "Estadística Aplicada a la Investigación", creditos: 3 }
-    ]
-  },
-  {
-    ciclo: 2,
-    semestre: "III - IV",
-    asignaturas: [
-      { nombre: "Gestión y Liderazgo Educativo", creditos: 4 },
-      { nombre: "Seminario de Tesis I", creditos: 4 },
-      { nombre: "Neurociencia y Educación", creditos: 3 },
-      { nombre: "Tecnología Educativa e Innovación", creditos: 3 },
-      { nombre: "Políticas Educativas Comparadas", creditos: 3 }
-    ]
-  },
-  {
-    ciclo: 3,
-    semestre: "V - VI",
-    asignaturas: [
-      { nombre: "Seminario de Tesis II", creditos: 6 },
-      { nombre: "Educación Inclusiva y Diversidad", creditos: 3 },
-      { nombre: "Evaluación de Programas Educativos", creditos: 3 },
-      { nombre: "Ética de la Investigación", creditos: 2 }
-    ]
-  },
-  {
-    ciclo: 4,
-    semestre: "VII - VIII",
-    asignaturas: [
-      { nombre: "Desarrollo y Sustentación de Tesis", creditos: 12 }
-    ]
-  }
+const stats = [
+  { numero: "4", etiqueta: "Menciones", sub: "especializaciones" },
+  { numero: "49", etiqueta: "Créditos", sub: "académicos totales" },
+  { numero: "3", etiqueta: "Semestres", sub: "año y medio" },
+  { numero: "2026‑I", etiqueta: "Convocatoria", sub: "nueva cohorte" },
 ];
 
-const requisitosAdmision = [
-  "Título profesional universitario o grado de bachiller",
-  "Carta de motivación y proyecto de investigación preliminar",
-  "Curriculum vitae documentado",
-  "Certificado de suficiencia en idioma extranjero (inglés recomendado)",
-  "Dos cartas de recomendación académica o profesional",
-  "Entrevista personal con el comité académico"
+const propuestaValor = [
+  {
+    titulo: "Formación para liderar",
+    descripcion: "Desarrolla capacidades de gestión, investigación y toma de decisiones en escenarios educativos reales.",
+    icono: Target,
+  },
+  {
+    titulo: "Investigación aplicada",
+    descripcion: "Conecta tu formación con proyectos de tesis y soluciones concretas para instituciones educativas.",
+    icono: Brain,
+  },
+  {
+    titulo: "Docentes de alto nivel",
+    descripcion: "Aprende con una plana académica especializada en educación, innovación y desarrollo profesional.",
+    icono: Award,
+  },
+  {
+    titulo: "Enfoque estratégico",
+    descripcion: "Integra pensamiento crítico, creatividad y análisis de datos para potenciar tu perfil.",
+    icono: Lightbulb,
+  },
 ];
 
-const estadisticasPrograma = [
-  { numero: "4", label: "Ciclos Académicos" },
-  { numero: "72", label: "Créditos Totales" },
-  { numero: "2", label: "Años de Duración" },
-  { numero: "95%", label: "Empleabilidad" }
+const pasosPostulacion = [
+  {
+    paso: "01",
+    titulo: "Realiza el pago de inscripción",
+    detalle: "Caja Huancayo o Banco de la Nación. Derecho de inscripción: S/ 211.00 (código 1671, consignando DNI).",
+    icono: CreditCard,
+  },
+  {
+    paso: "02",
+    titulo: "Ubica usuario y clave en tu voucher",
+    detalle: "Con esos datos podrás continuar la inscripción en línea. Conserva tu comprobante de pago.",
+    icono: FileText,
+  },
+  {
+    paso: "03",
+    titulo: "Desarrolla tu perfil de investigación",
+    detalle: "Descarga el formato oficial y prepara tu perfil según los lineamientos solicitados.",
+    icono: Download,
+  },
+  {
+    paso: "04",
+    titulo: "Inscríbete en la plataforma de admisión",
+    detalle: "Completa tu inscripción en línea luego de 24 horas de realizado el pago.",
+    icono: GraduationCap,
+  },
+  {
+    paso: "05",
+    titulo: "Descarga tu constancia de inscripción",
+    detalle: "Al finalizar el registro podrás guardar la constancia para tu expediente.",
+    icono: BadgeCheck,
+  },
+  {
+    paso: "06",
+    titulo: "Envía tu expediente en un solo PDF",
+    detalle: "Incluye DNI, bachiller, perfil, CV descriptivo, voucher y constancia según el orden establecido.",
+    icono: ListChecks,
+  },
 ];
 
 export default function MaestriaContent() {
-  const [cicloActivo, setCicloActivo] = useState(1);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const toggle = (slug: string) =>
+    setExpanded((prev) => (prev === slug ? null : slug));
 
   return (
-    <main className="flex-1 w-full">
-      
-      {/* HERO SECTION */}
-      <section className="relative bg-gradient-to-br from-brand-950 via-brand-800 to-brand-600 text-white py-24 lg:py-32 overflow-hidden">
-        {/* Patrón de fondo */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}></div>
+    <main className="flex-1 w-full bg-background text-foreground">
+
+      {/* ── HERO ──────────────────────────────────────────── */}
+      <section className="relative flex min-h-[92vh] flex-col justify-center overflow-hidden bg-brand-950">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[url('/images/portada-2.webp')] bg-cover bg-center opacity-15" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-brand-950/95 to-brand-800/70" />
         </div>
-
-        <div className="relative z-10 container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Eyebrow */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="h-px w-8 bg-uncp-gold"></div>
-              <span className="text-xs font-black uppercase tracking-widest text-uncp-gold">
-                Posgrado - Unidad de Posgrado
+        <div className="container relative z-10 mx-auto max-w-7xl px-6 py-24 lg:px-12">
+          <div className="grid items-center gap-14 lg:grid-cols-2">
+            <div>
+              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-uncp-gold/40 bg-uncp-gold/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-uncp-gold">
+                <Sparkles className="h-3.5 w-3.5" /> Posgrado UNCP · Educación
               </span>
-              <div className="h-px w-8 bg-uncp-gold"></div>
+
+              <h1 className="mt-5 font-serif text-5xl font-black leading-[1.08] tracking-tight text-white md:text-6xl xl:text-7xl">
+                Maestría en
+                <span className="block text-uncp-gold">Ciencias de la</span>
+                <span className="block">Educación</span>
+              </h1>
+
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-brand-50/80 md:text-lg">
+                Formación de posgrado orientada a liderazgo, investigación e innovación educativa. Cuatro menciones diseñadas para transformar tu carrera.
+              </p>
+
+              <div className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-brand-50">
+                <Calendar className="h-4 w-4 text-uncp-gold" />
+                Inscripciones hasta el{" "}
+                <strong className="text-uncp-gold">27 de marzo de 2026</strong>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-7 py-3.5 text-sm font-black uppercase tracking-wider text-brand-950 shadow-lg transition hover:brightness-110 active:scale-95"
+                >
+                  Inscribirme ahora <ArrowRight className="h-4 w-4" />
+                </a>
+                <a
+                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20las%20Maestr%C3%ADas%20en%20Educaci%C3%B3n"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
+                >
+                  <MessageCircle className="h-4 w-4" /> Consultar por WhatsApp
+                </a>
+              </div>
             </div>
 
-            {/* Título Principal */}
-            <h1 className="font-serif text-5xl md:text-7xl font-bold mb-8 leading-tight">
-              <span className="text-white">Maestría en</span>
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-uncp-gold to-amber-300">
-                Educación
-              </span>
-            </h1>
+            {/* columna derecha: stats */}
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                {stats.map((s) => (
+                  <div
+                    key={s.etiqueta}
+                    className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm"
+                  >
+                    <p className="text-3xl font-black text-uncp-gold md:text-4xl">{s.numero}</p>
+                    <p className="mt-1 text-sm font-black text-white">{s.etiqueta}</p>
+                    <p className="text-[11px] font-medium text-brand-50/60">{s.sub}</p>
+                  </div>
+                ))}
+              </div>
 
-            {/* Descripción */}
-            <p className="text-xl md:text-2xl text-blue-100 font-medium leading-relaxed mb-12 max-w-3xl mx-auto">
-              Forja tu liderazgo pedagógico con un programa de excelencia académica que integra investigación, innovación y gestión educativa.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <a 
-                href="https://wa.me/51949260658?text=Hola,%20quisiera%20más%20información%20sobre%20la%20Maestría%20en%20Educación" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="px-10 py-5 bg-uncp-gold text-brand-950 rounded-2xl font-bold text-lg hover:bg-amber-400 transition-all shadow-2xl hover:shadow-amber-500/50 hover:scale-105 flex items-center gap-3"
-              >
-                <GraduationCap className="h-6 w-6" />
-                Solicitar Información
-              </a>
-              <a 
-                href="/documentos/maestria-brochure.pdf" 
-                download
-                className="px-10 py-5 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-2xl font-bold text-lg hover:bg-white/20 transition-all flex items-center gap-3"
-              >
-                <FileText className="h-6 w-6" />
-                Descargar Brochure
-              </a>
-            </div>
-
-            {/* Estadísticas Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-              {estadisticasPrograma.map((stat, idx) => (
-                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <div className="text-3xl md:text-4xl font-serif font-black text-uncp-gold">{stat.numero}</div>
-                  <div className="text-sm text-blue-100 mt-2 font-medium">{stat.label}</div>
-                </div>
-              ))}
+              <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
+                <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-uncp-gold">
+                  ¿Por qué esta maestría?
+                </p>
+                <ul className="space-y-2 text-sm text-brand-50/90">
+                  {[
+                    "Acompañamiento académico durante toda la maestría",
+                    "Malla curricular orientada a resultados reales",
+                    "Formación con enfoque en liderazgo e investigación",
+                    "Plana docente de alto nivel especializada",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-uncp-gold" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PERFIL DE EGRESO */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          {/* Header */}
-          <div className="mb-16 text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="h-1 w-12 bg-brand-600 rounded-full"></div>
-              <span className="text-xs font-black uppercase tracking-widest text-brand-600">
-                Competencias
-              </span>
-              <div className="h-1 w-12 bg-brand-600 rounded-full"></div>
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-brand-950 mb-4">
-              Perfil del Egresado
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Desarrolla competencias de alto nivel para transformar la educación desde la investigación y el liderazgo pedagógico.
-            </p>
-          </div>
-
-          {/* Grid de Competencias */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {perfilEgreso.map((competencia) => {
-              const IconComponent = competencia.icon;
+      {/* ── STRIP PROPUESTA DE VALOR ──────────────────────── */}
+      <section className="bg-brand-800 py-14">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {propuestaValor.map((item) => {
+              const Icono = item.icono;
               return (
                 <div
-                  key={competencia.id}
-                  className="group bg-white rounded-[2rem] p-8 border border-gray-200 hover:border-brand-300 hover:shadow-2xl transition-all duration-300"
+                  key={item.titulo}
+                  className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/8 p-5"
                 >
-                  <div className={`w-16 h-16 rounded-2xl ${competencia.color} border-2 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                    <IconComponent className="h-8 w-8" />
+                  <div className="shrink-0 rounded-xl bg-uncp-gold/15 p-2.5 text-uncp-gold">
+                    <Icono className="h-5 w-5" />
                   </div>
-                  
-                  <h3 className="font-bold text-xl text-brand-950 mb-3">
-                    {competencia.titulo}
-                  </h3>
-                  
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {competencia.descripcion}
-                  </p>
+                  <div>
+                    <p className="text-sm font-black text-white">{item.titulo}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-brand-50/70">{item.descripcion}</p>
+                  </div>
                 </div>
               );
             })}
@@ -246,232 +416,458 @@ export default function MaestriaContent() {
         </div>
       </section>
 
-      {/* MALLA CURRICULAR */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          {/* Header */}
-          <div className="mb-16 text-center">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="h-1 w-12 bg-uncp-gold rounded-full"></div>
-              <span className="text-xs font-black uppercase tracking-widest text-uncp-gold">
-                Programa Académico
-              </span>
-              <div className="h-1 w-12 bg-uncp-gold rounded-full"></div>
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-brand-950 mb-4">
-              Malla Curricular
+      {/* ── MENCIONES ─────────────────────────────────────── */}
+      <section className="bg-white py-20 md:py-24" id="menciones">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="mb-14 max-w-2xl">
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-brand-600">
+              4 Especializaciones
+            </p>
+            <h2 className="mt-3 font-serif text-4xl font-black leading-tight text-brand-950 md:text-5xl">
+              Elige la mención que
+              <br />
+              <span className="text-brand-600">impulsa tu carrera</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Estructura académica diseñada para tu desarrollo progresivo como investigador y líder educativo.
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              Cada mención tiene malla propia, perfil de egreso y enfoque diferenciado. Despliega cualquier tarjeta para ver la malla curricular completa.
             </p>
           </div>
 
-          {/* Navegación por ciclos */}
-          <div className="flex flex-wrap gap-3 justify-center mb-12">
-            {mallaCurricular.map((ciclo) => (
-              <button
-                key={ciclo.ciclo}
-                onClick={() => setCicloActivo(ciclo.ciclo)}
-                className={`px-8 py-4 rounded-2xl font-bold text-sm transition-all transform ${
-                  cicloActivo === ciclo.ciclo
-                    ? "bg-brand-600 text-white shadow-xl scale-105"
-                    : "bg-white text-gray-600 hover:bg-gray-50 border-2 border-gray-200 hover:border-brand-300"
-                }`}
-              >
-                Ciclo {ciclo.ciclo}
-                <span className="block text-xs font-medium mt-1 opacity-80">
-                  {ciclo.semestre}
-                </span>
-              </button>
-            ))}
-          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {menciones.map((m) => {
+              const Icono = m.icono;
+              const isOpen = expanded === m.slug;
 
-          {/* Contenido del ciclo activo */}
-          {mallaCurricular.filter(c => c.ciclo === cicloActivo).map((ciclo) => (
-            <div key={ciclo.ciclo} className="bg-gradient-to-br from-gray-50 to-white rounded-[3rem] p-8 md:p-12 border-2 border-gray-200">
-              <div className="mb-8">
-                <h3 className="font-serif text-3xl font-bold text-brand-950 mb-2">
-                  Ciclo {ciclo.ciclo} - Semestre {ciclo.semestre}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {ciclo.asignaturas.reduce((sum, a) => sum + a.creditos, 0)} créditos totales
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                {ciclo.asignaturas.map((asignatura, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-brand-600 hover:shadow-lg transition-all group"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <h4 className="font-bold text-base text-brand-950 mb-2 group-hover:text-brand-600 transition-colors">
-                          {asignatura.nombre}
-                        </h4>
+              return (
+                <article
+                  key={m.slug}
+                  className="overflow-hidden rounded-[2rem] border border-border bg-white shadow-sm transition-all duration-300 hover:border-brand-200 hover:shadow-xl"
+                >
+                  {/* CABECERA OSCURA */}
+                  <div className="relative bg-brand-950 p-7">
+                    <span className="absolute right-6 top-5 select-none text-5xl font-black text-white/6">
+                      {m.numero}
+                    </span>
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-xl border border-white/20 bg-white/12 p-3">
+                        <Icono className="h-6 w-6 text-uncp-gold" />
                       </div>
-                      <div className="bg-brand-50 text-brand-600 rounded-xl px-3 py-1.5 text-xs font-black border border-brand-200">
-                        {asignatura.creditos} CR
+                      <span className="text-[10px] font-black uppercase tracking-widest text-brand-50/50">
+                        Mención {m.numero}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 font-serif text-2xl font-black text-white md:text-3xl">
+                      {m.nombre}
+                    </h3>
+                    <p className="mt-1.5 text-sm font-bold text-uncp-gold">{m.slogan}</p>
+                  </div>
+
+                  {/* CUERPO */}
+                  <div className="p-7">
+                    <p className="text-sm leading-relaxed text-muted-foreground">{m.resumen}</p>
+
+                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3">
+                      <Zap className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-brand-600">
+                          Ideal para
+                        </p>
+                        <p className="mt-0.5 text-sm text-brand-950">{m.idealPara}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
 
-              {/* Total de créditos */}
-              <div className="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
-                <span className="text-sm font-bold text-muted-foreground">Total de Créditos del Ciclo</span>
-                <span className="text-2xl font-black text-brand-600">
-                  {ciclo.asignaturas.reduce((sum, a) => sum + a.creditos, 0)} Créditos
-                </span>
-              </div>
-            </div>
-          ))}
+                    <div className="mt-6">
+                      <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-600">
+                        <BadgeCheck className="h-3.5 w-3.5" /> Perfil de egreso
+                      </p>
+                      <ul className="space-y-2.5">
+                        {m.perfil.map((p) => (
+                          <li key={p} className="flex items-start gap-2.5 text-sm text-brand-950">
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-uncp-green" />
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => toggle(m.slug)}
+                      className="mt-6 flex w-full items-center justify-between rounded-2xl border border-brand-200 bg-brand-50/40 px-5 py-3.5 text-sm font-black text-brand-950 transition hover:border-brand-400 hover:bg-brand-50"
+                    >
+                      <span className="flex items-center gap-2">
+                        <BookOpen className="h-4 w-4 text-brand-600" />
+                        {isOpen ? "Ocultar malla curricular" : "Ver malla curricular completa"}
+                      </span>
+                      <ChevronDown
+                        className={`h-4 w-4 text-brand-600 transition-transform duration-300 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="mt-5 space-y-4 border-t border-brand-100 pt-5">
+                        {m.ciclos.map((ciclo) => (
+                          <div key={ciclo.titulo} className="rounded-2xl border border-border bg-background">
+                            {/* cabecera del ciclo */}
+                            <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+                              <p className="text-xs font-black uppercase tracking-widest text-brand-950">
+                                {ciclo.titulo}
+                              </p>
+                              <span className="rounded-lg bg-brand-600 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white">
+                                {ciclo.total}
+                              </span>
+                            </div>
+
+                            {/* items */}
+                            <div className="divide-y divide-border">
+                              {ciclo.items.map((item, idx) =>
+                                item.tipo === "curso" ? (
+                                  /* ── curso regular ── */
+                                  <div key={idx} className="flex items-center justify-between gap-4 px-5 py-3">
+                                    <p className="text-sm text-brand-950">{item.nombre}</p>
+                                    <span className="shrink-0 rounded-lg border border-brand-100 bg-brand-50 px-2.5 py-1 text-[11px] font-black text-brand-600">
+                                      {item.creditos} cr.
+                                    </span>
+                                  </div>
+                                ) : (
+                                  /* ── electivo ── */
+                                  <div key={idx} className="px-5 py-4">
+                                    <div className="mb-3 flex items-center gap-2">
+                                      <span className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-700">
+                                        Elige 1 electivo · {item.creditos} cr.
+                                      </span>
+                                    </div>
+                                    <div className="space-y-2">
+                                      {item.opciones.map((op, i) => (
+                                        <div
+                                          key={i}
+                                          className="flex items-center gap-3 rounded-xl border border-dashed border-brand-200 bg-brand-50/40 px-4 py-2.5"
+                                        >
+                                          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-brand-300 text-[10px] font-black text-brand-600">
+                                            {String.fromCharCode(65 + i)}
+                                          </span>
+                                          <p className="text-sm text-brand-950">{op}</p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <p className="mt-2 text-[11px] text-muted-foreground">
+                                      * El maestrando elige una de las tres asignaturas electivas.
+                                    </p>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                        <div className="flex items-center justify-center gap-3 rounded-2xl border border-brand-100 bg-brand-50/50 py-3">
+                          <p className="text-[11px] font-black uppercase tracking-widest text-brand-600">
+                            Total plan de estudios
+                          </p>
+                          <span className="rounded-lg bg-brand-600 px-3 py-1 text-[11px] font-black text-white">49 créditos</span>
+                          <span className="text-[11px] text-muted-foreground">· 3 semestres</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* INFORMACIÓN GENERAL */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="grid lg:grid-cols-3 gap-12 items-start">
-            
-            {/* Detalles del Programa - Columna principal */}
-            <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-1 w-12 bg-brand-600 rounded-full"></div>
-                <span className="text-xs font-black uppercase tracking-widest text-brand-600">
-                  Información General
-                </span>
-              </div>
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-brand-950 mb-8">
-                Detalles del Programa
+      {/* ── LOGROS ────────────────────────────────────────── */}
+      <section className="bg-brand-950 py-20">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div className="flex flex-col justify-center">
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-uncp-gold">
+                Tu transformación profesional
+              </p>
+              <h2 className="mt-4 font-serif text-4xl font-black leading-tight text-white md:text-5xl">
+                Lo que vas a construir con esta maestría
               </h2>
-
-              <div className="space-y-6">
-                <div className="bg-white rounded-2xl p-6 border-l-4 border-brand-600">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-brand-50 text-brand-600 rounded-xl p-3">
-                      <Clock className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-brand-950 mb-1">Duración</h4>
-                      <p className="text-sm text-muted-foreground">4 ciclos académicos (2 años) incluyendo desarrollo de tesis</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border-l-4 border-uncp-gold">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-amber-50 text-uncp-gold rounded-xl p-3">
-                      <Calendar className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-brand-950 mb-1">Modalidad</h4>
-                      <p className="text-sm text-muted-foreground">Presencial / Semipresencial (clases viernes y sábados)</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border-l-4 border-green-600">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-green-50 text-green-600 rounded-xl p-3">
-                      <Award className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-brand-950 mb-1">Grado Otorgado</h4>
-                      <p className="text-sm text-muted-foreground">Magíster en Educación (Mg. en Educación)</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 border-l-4 border-purple-600">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-purple-50 text-purple-600 rounded-xl p-3">
-                      <BarChart className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-brand-950 mb-1">Líneas de Investigación</h4>
-                      <p className="text-sm text-muted-foreground">Didáctica, Gestión Educativa, Educación Inclusiva, TIC en Educación</p>
-                    </div>
-                  </div>
-                </div>
+              <p className="mt-5 text-base leading-relaxed text-brand-50/75">
+                No es solo un grado. Es el siguiente nivel en tu trayectoria como educador, gestor o investigador.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20las%20Maestr%C3%ADas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-6 py-3 text-sm font-black uppercase tracking-wider text-brand-950 transition hover:brightness-110"
+                >
+                  <MessageCircle className="h-4 w-4" /> WhatsApp: 949 260 658
+                </a>
+                <a
+                  href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
+                >
+                  Inscribirme <ArrowRight className="h-4 w-4" />
+                </a>
               </div>
             </div>
 
-            {/* Sidebar: Requisitos de Admisión */}
-            <div className="lg:col-span-1">
-              <div className="bg-brand-950 rounded-[2.5rem] p-10 text-white sticky top-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <PenTool className="h-6 w-6 text-uncp-gold" />
-                  <span className="text-xs font-black uppercase tracking-widest text-uncp-gold">
-                    Proceso de Admisión
-                  </span>
-                </div>
-                
-                <h3 className="font-serif text-3xl font-bold mb-6">
-                  Requisitos de Ingreso
-                </h3>
-
-                <ul className="space-y-4 mb-8">
-                  {requisitosAdmision.map((requisito, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-uncp-gold shrink-0 mt-0.5" />
-                      <span className="text-sm font-medium leading-relaxed">{requisito}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="pt-6 border-t border-white/20">
-                  <a 
-                    href="https://uncpadmision.edu.pe/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-full bg-uncp-gold text-brand-950 rounded-2xl py-4 px-6 font-bold hover:bg-amber-400 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                {
+                  icono: TrendingUp,
+                  titulo: "Perfil profesional diferenciado",
+                  desc: "Mayor competitividad para ascenso, dirección de instituciones y nuevos retos docentes.",
+                },
+                {
+                  icono: Brain,
+                  titulo: "Capacidad investigadora",
+                  desc: "Diseño y ejecución de proyectos de tesis con rigor metodológico reconocido.",
+                },
+                {
+                  icono: Building2,
+                  titulo: "Liderazgo institucional",
+                  desc: "Gestión de equipos, proyectos de mejora y toma de decisiones basada en evidencia.",
+                },
+                {
+                  icono: Award,
+                  titulo: "Grado de Magíster",
+                  desc: "Titulación oficial por la UNCP con pleno reconocimiento académico nacional.",
+                },
+              ].map((l) => {
+                const Icono = l.icono;
+                return (
+                  <div
+                    key={l.titulo}
+                    className="rounded-[1.5rem] border border-white/10 bg-white/6 p-5 backdrop-blur-sm"
                   >
-                    <Users className="h-5 w-5" />
-                    Iniciar Postulación
+                    <div className="mb-3 inline-flex rounded-xl bg-uncp-gold/15 p-2.5 text-uncp-gold">
+                      <Icono className="h-5 w-5" />
+                    </div>
+                    <p className="text-sm font-black text-white">{l.titulo}</p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-brand-50/65">{l.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── INSCRIPCIÓN ───────────────────────────────────── */}
+      <section className="bg-brand-50/40 py-20 md:py-24" id="inscripcion">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-brand-600">
+                Admisión 2026‑I
+              </p>
+              <h2 className="mt-3 font-serif text-4xl font-black text-brand-950 md:text-5xl">
+                Inscripción paso a paso
+              </h2>
+            </div>
+            <a
+              href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-fit items-center gap-2 rounded-2xl bg-brand-950 px-6 py-3 text-sm font-black uppercase tracking-wider text-white transition hover:bg-brand-800"
+            >
+              Ir a la plataforma <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+
+          <div className="grid gap-12 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <ol className="space-y-4">
+                {pasosPostulacion.map((item) => {
+                  const Icono = item.icono;
+                  return (
+                    <li
+                      key={item.titulo}
+                      className="flex gap-5 rounded-2xl border border-border bg-white p-5 shadow-sm"
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-950 text-sm font-black text-white">
+                          {item.paso}
+                        </div>
+                        <div className="h-full w-px bg-brand-100" />
+                      </div>
+                      <div className="pb-1 pt-0.5">
+                        <div className="mb-1.5 inline-flex rounded-lg bg-brand-50 p-1.5 text-brand-600">
+                          <Icono className="h-4 w-4" />
+                        </div>
+                        <h3 className="text-sm font-black text-brand-950">{item.titulo}</h3>
+                        <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                          {item.detalle}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+
+              <div className="mt-8 rounded-2xl border border-brand-100 bg-white p-5 shadow-sm">
+                <p className="mb-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-600">
+                  <ListChecks className="h-3.5 w-3.5" /> Documentos y enlaces oficiales
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href="https://docs.google.com/document/d/1KSzmsLr9cuvKgUli1NEmiDCYhEU-IT72/edit?usp=sharing&ouid=113603275562061894464&rtpof=true&sd=true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50/50 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-brand-950 transition hover:border-brand-400 hover:bg-white"
+                  >
+                    <Download className="h-3.5 w-3.5 text-brand-600" /> Formato perfil de investigación
+                  </a>
+                  <a
+                    href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50/50 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-brand-950 transition hover:border-brand-400 hover:bg-white"
+                  >
+                    <GraduationCap className="h-3.5 w-3.5 text-brand-600" /> Plataforma de inscripción
+                  </a>
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfC4oUvGvqlToaQiFzRjZUpmyZ_KAk3yiFeJt5j70OYNt3V_g/viewform?usp=sharing&ouid=113603275562061894464"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50/50 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-brand-950 transition hover:border-brand-400 hover:bg-white"
+                  >
+                    <FileText className="h-3.5 w-3.5 text-brand-600" /> Enviar expediente
                   </a>
                 </div>
-
-                <p className="text-xs text-blue-200 text-center mt-4">
-                  Próxima convocatoria: Marzo 2026
-                </p>
               </div>
             </div>
+
+            <aside className="space-y-5">
+              <div className="overflow-hidden rounded-[2rem] bg-brand-950 text-white shadow-xl">
+                <div className="border-b border-white/10 px-7 py-5">
+                  <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-uncp-gold">
+                    <CreditCard className="h-3.5 w-3.5" /> Inversión referencial
+                  </p>
+                  <p className="mt-1 text-xs text-brand-50/60">Por semestre académico</p>
+                </div>
+                <div className="px-7 py-6">
+                  <ul className="divide-y divide-white/10">
+                    {[
+                      { concepto: "Inscripción (único pago)", monto: "S/ 211.00", detalle: "Banco Nación · cód. 1671" },
+                      { concepto: "Matrícula (c/semestre)", monto: "S/ 101.00", detalle: "Por cada ciclo" },
+                      { concepto: "Pensión (4 cuotas)", monto: "S/ 401.00", detalle: "Por cuota, por semestre" },
+                      { concepto: "Propedéutica", monto: "S/ 121.00", detalle: "Único pago al inicio" },
+                    ].map((c) => (
+                      <li key={c.concepto} className="flex items-start justify-between gap-3 py-3.5">
+                        <div>
+                          <p className="text-sm font-bold text-brand-50">{c.concepto}</p>
+                          <p className="text-[11px] text-brand-50/50">{c.detalle}</p>
+                        </div>
+                        <span className="shrink-0 text-base font-black text-uncp-gold">{c.monto}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-border bg-white p-6 shadow-sm">
+                <p className="mb-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-600">
+                  <Clock3 className="h-3.5 w-3.5" /> Fechas y detalles clave
+                </p>
+                <ul className="space-y-4 text-sm">
+                  {[
+                    { icono: Landmark, texto: "Estudios en 3 semestres (año y medio)." },
+                    { icono: Calendar, texto: "Pago de inscripción hasta el 27 de marzo 2026." },
+                    { icono: GraduationCap, texto: "Inscripción en línea hasta el 28 de marzo 2026." },
+                    { icono: Award, texto: "Entrevista virtual vía Microsoft Teams." },
+                  ].map((f) => {
+                    const Icono = f.icono;
+                    return (
+                      <li key={f.texto} className="flex items-start gap-3 text-muted-foreground">
+                        <Icono className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
+                        {f.texto}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section className="py-20 bg-gradient-to-br from-brand-600 to-brand-800 text-white">
-        <div className="container mx-auto px-6 lg:px-12 max-w-4xl text-center">
-          <TrendingUp className="h-16 w-16 text-uncp-gold mx-auto mb-6" />
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6" style={{ color: "#FFFF"}}>
-            ¿Listo para Transformar la Educación?
-          </h2>
-          <p className="text-xl text-blue-100 mb-10 leading-relaxed">
-            Únete a la próxima generación de líderes educativos que están revolucionando la enseñanza en el Perú.
+      {/* ── VOUCHERS ──────────────────────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto max-w-7xl px-6 lg:px-12">
+          <p className="mb-8 text-center text-xs font-black uppercase tracking-[0.25em] text-brand-600">
+            Referencia de pago
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="mailto:UPGEDUCACION@UNCP.EDU.PE?subject=Solicitud%20de%20Entrevista%20-%20Maestría%20en%20Educación&body=Estimados%20señores,%0D%0A%0D%0AMe%20dirijo%20a%20ustedes%20para%20solicitar%20una%20entrevista%20sobre%20el%20programa%20de%20Maestría%20en%20Educación.%0D%0A%0D%0ANombre:%0D%0ATeléfono:%0D%0ACorreo:%0D%0A%0D%0ASaludos%20cordiales"
-              className="px-10 py-5 bg-white text-brand-950 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl"
-            >
-              Agendar Entrevista
-            </a>
-            <a 
-              href="/documentos/maestria-plan-estudios.pdf" 
-              download="Plan_Estudios_Maestria_Educacion_UNCP.pdf"
-              className="px-10 py-5 bg-uncp-gold text-brand-950 rounded-2xl font-bold text-lg hover:bg-amber-400 transition-all shadow-2xl"
-            >
-              Descargar Plan de Estudios
-            </a>
+          <div className="grid gap-6 md:grid-cols-2">
+            <article className="rounded-[2rem] border border-border bg-white p-6 shadow-sm">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-black text-brand-950">
+                <Landmark className="h-4 w-4 text-brand-600" /> Voucher Banco de la Nación
+              </h3>
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border bg-brand-50">
+                <Image
+                  src="/images/voucher_banco_nacion.png"
+                  alt="Voucher de pago Banco de la Nación"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </article>
+            <article className="rounded-[2rem] border border-border bg-white p-6 shadow-sm">
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-black text-brand-950">
+                <Landmark className="h-4 w-4 text-brand-600" /> Voucher Caja Huancayo
+              </h3>
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border bg-brand-50">
+                <Image
+                  src="/images/voucher_caja_huancayo.png"
+                  alt="Voucher de pago Caja Huancayo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* FACEBOOK SECTION */}
-      <FacebookSection />
+      {/* ── CTA FINAL ─────────────────────────────────────── */}
+      <section className="bg-brand-950 py-20">
+        <div className="container mx-auto max-w-5xl px-6 text-center lg:px-12">
+          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-uncp-gold/40 bg-uncp-gold/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-uncp-gold">
+            <Calendar className="h-3.5 w-3.5" /> Cierre de inscripciones: 28 de marzo 2026
+          </span>
+          <h2 className="font-serif text-4xl font-black text-white md:text-5xl xl:text-6xl">
+            Tu próximo grado
+            <span className="block text-uncp-gold">empieza con una decisión</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-brand-50/75 md:text-lg">
+            Únete a la Maestría en Ciencias de la Educación de la UNCP. Formación orientada a resultados, con acompañamiento académico en cada etapa.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-8 py-4 text-sm font-black uppercase tracking-wider text-brand-950 shadow-lg transition hover:brightness-110 active:scale-95"
+            >
+              Inscribirme ahora <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href="https://wa.me/51949260658"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-8 py-4 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
+            >
+              <MessageCircle className="h-4 w-4" /> 949 260 658
+            </a>
+            <a
+              href="mailto:UPGEDUCACION@UNCP.EDU.PE"
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/6 px-8 py-4 text-sm font-black uppercase tracking-wider text-brand-50/80 transition hover:bg-white/12"
+            >
+              UPGEDUCACION@UNCP.EDU.PE
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
