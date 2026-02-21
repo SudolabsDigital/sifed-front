@@ -4,7 +4,7 @@ import { Noticia } from '@/types/noticia';
 import { Calendar, ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn, getStorageUrl } from '@/lib/utils';
 
 interface NewsCardProps {
   noticia: Noticia;
@@ -31,7 +31,7 @@ export function NewsCard({ noticia, className, featured = false }: NewsCardProps
         <div className="absolute inset-0 z-0">
           {hasImage ? (
             <Image
-              src={noticia.imagen_url!}
+              src={getStorageUrl(noticia.imagen_url!)}
               alt={noticia.titulo}
               fill
               unoptimized
@@ -44,7 +44,7 @@ export function NewsCard({ noticia, className, featured = false }: NewsCardProps
             </div>
           )}
           
-          {/* Layer 2: Gradient Refinado (Más corto, solo para texto) */}
+          {/* Layer 2: Gradient Refinado */}
           <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-80" />
         </div>
 
@@ -66,23 +66,21 @@ export function NewsCard({ noticia, className, featured = false }: NewsCardProps
 
           {/* Title - Blanco Puro */}
           <h3 className={cn(
-            "font-serif font-bold text-white leading-tight mb-3 drop-shadow-md transition-all duration-300",
-            // Sutil movimiento en hover
+            "font-serif font-bold text-white leading-tight drop-shadow-md transition-all duration-300",
             "group-hover:-translate-y-1",
-            featured ? "text-2xl md:text-3xl lg:text-4xl" : "text-lg md:text-xl"
+            featured ? "text-3xl md:text-4xl lg:text-5xl mb-4" : "text-lg md:text-xl mb-3"
           )}>
             {noticia.titulo}
           </h3>
 
-          {/* Summary - Blanco con opacidad (No azul) */}
-          <div className={cn(
-            "overflow-hidden transition-all duration-500 ease-in-out",
-            featured ? "max-h-24 opacity-90" : "max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100"
-          )}>
-            <p className="text-white/80 text-sm md:text-base line-clamp-2 leading-relaxed font-light tracking-wide drop-shadow-sm">
-              {noticia.resumen}
-            </p>
-          </div>
+          {/* Summary - Oculto si es featured, visible si no */}
+          {!featured && (
+            <div className="overflow-hidden transition-all duration-500 ease-in-out max-h-0 opacity-0 group-hover:max-h-24 group-hover:opacity-100">
+              <p className="text-white/80 text-sm md:text-base line-clamp-2 leading-relaxed font-light tracking-wide drop-shadow-sm">
+                {noticia.resumen}
+              </p>
+            </div>
+          )}
 
         </div>
       </Link>

@@ -102,7 +102,7 @@ export default function LoginHub() {
     services.splice(services.length - 1, 0, {
       title: "Gestión SIFED",
       subtitle: "Control Maestro",
-      href: "/admin/dashboard",
+      href: "/admin",
       requiresAuth: true,
       imageSrc: UNCP_LOGO
     });
@@ -175,7 +175,7 @@ export default function LoginHub() {
                   
                   <h3 className="text-2xl font-serif font-black text-brand-950 leading-tight">
                     Bienvenido, <br/>
-                    <span className="text-brand-600">{user.name.split(' ')[0]}</span>
+                    <span className="text-brand-600">{(user?.name || 'Usuario').split(' ')[0]}</span>
                   </h3>
 
                   <div className="mt-6 flex flex-wrap justify-center gap-2">

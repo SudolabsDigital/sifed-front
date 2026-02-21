@@ -71,7 +71,7 @@ export default function PosgradoCTA() {
             transition={{ duration: 0.8 }}
             className="group"
           >
-            <Link href="/en-construccion" className="block h-full">
+            <Link href="/posgrado/doctorados" className="block h-full">
               <div className="relative h-full bg-brand-950 rounded-[2rem] p-8 lg:p-10 border border-white/5 shadow-2xl transition-all duration-500 hover:shadow-uncp-gold/10 hover:-translate-y-1 overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-white group-hover:scale-110 transition-transform duration-700">
                   <Award size={180} strokeWidth={1} />
