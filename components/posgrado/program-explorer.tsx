@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { curriculums, ProgramaCurricular } from "@/data/curriculums";
+import { useState, useMemo, useEffect } from "react";
+import { curriculums } from "@/data/curriculums";
 import TabSelector from "@/components/ui/tab-selector";
 import CurriculumTable from "./curriculum-table";
 import { BookOpen, GraduationCap, Clock, Hash, Info, Download } from "lucide-react";
@@ -23,7 +23,7 @@ export default function ProgramExplorer() {
   const [activeProgramId, setActiveProgramId] = useState(availablePrograms[0].id);
 
   // Sincronizar activeProgramId cuando cambia el tipo
-  useMemo(() => {
+  useEffect(() => {
     setActiveProgramId(availablePrograms[0].id);
   }, [availablePrograms]);
 

@@ -5,7 +5,7 @@ import { Noticia } from '@/types/noticia';
 import { NoticiaService } from '@/lib/services/noticia-service';
 import { NewsCard } from './NewsCard';
 import { Loader2, ArrowRight, Calendar, ChevronRight } from 'lucide-react';
-import { cn, getStorageUrl } from '@/lib/utils';
+import { getStorageUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 

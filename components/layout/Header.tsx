@@ -115,8 +115,11 @@ export default function Header() {
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
-    setMobileMenuOpen(false);
-    setActiveSubmenu(null);
+    const t = setTimeout(() => {
+      setMobileMenuOpen(false);
+      setActiveSubmenu(null);
+    }, 10);
+    return () => clearTimeout(t);
   }, [pathname]);
 
   // Bloquear scroll cuando el menú móvil está abierto

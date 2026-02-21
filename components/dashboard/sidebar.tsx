@@ -57,7 +57,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
     });
 
     if (changed) {
-      setOpenMenus(prev => ({ ...prev, ...newMenus }));
+      setTimeout(() => setOpenMenus(prev => ({ ...prev, ...newMenus })), 0);
     }
   }, [pathname, items]);
 

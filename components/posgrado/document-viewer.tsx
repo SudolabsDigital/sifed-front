@@ -1,7 +1,6 @@
 "use client";
 
-import { Download, FileText, Calendar, CreditCard, User } from "lucide-react";
-import Link from "next/link";
+import { Download, FileText } from "lucide-react";
 
 interface QuickInfoItem {
   icon: React.ReactNode;
