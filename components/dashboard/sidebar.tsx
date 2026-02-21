@@ -12,7 +12,7 @@ import { AuthService } from "@/lib/services/auth-service";
 export interface NavItem {
   title: string;
   href: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   disabled?: boolean;
   children?: NavItem[];
 }
@@ -43,7 +43,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
     return initialMenus;
   });
 
-  // Sincronizar menús si cambia la ruta (esto sí requiere efecto, pero es reactivo a pathname)
+  // Sincronizar menús si cambia la ruta
   useEffect(() => {
     const newMenus: Record<string, boolean> = {};
     let changed = false;
@@ -59,15 +59,14 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
     if (changed) {
       setOpenMenus(prev => ({ ...prev, ...newMenus }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, items]); // openMenus no es dependencia intencionalmente
+  }, [pathname, items]);
 
   const toggleMenu = (title: string) => {
     setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));
   };
 
   const handleLogout = async () => {
-    localStorage.removeItem("user"); // Limpiamos rastro local
+    localStorage.removeItem("user");
     await AuthService.logout();
   };
 
@@ -111,7 +110,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
         {/* Navegación */}
         <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-1 scrollbar-thin scrollbar-thumb-brand-800 scrollbar-track-transparent">
           {items.map((item) => {
-            const Icon = item.icon;
+            const Icon = item.icon; // Puede ser undefined ahora
             const hasChildren = item.children && item.children.length > 0;
             const isMenuOpen = openMenus[item.title];
             const isActive = pathname === item.href || (hasChildren && pathname.startsWith(item.href));
@@ -134,8 +133,8 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
                           isActive ? "text-white" : "text-brand-200 group-hover:text-white"
                         )}
                       >
-                        <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-brand-400 group-hover:text-white")} />
-                        <span className="truncate">{item.title}</span>
+                        {Icon && <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-brand-400 group-hover:text-white")} />}
+                        <span className={cn("truncate", !Icon && "pl-8")}>{item.title}</span> {/* Padding si no hay icono */}
                       </Link>
 
                       {/* Zona de Despliegue (Derecha) */}
@@ -187,8 +186,8 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
                       item.disabled && "cursor-not-allowed opacity-50"
                     )}
                   >
-                    <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-brand-400 group-hover:text-white")} />
-                    <span className="truncate">{item.title}</span>
+                    {Icon && <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-brand-400 group-hover:text-white")} />}
+                    <span className={cn("truncate", !Icon && "pl-8")}>{item.title}</span>
                   </Link>
                 )}
               </div>

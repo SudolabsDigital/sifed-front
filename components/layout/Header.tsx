@@ -4,97 +4,103 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, LogIn, ChevronRight } from "lucide-react";
 
-// Estructura de datos optimizada
+// Estructura de datos optimizada y realista
 const menuItems = [
   {
-    label: "La Facultad",
+    label: "Posgrado",
     featured: {
-      title: "Nuestra Facultad",
-      desc: "Líderes en formación docente desde 1959.",
-      link: "/nosotros",
-      image: "/images/Escudo_UNCP.webp"
-    },
-    cols: [
-      {
-        title: "Identidad",
-        links: ["Misión y Visión", "Estatuto", "Organigrama", "Historia"]
-      },
-      {
-        title: "Gestión",
-        links: ["Autoridades", "Consejo de Facultad", "Documentos Normativos", "Directorio"]
-      },
-      {
-        title: "Oficinas",
-        links: ["Secretaria General", "Bienestar Universitario", "Calidad Académica", "Grados y Títulos"]
-      }
-    ]
-  },
-  {
-    label: "Admisión",
-    featured: {
-      title: "Admisión 2026",
-      desc: "Postula a nuestros programas de pregrado y posgrado.",
-      link: "/admision",
+      title: "Unidad de Posgrado",
+      desc: "Excelencia académica y formación de investigadores líderes.",
+      link: "/posgrado",
       image: "/images/logoeducacion.webp"
     },
     cols: [
       {
-        title: "Pregrado",
-        links: ["Modalidad Ordinaria", "CEPRE-UNCP", "Segunda Especialidad", "Traslados Externos"]
+        title: "Programas Académicos",
+        links: [
+          { label: "Maestrías", href: "/posgrado/maestrias" },
+          { label: "Doctorados", href: "/posgrado/doctorados" }
+        ]
       },
       {
-        title: "Posgrado",
-        links: ["Maestrías", "Doctorados", "Diplomados", "Requisitos"]
-      }
-    ]
-  },
-  {
-    label: "Académico",
-    featured: {
-        title: "Oferta Educativa",
-        desc: "Conoce nuestros planes de estudio y mallas curriculares.",
-        link: "/programas",
-        image: "/images/logoeducacion.webp"
-    },
-    cols: [
-      {
-        title: "Escuelas Profesionales",
-        links: ["Educación Inicial", "Educación Primaria", "Educación Secundaria", "Filosofía y CC.SS"]
+        title: "Admisión 2026",
+        links: [
+          { label: "Proceso de Admisión", href: "/posgrado/admision" },
+          { label: "Guía Maestría", href: "/posgrado/admision/maestria" },
+          { label: "Guía Doctorado", href: "/posgrado/admision/doctorado" }
+        ]
       },
       {
-        title: "Estudiantes",
-        links: ["Matrícula Online", "Horarios", "Tutoría", "Federación Estudiantil"]
-      },
-      {
-        title: "Especialización",
-        links: ["Maestría en Educación", "Doctorado en Ciencias", "Segunda Especialidad"]
+        title: "Comunidad",
+        links: [
+          { label: "Plana Docente", href: "/posgrado/plana-docente" },
+          // { label: "Planes de Estudio", href: "/posgrado/planes-estudio" } // Pendiente
+        ]
       }
     ]
   },
   {
     label: "Investigación",
     featured: {
-        title: "Ciencia y Tecnología",
-        desc: "Producción científica de alto impacto.",
-        link: "/investigacion",
+        title: "Investigación",
+        desc: "Producción científica y sustentación de tesis doctorales.",
+        link: "/galeria-fotos/investigacion", // Showcase temporal
         image: "/images/Escudo_UNCP.webp"
     },
     cols: [
       {
-        title: "Direcciones",
-        links: ["Instituto de Investigación", "Incubadora de Empresas", "Innovación y Transferencia"]
-      },
-      {
         title: "Producción",
-        links: ["Repositorio de Tesis", "Revistas Científicas", "Artículos Indexados"]
+        links: [
+          { label: "Galería de Investigación", href: "/galeria-fotos/investigacion" },
+          { label: "Sustentaciones", href: "/galeria-fotos/sustentaciones" }
+        ]
       },
       {
-        title: "Sistemas",
-        links: ["CTI Vitae", "Docentes Renacyt", "Grupos de Investigación"]
+        title: "Recursos",
+        links: [
+          { label: "Normativa de Grados", href: "/documentos-normativos" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Actualidad",
+    featured: {
+        title: "Noticias y Eventos",
+        desc: "Entérate de lo último en nuestra facultad.",
+        link: "/noticias",
+        image: "/images/logoeducacion.webp"
+    },
+    cols: [
+      {
+        title: "Noticias",
+        links: [
+          { label: "Últimas Noticias", href: "/noticias" }
+        ]
       },
       {
-        title: "Galeria de fotos",
-        links: ["Fotos de eventos", "Sustentaciones", "Investigación en acción"]
+        title: "Galería Multimedia",
+        links: [
+          { label: "Galería General", href: "/galeria-fotos" },
+          { label: "Eventos Académicos", href: "/galeria-fotos/eventos" }
+        ]
+      }
+    ]
+  },
+  {
+    label: "Transparencia",
+    featured: {
+        title: "Documentos",
+        desc: "Acceso a la información pública y normativa institucional.",
+        link: "/documentos-normativos",
+        image: "/images/Escudo_UNCP.webp"
+    },
+    cols: [
+      {
+        title: "Gestión",
+        links: [
+          { label: "Documentos Normativos", href: "/documentos-normativos" }
+        ]
       }
     ]
   }
@@ -105,8 +111,8 @@ export default function Header() {
     <header className="relative z-50 w-full bg-background border-b border-border font-sans">
       <div className="mx-auto flex h-24 max-w-[1920px] items-center justify-between px-6 lg:px-12 relative z-50">
         
-        {/* BRAND */}
-        <div className="flex items-center gap-4 flex-shrink-0 cursor-pointer group">
+        {/* BRAND - Link interactivo a Inicio */}
+        <Link href="/" className="flex items-center gap-4 flex-shrink-0 cursor-pointer group">
           <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={44} height={44} className="h-11 w-auto object-contain transition-transform group-hover:scale-105 drop-shadow-sm" />
           <div className="hidden h-10 w-px bg-border xl:block"></div>
           <div className="hidden xl:flex items-center gap-3">
@@ -116,19 +122,11 @@ export default function Header() {
                <span className="font-serif text-lg font-bold leading-none text-brand-950 group-hover:text-brand-600 transition-colors">Facultad de Educación</span>
              </div>
           </div>
-        </div>
+        </Link>
 
         {/* MEGA MENU NAVIGATION */}
         <nav className="hidden lg:flex h-full items-center gap-2">
           
-          {/* Enlace Directo: Noticias (Funcional) */}
-          <Link 
-            href="/noticias" 
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-muted-foreground hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-all"
-          >
-            Noticias
-          </Link>
-
           {menuItems.map((item) => (
             <div key={item.label} className="group h-full flex items-center">
               {/* Menu Trigger */}
@@ -148,7 +146,7 @@ export default function Header() {
                                 <span className="text-xs font-bold text-brand-600 uppercase tracking-widest mb-4 block">Destacado</span>
                                 <h3 className="font-serif text-2xl font-bold text-brand-950 mb-3">{item.featured.title}</h3>
                                 <p className="text-sm text-muted-foreground leading-relaxed mb-6">{item.featured.desc}</p>
-                                <Link href="/en-construccion" className="inline-flex items-center gap-2 text-sm font-bold text-brand-950 hover:text-brand-600 transition-colors group/link">
+                                <Link href={item.featured.link} className="inline-flex items-center gap-2 text-sm font-bold text-brand-950 hover:text-brand-600 transition-colors group/link">
                                     Ver más <ChevronRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
                                 </Link>
                             </div>
@@ -167,40 +165,13 @@ export default function Header() {
                                  </h4>
                                  <ul className="space-y-2.5">
                                     {col.links.map((link) => (
-                                       <li key={link}>
+                                       <li key={link.label}>
                                         <Link
-  href={
-    /* ---------- LA FACULTAD ---------- */
-    link === "Documentos Normativos"
-      ? "/documentos-normativos"
-
-    /* ---------- POSGRADO ---------- */
-    : link === "Maestría en Educación" || link === "Maestrías"
-      ? "/maestria"
-
-    : link === "Doctorado en Ciencias" || link === "Doctorados"
-      ? "/posgrado/doctorados"
-
-    /* ---------- GALERÍA ---------- */
-    : link === "Fotos de eventos"
-      ? "/galeria-fotos/eventos"
-
-    : link === "Sustentaciones"
-      ? "/galeria-fotos/sustentaciones"
-
-    : link === "Investigación en acción"
-      ? "/galeria-fotos/investigacion"
-
-    /* ---------- DEFAULT ---------- */
-    : "/en-construccion"
-  }
-  className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
->
-  {link}
-</Link>
-
-                                          
-
+                                          href={link.href}
+                                          className="text-sm text-muted-foreground hover:text-brand-600 hover:font-semibold transition-all block py-0.5 hover:translate-x-1"
+                                        >
+                                          {link.label}
+                                        </Link>
                                        </li>
                                     ))}
                                  </ul>
