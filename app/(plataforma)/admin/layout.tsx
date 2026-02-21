@@ -16,7 +16,7 @@ import {
 } from "lucide-react";const adminNavItems = [
   {
     title: "Dashboard",
-    href: "/admin/dashboard",
+    href: "/admin",
     icon: LayoutDashboard,
   },
   {

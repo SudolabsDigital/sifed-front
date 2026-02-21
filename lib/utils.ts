@@ -8,3 +8,23 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+/**
+ * Genera la URL completa para un recurso de almacenamiento (imagen, documento).
+ * Maneja rutas relativas y absolutas - para unoptimiced de next 
+ */
+export function getStorageUrl(path?: string | null): string {
+  if (!path) return "";
+  
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+  
+  // Si es http://localhost:8000/api => http://localhost:8000
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "";
+  
+  // Asegurar que el path empiece con / si no lo tiene
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  
+  return `${baseUrl}${cleanPath}`;
+}
