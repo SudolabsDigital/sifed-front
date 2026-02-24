@@ -27,17 +27,14 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Interceptor de respuesta para depuración profesional
+// Interceptor de respuesta
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.message === "Network Error") {
-      console.error("🚨 Error de Red Crítico:", {
-        url: error.config?.url,
-        method: error.config?.method,
-        baseURL: error.config?.baseURL,
-        headers: error.config?.headers
-      });
+    if (process.env.NODE_ENV === 'development' && error.message === "Network Error") {
+      console.warn(
+        `[API] Sin conexión al backend: ${error.config?.method?.toUpperCase() ?? ''} ${error.config?.baseURL ?? ''}${error.config?.url ?? ''}`
+      );
     }
     return Promise.reject(error);
   }
