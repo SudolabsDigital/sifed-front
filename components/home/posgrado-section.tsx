@@ -172,7 +172,7 @@ export default function PosgradoSection() {
                 <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
                   El máximo nivel de investigación científica, orientado a generar conocimiento original con estándares globales.
                 </p>
-                <Link href="/en-construccion" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                <Link href="/posgrado/doctorados" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
                   Ver Doctorados <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
                 </Link>
               </motion.div>
@@ -184,10 +184,10 @@ export default function PosgradoSection() {
               >
                 <div className="text-uncp-gold font-mono text-xs mb-4 font-bold tracking-[0.3em] uppercase">/ 04 Comunidad</div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Investigadores Renacyt</h3>
-                <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
+                <p className="text-brand-50/40 text-lg max-w-md mb-8 leading-relaxed">
                   Nuestra plana docente está conformada por expertos certificados que lideran la producción científica del posgrado.
                 </p>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 mb-10">
                   {['Acreditada', 'ISO 9001', 'Renacyt'].map(tag => (
                     <span 
                       key={tag} 
@@ -197,6 +197,9 @@ export default function PosgradoSection() {
                     </span>
                   ))}
                 </div>
+                <Link href="/posgrado/plana-docente" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-700 transition-all group shadow-xl shadow-brand-600/20">
+                  Ver Plana Docente <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
+                </Link>
               </motion.div>
 
             </div>
