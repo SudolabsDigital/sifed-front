@@ -131,7 +131,7 @@ const statsCard = {
 
 export default function HeroSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 }, [
-    Autoplay({ delay: AUTOPLAY_DELAY, stopOnInteraction: true, stopOnMouseEnter: true }),
+    Autoplay({ delay: AUTOPLAY_DELAY, stopOnInteraction: false, stopOnMouseEnter: false }),
   ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -301,7 +301,7 @@ export default function HeroSection() {
                   {/* Shimmer */}
                   <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
                   <BookOpen className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-                  <span>Malla Curricular</span>
+                  <span>Plan de Estudio</span>
                   <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover/btn:translate-x-1" strokeWidth={2.5} />
                 </Link>
 
@@ -310,7 +310,7 @@ export default function HeroSection() {
                   className="group/btn flex h-12 items-center justify-center gap-2.5 rounded-xl bg-white/8 backdrop-blur-md border-2 border-white/20 px-6 text-sm font-bold text-white transition-all hover:bg-uncp-gold hover:border-uncp-gold hover:text-brand-950 hover:-translate-y-0.5"
                 >
                   <ClipboardList className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-                  <span>Inscríbete</span>
+                  <span>Guía de Inscripción</span>
                   <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover/btn:translate-x-1" strokeWidth={2.5} />
                 </Link>
               </motion.div>

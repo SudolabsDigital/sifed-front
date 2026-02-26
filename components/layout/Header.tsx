@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 // Estructura de datos optimizada y realista
 const menuItems = [
   {
-    label: "Posgrado",
+    label: "Programas",
     featured: {
       title: "Unidad de Posgrado",
       desc: "Excelencia académica y formación de investigadores líderes.",
@@ -152,10 +152,11 @@ export default function Header() {
           
           {/* Logo Educación + Texto */}
           <div className="flex items-center gap-2 lg:gap-3 overflow-hidden">
-             <Image src="/images/logoeducacion.webp" alt="Logo Educación" width={40} height={40} className="h-8 w-auto lg:h-11 object-contain shrink-0" />
-             <div className="flex flex-col justify-center min-w-0">
-               <span className="text-[6px] sm:text-[8px] lg:text-[10px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate">Universidad Nacional del Centro del Perú</span>
-               <span className="font-serif text-sm sm:text-base lg:text-lg font-bold leading-none text-brand-950 group-hover:text-brand-600 transition-colors truncate">Facultad de Educación</span>
+             <Image src="/images/logoeducacion.webp" alt="Logo Educación" width={40} height={40} className="h-8 w-auto lg:h-12 object-contain shrink-0" />
+             <div className="flex flex-col justify-center min-w-0 py-0.5">
+               <span className="text-[5px] sm:text-[7px] lg:text-[8px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate">Universidad Nacional del Centro del Perú</span>
+               <span className="text-[8px] sm:text-[10px] lg:text-[11px] font-bold text-brand-700 leading-tight truncate">Facultad de Educación</span>
+               <span className="font-serif text-sm sm:text-base lg:text-xl font-black leading-none text-brand-950 group-hover:text-brand-600 transition-colors truncate mt-0.5 -ml-[1px]">Unidad de Posgrado</span>
              </div>
           </div>
         </Link>
