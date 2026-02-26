@@ -1,31 +1,51 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { curriculums } from "@/data/curriculums";
 import TabSelector from "@/components/ui/tab-selector";
 import CurriculumTable from "./curriculum-table";
 import { BookOpen, GraduationCap, Clock, Hash, Info, Download } from "lucide-react";
 
 export default function ProgramExplorer() {
+  const searchParams = useSearchParams();
+
   // Separar tipos de programa para el primer nivel de tabs
   const programTypes = [
     { id: "Maestría", label: "Maestrías", icon: <BookOpen className="w-4 h-4" /> },
     { id: "Doctorado", label: "Doctorado", icon: <GraduationCap className="w-4 h-4" /> },
   ];
 
-  const [activeType, setActiveType] = useState("Maestría");
+  // Determinar tipo y programa inicial desde el query param ?programa=ID
+  const getInitialValues = () => {
+    const param = searchParams.get("programa");
+    if (param) {
+      const found = curriculums.find((p) => p.id === param);
+      if (found) return { type: found.tipo, id: found.id };
+    }
+    return { type: "Maestría", id: curriculums.find((p) => p.tipo === "Maestría")!.id };
+  };
+
+  const initial = getInitialValues();
+  const [activeType, setActiveType] = useState(initial.type);
 
   // Filtrar menciones según el tipo activo
-  const availablePrograms = useMemo(() => 
-    curriculums.filter(p => p.tipo === activeType), 
+  const availablePrograms = useMemo(() =>
+    curriculums.filter(p => p.tipo === activeType),
   [activeType]);
 
-  const [activeProgramId, setActiveProgramId] = useState(availablePrograms[0].id);
+  const [activeProgramId, setActiveProgramId] = useState(initial.id);
 
-  // Sincronizar activeProgramId cuando cambia el tipo
+  // Sincronizar activeProgramId cuando cambia el tipo (sin sobrescribir el param inicial)
+  const [hasInitialized, setHasInitialized] = useState(false);
   useEffect(() => {
+    if (!hasInitialized) {
+      setHasInitialized(true);
+      return;
+    }
     setActiveProgramId(availablePrograms[0].id);
-  }, [availablePrograms]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeType]);
 
   const selectedProgram = useMemo(() => 
     curriculums.find(p => p.id === activeProgramId)!, 
