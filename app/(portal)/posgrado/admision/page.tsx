@@ -8,7 +8,7 @@ export default function AdmisionHubPage() {
   return (
     <>
       <PageHero
-        title="ADMISIÓN 2026"
+        title="ADMISIÓN"
         subtitle="ÚNETE A NOSOTROS"
         description="El primer paso hacia la excelencia académica. Consulta los requisitos, cronogramas y procesos específicos para tu programa de interés."
         imageSrc="/images/fondouncp1920x1080.webp"
@@ -83,7 +83,7 @@ export default function AdmisionHubPage() {
             <h3 className="text-xl font-bold text-brand-950 mb-8 text-center">Recursos y Ayuda</h3>
             <div className="grid sm:grid-cols-3 gap-6">
               {[
-                { icon: Download, label: "Prospecto 2026", href: "#", desc: "Descargar PDF" },
+                { icon: Download, label: "Prospecto de Admisión", href: "#", desc: "Descargar PDF" },
                 { icon: CreditCard, label: "Tasas Educativas", href: "#", desc: "Ver tarifario" },
                 { icon: HelpCircle, label: "Preguntas Frecuentes", href: "#", desc: "Centro de ayuda" },
               ].map((item, idx) => (

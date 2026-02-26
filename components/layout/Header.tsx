@@ -26,7 +26,7 @@ const menuItems = [
         ]
       },
       {
-        title: "Admisión 2026",
+        title: "Admisión",
         links: [
           { label: "Proceso de Admisión", href: "/posgrado/admision" },
           { label: "Guía Maestría", href: "/posgrado/maestrias#admision" },

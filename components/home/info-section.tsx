@@ -16,8 +16,8 @@ export default function InfoSection() {
                       <div className="text-xs md:text-sm font-bold text-muted-foreground mt-2 uppercase tracking-wide text-balance">Usuarios Activos</div>
                   </div>
                   <div className="group">
-                      <div className="text-5xl md:text-6xl font-serif font-black text-brand-600 transition-transform group-hover:scale-105 duration-300">54</div>
-                      <div className="text-xs md:text-sm font-bold text-muted-foreground mt-2 uppercase tracking-wide text-balance">Docentes Calificados</div>
+                      <div className="text-4xl md:text-5xl font-serif font-black text-brand-600 transition-transform group-hover:scale-105 duration-300 leading-tight">Plana Docente</div>
+                      <div className="text-xs md:text-sm font-bold text-muted-foreground mt-2 uppercase tracking-wide text-balance">Altamente Calificada</div>
                   </div>
                   <div className="group">
                       <div className="text-5xl md:text-6xl font-serif font-black text-brand-950 transition-transform group-hover:scale-105 duration-300">05</div>

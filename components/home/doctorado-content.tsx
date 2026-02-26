@@ -104,7 +104,6 @@ const stats = [
   { numero: "6", etiqueta: "Ciclos", sub: "semestres académicos" },
   { numero: "72", etiqueta: "Créditos", sub: "académicos totales" },
   { numero: "3", etiqueta: "Años", sub: "de formación" },
-  { numero: "2026‑I", etiqueta: "Convocatoria", sub: "nueva cohorte" },
 ];
 
 const propuestaValor = [
@@ -200,12 +199,6 @@ export default function DoctoradoContent() {
                 Formación doctoral orientada a la investigación científica, producción académica y liderazgo en el campo de las ciencias de la educación.
               </p>
 
-              <div className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-bold text-brand-50">
-                <Calendar className="h-4 w-4 text-uncp-gold" />
-                Inscripciones hasta el{" "}
-                <strong className="text-uncp-gold">28 de marzo de 2026</strong>
-              </div>
-
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
@@ -239,6 +232,10 @@ export default function DoctoradoContent() {
                     <p className="text-[11px] font-medium text-brand-50/60">{s.sub}</p>
                   </div>
                 ))}
+                {/* Cuarta tarjeta decorativa */}
+                <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm flex items-center justify-center">
+                    <Image src="/images/logoeducacion.webp" alt="Logo" width={48} height={48} className="opacity-40 grayscale brightness-200" />
+                </div>
               </div>
 
               <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
@@ -523,7 +520,7 @@ export default function DoctoradoContent() {
       <section className="bg-brand-950 py-20">
         <div className="container mx-auto max-w-5xl px-6 text-center lg:px-12">
           <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-uncp-gold/40 bg-uncp-gold/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-uncp-gold">
-            <Calendar className="h-3.5 w-3.5" /> Cierre de inscripciones: 28 de marzo 2026
+            <Calendar className="h-3.5 w-3.5" /> Proceso de Admisión Abierto
           </span>
           <h2 className="font-serif text-4xl font-black text-white md:text-5xl xl:text-6xl">
             Tu próximo grado
