@@ -31,7 +31,7 @@ const slides = [
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
     curriculumLink: "/posgrado/planes-estudio?programa=maestria-gestion",
-    inscripcionLink: "/posgrado/admision/maestria",
+    inscripcionLink: "/posgrado/maestrias#admision",
   },
   {
     id: 2,
@@ -49,7 +49,7 @@ const slides = [
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
     curriculumLink: "/posgrado/planes-estudio?programa=maestria-superior",
-    inscripcionLink: "/posgrado/admision/maestria",
+    inscripcionLink: "/posgrado/maestrias#admision",
   },
   {
     id: 3,
@@ -67,7 +67,7 @@ const slides = [
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
     curriculumLink: "/posgrado/planes-estudio?programa=maestria-psicologia",
-    inscripcionLink: "/posgrado/admision/maestria",
+    inscripcionLink: "/posgrado/maestrias#admision",
   },
   {
     id: 4,
@@ -85,7 +85,7 @@ const slides = [
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
     curriculumLink: "/posgrado/planes-estudio?programa=maestria-ensenanza",
-    inscripcionLink: "/posgrado/admision/maestria",
+    inscripcionLink: "/posgrado/maestrias#admision",
   },
   {
     id: 5,
@@ -103,7 +103,7 @@ const slides = [
       { icon: GraduationCap, label: "Grado", value: "Doctor" },
     ],
     curriculumLink: "/posgrado/planes-estudio?programa=doctorado-ciencias",
-    inscripcionLink: "/posgrado/admision/doctorado",
+    inscripcionLink: "/posgrado/doctorados#admision",
   },
 ];
 
