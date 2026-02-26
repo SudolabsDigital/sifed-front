@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import PageHero from "@/components/ui/page-hero";
 import AdmissionUnifiedSection from "@/components/posgrado/admission-unified-section";
 import { ADMISSION_CONFIG } from "@/data/admission-config";
 import {
@@ -305,92 +306,33 @@ export default function MaestriaContent() {
   return (
     <main className="flex-1 w-full bg-background text-foreground">
 
-      {/* ── HERO ──────────────────────────────────────────── */}
-      <section className="relative flex min-h-[92vh] flex-col justify-center overflow-hidden bg-brand-950">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('/images/portada-2.webp')] bg-cover bg-center opacity-15" />
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-brand-950/95 to-brand-800/70" />
-        </div>
-        <div className="container relative z-10 mx-auto max-w-7xl px-6 py-24 lg:px-12">
-          <div className="grid items-center gap-14 lg:grid-cols-2">
-            <div>
-              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-uncp-gold/40 bg-uncp-gold/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-uncp-gold">
-                <Sparkles className="h-3.5 w-3.5" /> Posgrado UNCP · Educación
-              </span>
+      <PageHero
+        title="MAESTRÍA EN CIENCIAS DE LA EDUCACIÓN"
+        subtitle="POSGRADO UNCP · EDUCACIÓN"
+        description="Formación de posgrado orientada a liderazgo, investigación e innovación educativa. Cuatro menciones diseñadas para transformar tu carrera."
+        imageSrc="/images/fondouncp1920x1080.webp"
+        align="left"
+        breadcrumbs={[
+          { label: "Posgrado", href: "/posgrado" },
+          { label: "Maestrías" }
+        ]}
+        actions={[
+          { 
+            label: "Inscribirme ahora", 
+            href: "https://uncpadmision.edu.pe/posgrado/registration/login.php",
+            variant: "primary",
+            icon: <ArrowRight className="h-4 w-4" />
+          },
+          { 
+            label: "Guía de Inscripción", 
+            href: "#admision",
+            variant: "secondary",
+            icon: <Download className="h-4 w-4" />
+          }
+        ]}
+      />
 
-              <h1 className="mt-5 font-serif text-5xl font-black leading-[1.08] tracking-tight text-white md:text-6xl xl:text-7xl">
-                Maestría en
-                <span className="block text-uncp-gold">Ciencias de la</span>
-                <span className="block">Educación</span>
-              </h1>
-
-              <p className="mt-6 max-w-lg text-base leading-relaxed text-brand-50/80 md:text-lg">
-                Formación de posgrado orientada a liderazgo, investigación e innovación educativa. Cuatro menciones diseñadas para transformar tu carrera.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-7 py-3.5 text-sm font-black uppercase tracking-wider text-brand-950 shadow-lg transition hover:brightness-110 active:scale-95"
-                >
-                  Inscribirme ahora <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://wa.me/51949260658?text=Hola,%20quisiera%20informaci%C3%B3n%20sobre%20las%20Maestr%C3%ADas%20en%20Educaci%C3%B3n"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
-                >
-                  <MessageCircle className="h-4 w-4" /> Consultar por WhatsApp
-                </a>
-              </div>
-            </div>
-
-            {/* columna derecha: stats */}
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                {stats.map((s) => (
-                  <div
-                    key={s.etiqueta}
-                    className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm"
-                  >
-                    <p className="text-3xl font-black text-uncp-gold md:text-4xl">{s.numero}</p>
-                    <p className="mt-1 text-sm font-black text-white">{s.etiqueta}</p>
-                    <p className="text-[11px] font-medium text-brand-50/60">{s.sub}</p>
-                  </div>
-                ))}
-                {/* Cuarta tarjeta estática opcional si se quiere balancear el grid */}
-                <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm flex items-center justify-center">
-                    <Image src="/images/logoeducacion.webp" alt="Logo" width={48} height={48} className="opacity-40 grayscale brightness-200" />
-                </div>
-              </div>
-
-              <div className="rounded-[1.5rem] border border-white/15 bg-white/8 p-5 backdrop-blur-sm">
-                <p className="mb-3 text-[10px] font-black uppercase tracking-[0.2em] text-uncp-gold">
-                  ¿Por qué esta maestría?
-                </p>
-                <ul className="space-y-2 text-sm text-brand-50/90">
-                  {[
-                    "Acompañamiento académico durante toda la maestría",
-                    "Malla curricular orientada a resultados reales",
-                    "Formación con enfoque en liderazgo e investigación",
-                    "Plana docente de alto nivel especializada",
-                  ].map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-uncp-gold" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STRIP PROPUESTA DE VALOR ──────────────────────── */}
+      {/* STRIP PROPUESTA DE VALOR */}
       <section className="bg-brand-800 py-14">
         <div className="container mx-auto max-w-7xl px-6 lg:px-12">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -399,7 +341,7 @@ export default function MaestriaContent() {
               return (
                 <div
                   key={item.titulo}
-                  className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/8 p-5"
+                  className="flex items-start gap-4 rounded-[1.5rem] border border-white/10 bg-white/8 p-6 backdrop-blur-sm hover:bg-white/12 transition-all"
                 >
                   <div className="shrink-0 rounded-xl bg-uncp-gold/15 p-2.5 text-uncp-gold">
                     <Icono className="h-5 w-5" />
@@ -415,7 +357,7 @@ export default function MaestriaContent() {
         </div>
       </section>
 
-      {/* ── MENCIONES ─────────────────────────────────────── */}
+      {/* MENCIONES */}
       <section className="bg-white py-20 md:py-24" id="menciones">
         <div className="container mx-auto max-w-7xl px-6 lg:px-12">
           <div className="mb-14 max-w-2xl">

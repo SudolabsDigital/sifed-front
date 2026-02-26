@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import PageHero from "@/components/ui/page-hero";
 import { 
   FileText, 
   Download, 
@@ -199,50 +200,34 @@ export default function DocumentosNormativosContent() {
   return (
     <main className="flex-1 w-full">
       
-      {/* HERO SECTION */}
-      <section className="relative bg-gradient-to-br from-brand-950 via-brand-800 to-brand-600 text-white py-24 lg:py-32 overflow-hidden">
-        {/* Patrón de fondo */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}></div>
-        </div>
+      <PageHero
+        title="DOCUMENTOS NORMATIVOS"
+        subtitle="UNIDAD DE POSGRADO"
+        description="Accede a toda la normativa nacional, formatos oficiales, plantillas y documentos requeridos para tus trámites académicos. Todo en un solo lugar."
+        imageSrc="/images/fondouncp1920x1080.webp"
+        size="compact"
+        align="center"
+        breadcrumbs={[
+          { label: "Posgrado", href: "/posgrado" },
+          { label: "Documentos" }
+        ]}
+      />
 
-        <div className="relative z-10 container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Eyebrow */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="h-px w-8 bg-uncp-gold"></div>
-              <span className="text-xs font-black uppercase tracking-widest text-uncp-gold">
-                Unidad de Posgrado
-              </span>
-              <div className="h-px w-8 bg-uncp-gold"></div>
-            </div>
-
-            {/* Título Principal */}
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
-              <span className="text-white">Documentos</span> <span className="text-uncp-gold">Normativos</span>
-            </h1>
-
-            {/* Descripción */}
-            <p className="text-lg md:text-xl text-blue-100 leading-relaxed max-w-3xl mx-auto mb-10">
-              Accede a toda la normativa nacional, formatos oficiales, plantillas y documentos requeridos para tus trámites académicos. Todo en un solo lugar.
-            </p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-              {[
-                { numero: "6", label: "Normas Nacionales" },
-                { numero: "8", label: "Formatos Oficiales" },
-                { numero: "100%", label: "Actualizados" },
-                { numero: "24/7", label: "Disponibles" }
-              ].map((stat, idx) => (
-                <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <div className="text-3xl md:text-4xl font-serif font-black text-uncp-gold">{stat.numero}</div>
-                  <div className="text-sm text-blue-100 mt-2 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+      {/* QUICK STATS - Standard Pattern */}
+      <section className="bg-white py-12 border-b border-border">
+        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { numero: "06", label: "Normas Nacionales" },
+              { numero: "08", label: "Formatos Oficiales" },
+              { numero: "100%", label: "Versión Actual" },
+              { numero: "24/7", label: "Acceso Libre" }
+            ].map((stat, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center group">
+                <div className="text-3xl md:text-4xl font-serif font-black text-brand-950 group-hover:text-brand-600 transition-colors">{stat.numero}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-brand-400 mt-2">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -250,27 +235,27 @@ export default function DocumentosNormativosContent() {
       {/* NAVEGACIÓN DE PESTAÑAS */}
       <section className="sticky top-0 z-40 bg-white border-b-2 border-gray-200 shadow-md backdrop-blur-sm">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="flex gap-3 py-5">
+          <div className="flex flex-wrap gap-4 py-6">
             <button
               onClick={() => setSeccionActiva("nacional")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-sm transition-all transform ${
+              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all transform ${
                 seccionActiva === "nacional"
-                  ? "bg-brand-600 text-white shadow-xl scale-105"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border-2 border-gray-200 hover:border-brand-300"
+                  ? "bg-brand-950 text-white shadow-2xl scale-105"
+                  : "bg-white text-muted-foreground hover:bg-brand-50 border border-border hover:border-brand-200"
               }`}
             >
-              <Scale className="h-5 w-5" />
+              <Scale className="h-4 w-4" />
               Normativa Nacional
             </button>
             <button
               onClick={() => setSeccionActiva("formatos")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-sm transition-all transform ${
+              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all transform ${
                 seccionActiva === "formatos"
-                  ? "bg-brand-600 text-white shadow-xl scale-105"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border-2 border-gray-200 hover:border-brand-300"
+                  ? "bg-brand-950 text-white shadow-2xl scale-105"
+                  : "bg-white text-muted-foreground hover:bg-brand-50 border border-border hover:border-brand-200"
               }`}
             >
-              <FileSpreadsheet className="h-5 w-5" />
+              <FileSpreadsheet className="h-4 w-4" />
               Formatos y Plantillas
             </button>
           </div>
