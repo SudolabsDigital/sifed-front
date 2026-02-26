@@ -9,8 +9,8 @@ export default function Home() {
     <>
       <HeroSection />
       <NewsCollage />
-      <EcosistemaSection />
       <PosgradoSection />
+      <EcosistemaSection />
       <InfoSection />
     </>
   );

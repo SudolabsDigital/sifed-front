@@ -4,7 +4,7 @@ import { Newspaper, MonitorPlay, ArrowRight } from "lucide-react";
 
 export default function EcosistemaSection() {
   return (
-    <section className="w-full bg-brand-50 h-screen flex items-center py-12 px-6 lg:px-12 border-b border-border overflow-hidden">
+    <section className="w-full bg-brand-50 min-h-screen flex items-center py-20 px-6 lg:px-12 border-b border-border overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
             <div className="mb-8 flex flex-col md:flex-row justify-between items-end gap-4 text-center md:text-left">
                <div>
@@ -40,9 +40,9 @@ export default function EcosistemaSection() {
                       </ul>
                    </div>
                    <div className="mt-6 pt-6 border-t border-border">
-                      <span className="inline-flex items-center gap-2 text-base font-bold text-brand-600 underline decoration-2 underline-offset-4 group-hover:text-brand-800 transition-colors">
+                      <Link href="/posgrado" className="inline-flex items-center gap-2 text-base font-bold text-brand-600 underline decoration-2 underline-offset-4 hover:text-brand-800 transition-colors">
                           Visitar Portal Público <ArrowRight className="h-4 w-4" />
-                      </span>
+                      </Link>
                    </div>
                 </div>
               </div>
