@@ -1,15 +1,21 @@
 import HeroSection from "@/components/home/hero-section";
 import { NewsCollage } from "@/components/portal/news/NewsCollage";
 import EcosistemaSection from "@/components/home/ecosistema-section";
+import ProgramSelectorSection from "@/components/home/program-selector-section";
 import PosgradoSection from "@/components/home/posgrado-section";
 import InfoSection from "@/components/home/info-section";
+import FAQSection from "@/components/home/faq-section";
+import QuickAccessSection from "@/components/home/quick-access-section";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <NewsCollage />
+      <ProgramSelectorSection />
       <PosgradoSection />
+      <QuickAccessSection />
+      <FAQSection />
+      <NewsCollage />
       <EcosistemaSection />
       <InfoSection />
     </>

@@ -85,9 +85,16 @@ export default function Footer() {
         <div className="border-t border-border pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
           <p>© 2026 Universidad Nacional del Centro del Perú.</p>
           <div className="flex gap-8">
-            <button className="hover:text-brand-950 transition-colors">Privacidad</button>
-            <button className="hover:text-brand-950 transition-colors">Términos</button>
-            <button className="hover:text-brand-950 transition-colors">Reclamaciones</button>
+            <Link href="/privacidad" className="hover:text-brand-950 transition-colors">Privacidad</Link>
+            <Link href="/terminos" className="hover:text-brand-950 transition-colors">Términos</Link>
+            <Link 
+              href="https://reclamos.servicios.gob.pe/?institution_id=252" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-brand-950 transition-colors"
+            >
+              Reclamaciones
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import FloatingActions from "@/components/ui/floating-actions";
 
 export default function PortalLayout({
   children,
@@ -16,6 +17,9 @@ export default function PortalLayout({
       </main>
 
       <Footer />
+      
+      {/* ACCIONES FLOTANTES (CONTACTO Y SCROLL) */}
+      <FloatingActions />
     </div>
   );
 }

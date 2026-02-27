@@ -33,13 +33,13 @@ import {
   Zap,
 } from "lucide-react";
 
-/* ─── TIPOS ─────────────────────────────────────────────────── */
+/* TIPOS */
 type CursoRegular = { tipo: "curso"; nombre: string; creditos: number };
 type CursoElectivo = { tipo: "electivo"; creditos: number; opciones: string[] };
 type CursoItem = CursoRegular | CursoElectivo;
 type Ciclo = { titulo: string; total: string; items: CursoItem[] };
 
-/* ─── HELPER ─────────────────────────────────────────────────── */
+/* HELPER */
 const c = (nombre: string, creditos: number): CursoRegular => ({ tipo: "curso", nombre, creditos });
 const e = (creditos: number, opciones: string[]): CursoElectivo => ({ tipo: "electivo", creditos, opciones });
 
@@ -518,7 +518,7 @@ export default function MaestriaContent() {
         </div>
       </section>
 
-      {/* ── LOGROS ────────────────────────────────────────── */}
+      {/* LOGROS */}
       <section className="bg-brand-950 py-20">
         <div className="container mx-auto max-w-7xl px-6 lg:px-12">
           <div className="grid gap-10 lg:grid-cols-2">
@@ -594,10 +594,10 @@ export default function MaestriaContent() {
         </div>
       </section>
 
-      {/* ── GUÍA DE ADMISIÓN UNIFICADA ────────────────────── */}
+      {/* GUÍA DE ADMISIÓN UNIFICADA */}
       <AdmissionUnifiedSection data={ADMISSION_CONFIG.maestria} />
 
-      {/* ── CTA FINAL ─────────────────────────────────────── */}
+      {/* CTA FINAL */}
       <section className="bg-brand-950 py-20">
         <div className="container mx-auto max-w-5xl px-6 text-center lg:px-12">
           <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-uncp-gold/40 bg-uncp-gold/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-uncp-gold">

@@ -1,4 +1,4 @@
-import { Ciclo } from "@/data/curriculums";
+import { Ciclo } from "@/types/curriculum";
 import { cn } from "@/lib/utils";
 
 export default function CurriculumTable({ ciclo }: { ciclo: Ciclo }) {

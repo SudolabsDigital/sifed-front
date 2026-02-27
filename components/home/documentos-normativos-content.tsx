@@ -233,7 +233,7 @@ export default function DocumentosNormativosContent() {
       </section>
 
       {/* NAVEGACIÓN DE PESTAÑAS */}
-      <section className="sticky top-0 z-40 bg-white border-b-2 border-gray-200 shadow-md backdrop-blur-sm">
+      <section className="bg-white border-b-2 border-gray-200 shadow-sm">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
           <div className="flex flex-wrap gap-4 py-6">
             <button
@@ -263,7 +263,7 @@ export default function DocumentosNormativosContent() {
       </section>
 
       {/* BUSCADOR INTELIGENTE */}
-      <section className="sticky top-24 z-35 bg-gradient-to-b from-white to-gray-50 border-b border-gray-200 backdrop-blur-sm">
+      <section className="bg-gradient-to-b from-white to-gray-50 border-b border-gray-200">
         <div className="container mx-auto px-6 lg:px-12 max-w-7xl py-6">
           <div className="relative">
             <div className="relative">

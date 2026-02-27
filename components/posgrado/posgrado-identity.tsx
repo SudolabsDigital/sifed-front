@@ -22,7 +22,7 @@ const identityItems = [
 
 export default function PosgradoIdentity() {
   return (
-    <section className="min-h-screen flex items-center py-16 lg:py-0 bg-white overflow-hidden">
+    <section className="bg-neutral-50 py-24 border-b border-border overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
