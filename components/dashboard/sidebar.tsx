@@ -90,9 +90,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
         {/* Header Logo */}
         <div className="flex h-16 items-center justify-between px-6 border-b border-brand-800 bg-brand-950/95 backdrop-blur-xl shrink-0">
           <div className="flex items-center gap-3">
-             <div className="bg-white p-1 rounded-lg shadow-sm">
-                <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={24} height={24} className="object-contain" />
-             </div>
+             <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={36} height={36} className="object-contain" />
              <div className="flex flex-col">
                 <span className="font-serif font-bold text-lg leading-none tracking-tight">SIFED</span>
                 <span className="text-[9px] text-brand-400 uppercase tracking-wider font-bold">Admin Panel</span>

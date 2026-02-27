@@ -22,7 +22,7 @@ interface ServiceCardProps {
 export default function ServiceCard({
   title,
   subtitle = "Servicio Académico",
-  imageSrc = "/images/Escudo_UNCP.webp",
+  imageSrc = "/images/logo-posgrado-educacion.webp",
   href,
   isLocked = false,
   onLockedClick,

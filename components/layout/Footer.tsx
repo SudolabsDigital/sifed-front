@@ -21,10 +21,8 @@ export default function Footer() {
           {/* Columna Marca */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-4 mb-8">
-               <div className="flex items-center gap-3">
-                  <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={48} height={48} className="object-contain" />
-                  <div className="h-10 w-px bg-border"></div>
-                  <Image src="/images/logoeducacion.webp" alt="Educación" width={48} height={48} className="object-contain" />
+               <div className="flex items-center">
+                  <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
                </div>
                <div className="flex flex-col justify-center">
                   <span className="text-[7px] font-black uppercase tracking-widest text-muted-foreground leading-tight">UNCP</span>
