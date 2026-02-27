@@ -3,13 +3,18 @@ import { FileText, Bell, ArrowRight, TrendingUp } from "lucide-react";
 
 export default function InfoSection() {
   return (
-    <section className="w-auto bg-brand-50/30 min-h-screen flex items-center py-20 px-6 lg:px-12 border-b border-border overflow-hidden">
+    <section className="w-auto bg-brand-50/30 min-h-screen flex items-center py-24 px-6 lg:px-12 border-b border-border overflow-hidden">
        <div className="max-w-7xl mx-auto w-full flex flex-col justify-center">
           
+          <div className="mb-12 text-center md:text-left">
+             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-uncp-gold mb-2 block">Impacto Institucional</span>
+             <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-950 leading-tight">Cifras y Gestión</h2>
+             <p className="text-base text-muted-foreground font-medium mt-3">Transparencia y resultados de nuestra labor académica.</p>
+          </div>
+
           <div className="grid lg:grid-cols-4 gap-8 md:gap-10">
             {/* Bloque: Estadísticas */}
             <div className="lg:col-span-1 bg-brand-50 p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] flex flex-col justify-center border border-border">
-               <h3 className="font-black text-brand-400 uppercase tracking-[0.2em] text-[10px] md:text-xs mb-8 md:mb-12">Impacto Académico</h3>
                <div className="space-y-8 md:space-y-12">
                   <div className="group">
                       <div className="text-5xl md:text-6xl font-serif font-black text-brand-950 transition-transform group-hover:scale-105 duration-300">1k+</div>

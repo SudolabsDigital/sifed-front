@@ -7,7 +7,7 @@ import {
   ClipboardList, Clock, GraduationCap, Layers,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -30,8 +30,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/planes-estudio?programa=maestria-gestion",
-    inscripcionLink: "/posgrado/maestrias#admision",
+    curriculumLink: "/posgrado/maestrias/gestion-educativa",
+    inscripcionLink: "/posgrado/maestrias/gestion-educativa#admision",
   },
   {
     id: 2,
@@ -48,8 +48,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/planes-estudio?programa=maestria-superior",
-    inscripcionLink: "/posgrado/maestrias#admision",
+    curriculumLink: "/posgrado/maestrias/educacion-superior",
+    inscripcionLink: "/posgrado/maestrias/educacion-superior#admision",
   },
   {
     id: 3,
@@ -66,8 +66,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/planes-estudio?programa=maestria-psicologia",
-    inscripcionLink: "/posgrado/maestrias#admision",
+    curriculumLink: "/posgrado/maestrias/psicologia-educativa",
+    inscripcionLink: "/posgrado/maestrias/psicologia-educativa#admision",
   },
   {
     id: 4,
@@ -84,8 +84,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/planes-estudio?programa=maestria-ensenanza",
-    inscripcionLink: "/posgrado/maestrias#admision",
+    curriculumLink: "/posgrado/maestrias/ensenanza-estrategica",
+    inscripcionLink: "/posgrado/maestrias/ensenanza-estrategica#admision",
   },
   {
     id: 5,
@@ -102,29 +102,37 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "72 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Doctor" },
     ],
-    curriculumLink: "/posgrado/planes-estudio?programa=doctorado-ciencias",
-    inscripcionLink: "/posgrado/doctorados#admision",
+    curriculumLink: "/posgrado/doctorados/ciencias-educacion",
+    inscripcionLink: "/posgrado/doctorados/ciencias-educacion#admision",
   },
 ];
 
 // ── Variantes ────────────────────────────────────────────────────────────────
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
   visible: (delay = 0) => ({
     opacity: 1, y: 0, filter: "blur(0px)",
-    transition: { delay, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { 
+      delay: delay * 0.7, 
+      duration: 0.4, 
+      ease: [0.22, 1, 0.36, 1] as const 
+    },
   }),
-  exit: { opacity: 0, y: -12, filter: "blur(4px)", transition: { duration: 0.25 } },
+  exit: { opacity: 0, y: -12, filter: "blur(4px)", transition: { duration: 0.2 } },
 };
 
-const statsCard = {
+const statsCard: Variants = {
   hidden: { opacity: 0, x: 40, filter: "blur(6px)" },
   visible: (delay = 0) => ({
     opacity: 1, x: 0, filter: "blur(0px)",
-    transition: { delay, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { 
+      delay: delay * 0.7, 
+      duration: 0.4, 
+      ease: [0.22, 1, 0.36, 1] as const 
+    },
   }),
-  exit: { opacity: 0, x: 30, filter: "blur(4px)", transition: { duration: 0.2 } },
+  exit: { opacity: 0, x: 30, filter: "blur(4px)", transition: { duration: 0.15 } },
 };
 
 // ── Componente ───────────────────────────────────────────────────────────────
@@ -301,7 +309,7 @@ export default function HeroSection() {
                   {/* Shimmer */}
                   <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
                   <BookOpen className="h-4 w-4 shrink-0" strokeWidth={2.5} />
-                  <span>Plan de Estudio</span>
+                  <span>Conocer más</span>
                   <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover/btn:translate-x-1" strokeWidth={2.5} />
                 </Link>
 

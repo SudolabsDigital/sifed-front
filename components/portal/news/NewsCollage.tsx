@@ -49,12 +49,12 @@ export function NewsCollage() {
       <div className="max-w-7xl mx-auto">
         
         {/* Header de Sección */}
-        <div className="flex items-end justify-between mb-12 border-b border-gray-100 pb-6">
+        <div className="flex items-end justify-between mb-10 pb-6">
           <div>
-            <span className="text-uncp-gold font-bold uppercase tracking-[0.2em] text-xs block mb-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-uncp-gold mb-2 block">
               Actualidad Institucional
             </span>
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-brand-950">
+            <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-950 leading-tight">
               Últimas Noticias
             </h2>
           </div>

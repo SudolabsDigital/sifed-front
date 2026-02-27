@@ -6,12 +6,10 @@ export default function EcosistemaSection() {
   return (
     <section className="w-full bg-brand-50 min-h-screen flex items-center py-20 px-6 lg:px-12 border-b border-border overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
-            <div className="mb-8 flex flex-col md:flex-row justify-between items-end gap-4 text-center md:text-left">
-               <div>
-                  <h2 className="font-serif text-3xl md:text-4xl font-bold text-brand-950 mb-2">Ecosistema Digital</h2>
-                  <p className="text-base md:text-lg text-muted-foreground font-medium">Plataformas integradas para la gestión universitaria.</p>
-               </div>
-               <div className="hidden md:block h-1 w-24 bg-uncp-gold rounded-full mb-2"></div>
+            <div className="mb-10 text-center md:text-left">
+               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-uncp-gold mb-2 block">Ecosistema Digital</span>
+               <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-950 leading-tight">Plataformas Académicas</h2>
+               <p className="text-base text-muted-foreground font-medium mt-3">Sistemas integrados para la gestión universitaria.</p>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6 h-full">
