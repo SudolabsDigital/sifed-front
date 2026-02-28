@@ -167,9 +167,21 @@ export default function Header() {
             {/* Texto */}
             <div className="flex items-center gap-2 lg:gap-3 overflow-hidden">
                <div className="flex flex-col justify-center min-w-0 py-0.5">
-                 <span className="text-[5px] sm:text-[7px] lg:text-[8px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate">Universidad Nacional del Centro del Perú</span>
-                 <span className="text-[8px] sm:text-[10px] lg:text-[11px] font-bold text-brand-700 leading-tight truncate">Facultad de Educación</span>
-                 <span className={cn("font-serif font-black leading-none text-brand-950 group-hover:text-brand-600 transition-all truncate mt-0.5 -ml-[1px]", scrolled ? "text-xs sm:text-sm lg:text-lg" : "text-sm sm:text-base lg:text-xl")}>Unidad de Posgrado</span>
+                 <span className="text-[5px] sm:text-[6px] lg:text-[7px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate mb-0.5">
+                   Universidad Nacional del Centro del Perú
+                 </span>
+                 <span className={cn(
+                   "font-black uppercase tracking-tight text-brand-800 leading-none truncate transition-all duration-500",
+                   scrolled ? "text-[9px] sm:text-[11px] lg:text-[13px]" : "text-[10px] sm:text-xs lg:text-sm"
+                 )}>
+                   Facultad de Educación
+                 </span>
+                 <span className={cn(
+                   "font-serif font-black leading-none text-brand-950 group-hover:text-brand-600 transition-all duration-500 truncate mt-0.5",
+                   scrolled ? "text-xs sm:text-sm lg:text-[1.1rem]" : "text-sm sm:text-base lg:text-[1.35rem]"
+                 )}>
+                   Unidad de Posgrado
+                 </span>
                </div>
             </div>
           </Link>
