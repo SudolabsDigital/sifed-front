@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-const UNCP_LOGO = "/images/Escudo_UNCP.webp";
+const UNCP_LOGO = "/images/logo-posgrado-educacion.webp";
 
 export default function LoginHub() {
   const loginRef = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ export default function LoginHub() {
       subtitle: "Oferta Académica",
       href: "/posgrado",
       requiresAuth: false,
-      imageSrc: "/images/logoeducacion.webp"
+      imageSrc: "/images/logo-posgrado-educacion.webp"
     },
     {
       title: "Documentos y Trámites",
@@ -129,10 +129,8 @@ export default function LoginHub() {
             </Link>
 
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={48} height={48} className="object-contain" />
-                <div className="h-8 w-px bg-brand-200" />
-                <Image src="/images/logoeducacion.webp" alt="Facultad" width={48} height={48} className="object-contain" />
+              <div className="flex items-center">
+                <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
               </div>
               <div>
                 <h1 className="font-serif text-3xl font-black text-brand-950 leading-none tracking-tighter">SIFED</h1>

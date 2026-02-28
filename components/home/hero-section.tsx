@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-const AUTOPLAY_DELAY = 7000;
+const AUTOPLAY_DELAY = 12000;
 
 const slides = [
   {
@@ -20,7 +20,7 @@ const slides = [
     src: "/banner/maestria01.jpg",
     alt: "Maestría en Gestión Educativa",
     badge: "Maestría",
-    preTitle: "Maestría en Educación",
+    preTitle: "MAESTRÍA EN MENCIÓN EN",
     title: "Gestión Educativa",
     subtitle: "Forma líderes que transforman instituciones",
     description:
@@ -38,7 +38,7 @@ const slides = [
     src: "/banner/maestria02.jpg",
     alt: "Maestría en Educación Superior",
     badge: "Maestría",
-    preTitle: "Maestría en Educación",
+    preTitle: "MAESTRÍA EN MENCIÓN EN",
     title: "Educación Superior",
     subtitle: "Mejora tu perfil profesional",
     description:
@@ -56,7 +56,7 @@ const slides = [
     src: "/banner/maestria03.jpg",
     alt: "Maestría en Psicología Educativa",
     badge: "Maestría",
-    preTitle: "Maestría en Educación",
+    preTitle: "MAESTRÍA EN MENCIÓN EN",
     title: "Psicología Educativa",
     subtitle: "Comprende la mente para transformar el aprendizaje",
     description:
@@ -74,7 +74,7 @@ const slides = [
     src: "/banner/maestria04.jpg",
     alt: "Maestría en Enseñanza Estratégica",
     badge: "Maestría",
-    preTitle: "Maestría en Educación",
+    preTitle: "MAESTRÍA EN MENCIÓN EN",
     title: "Enseñanza Estratégica",
     subtitle: "Diseña el futuro de la educación",
     description:
@@ -246,7 +246,7 @@ export default function HeroSection() {
               {/* Badge con ping */}
               <motion.span
                 variants={fadeUp} custom={0.1}
-                className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full border border-uncp-gold/50 bg-uncp-gold/10 backdrop-blur-sm text-uncp-gold text-xs font-black tracking-widest uppercase"
+                className="inline-flex items-center gap-2 mb-5 px-5 py-2.5 rounded-full border border-uncp-gold/50 bg-uncp-gold/10 backdrop-blur-sm text-uncp-gold text-sm font-black tracking-widest uppercase"
               >
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-uncp-gold opacity-60" />

@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronRight, Home, Clock, Hash, Globe, GraduationCap } from "lucide-react";
+import { ChevronRight, Home, Clock, Hash, GraduationCap, MessageCircle } from "lucide-react";
 import { ProgramData } from "@/types/programa";
+import { cn } from "@/lib/utils";
 
 interface ProgramHeroProps {
   program: ProgramData;
@@ -71,25 +72,49 @@ export default function ProgramHero({ program }: ProgramHeroProps) {
             </div>
           </motion.div>
 
-          {/* Stats Box */}
+          {/* Stats Box & CTA */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="grid grid-cols-2 gap-4"
+            className="flex flex-col gap-4"
           >
-            {[
-              { icon: Clock, label: "Duración", value: program.infoGeneral.duracion },
-              { icon: Globe, label: "Modalidad", value: program.infoGeneral.modalidad },
-              { icon: Hash, label: "Créditos", value: `${program.infoGeneral.totalCreditos} Totales` },
-              { icon: GraduationCap, label: "Grado", value: program.infoGeneral.certificacion },
-            ].map((stat, idx) => (
-              <div key={idx} className="p-6 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm">
-                <stat.icon className="w-6 h-6 text-uncp-gold mb-4" />
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">{stat.label}</p>
-                <p className="text-sm font-black text-white">{stat.value}</p>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: Clock, label: "Duración", value: program.infoGeneral.duracion },
+                { icon: Hash, label: "Créditos", value: `${program.infoGeneral.totalCreditos} Totales` },
+                { icon: GraduationCap, label: "Grado", value: program.infoGeneral.certificacion, className: "col-span-2" },
+              ].map((stat, idx) => (
+                <div key={idx} className={cn("p-6 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-sm", stat.className)}>
+                  <stat.icon className="w-6 h-6 text-uncp-gold mb-4" />
+                  <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">{stat.label}</p>
+                  <p className="text-sm font-black text-white">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Contact CTA */}
+            <div className="p-8 rounded-[2rem] bg-gradient-to-br from-uncp-gold/20 to-uncp-gold/5 border border-uncp-gold/30 backdrop-blur-md relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-6 opacity-20 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-500">
+                <MessageCircle className="w-24 h-24 text-uncp-gold" />
               </div>
-            ))}
+              <div className="relative z-10">
+                <h3 className="text-white font-serif text-xl font-bold mb-2">¿Tienes dudas sobre el programa?</h3>
+                <p className="text-white/70 text-sm mb-6 max-w-sm">
+                  Habla con un asesor académico para resolver tus consultas sobre admisión, inversión o plan de estudios.
+                </p>
+                <a 
+                  href={`https://wa.me/51949260658?text=Hola,%20quisiera%20información%20sobre%20el%20programa%20de%20${encodeURIComponent(program.titulo)}`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-uncp-gold text-brand-950 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-brand-950 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Contactar Asesor
+                </a>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

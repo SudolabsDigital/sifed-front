@@ -40,13 +40,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
           </div>
         )}
 
-        {/* Tipo Badge */}
-        <div className="absolute bottom-6 left-6">
-          <span className="flex items-center gap-2 text-uncp-gold text-xs font-black uppercase tracking-widest">
-            <Award className="w-4 h-4" />
-            {program.tipo}
-          </span>
-        </div>
       </div>
 
       {/* Contenido */}

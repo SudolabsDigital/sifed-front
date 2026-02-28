@@ -42,9 +42,7 @@ export default function StatusCard({
         
         {/* Branding */}
         <div className="flex items-center gap-3 mb-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={32} height={32} className="object-contain" />
-            <div className="h-4 w-px bg-border"></div>
-            <Image src="/images/logoeducacion.webp" alt="Facultad" width={32} height={32} className="object-contain" />
+            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
         </div>
 
         {/* Icono Flotante */}

@@ -94,10 +94,10 @@ export default function PosgradoSection() {
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
                 {/* Logo Estilo Sello y Eyebrow */}
                 <div className="flex items-center gap-6 mb-10">
-                  <div className="relative h-20 w-20 bg-white rounded-2xl p-3 shadow-2xl shadow-brand-950/50 flex items-center justify-center transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <div className="relative h-20 w-20 bg-brand-950 rounded-2xl p-2 shadow-2xl shadow-brand-950/50 flex items-center justify-center transform -rotate-3 hover:rotate-0 transition-transform duration-500">
                     <Image
-                      src="/images/logoeducacion.webp"
-                      alt="Logo Facultad de Educación"
+                      src="/images/logo-posgrado-educacion.webp"
+                      alt="Logo Posgrado"
                       width={60}
                       height={60}
                       className="object-contain"

@@ -16,7 +16,7 @@ const menuItems = [
       title: "Oferta Académica",
       desc: "Explora todos nuestros programas de posgrado y formación continua.",
       link: "/posgrado/programas",
-      image: "/images/logoeducacion.webp"
+      image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
@@ -48,7 +48,7 @@ const menuItems = [
         title: "Investigación",
         desc: "Producción científica y sustentación de tesis doctorales.",
         link: "/galeria-fotos/investigacion",
-        image: "/images/Escudo_UNCP.webp"
+        image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
@@ -72,7 +72,7 @@ const menuItems = [
         title: "Noticias y Eventos",
         desc: "Entérate de lo último en nuestra facultad.",
         link: "/noticias",
-        image: "/images/logoeducacion.webp"
+        image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
@@ -96,7 +96,7 @@ const menuItems = [
         title: "Documentos",
         desc: "Acceso a la información pública y normativa institucional.",
         link: "/documentos-normativos",
-        image: "/images/Escudo_UNCP.webp"
+        image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
@@ -161,19 +161,27 @@ export default function Header() {
           
           {/* BRAND */}
           <Link href="/" className="flex items-center gap-2 lg:gap-4 flex-shrink-0 cursor-pointer group relative z-50 max-w-[85%] lg:max-w-none">
-            {/* Logo UNCP */}
-            <Image src="/images/Escudo_UNCP.webp" alt="UNCP" width={40} height={40} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-7 lg:h-9" : "h-8 lg:h-11")} />
+            {/* Logo Posgrado */}
+            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación UNCP" width={60} height={60} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-8 w-auto lg:h-10" : "h-10 w-auto lg:h-12")} />
             
-            {/* Separador */}
-            <div className={cn("w-px transition-all duration-500 shrink-0", scrolled ? "h-6 lg:h-8" : "h-8 lg:h-10", scrolled ? "bg-uncp-gold/50" : "bg-border")} />
-            
-            {/* Logo Educación + Texto */}
+            {/* Texto */}
             <div className="flex items-center gap-2 lg:gap-3 overflow-hidden">
-               <Image src="/images/logoeducacion.webp" alt="Logo Educación" width={40} height={40} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-7 lg:h-10" : "h-8 lg:h-12")} />
                <div className="flex flex-col justify-center min-w-0 py-0.5">
-                 <span className="text-[5px] sm:text-[7px] lg:text-[8px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate">Universidad Nacional del Centro del Perú</span>
-                 <span className="text-[8px] sm:text-[10px] lg:text-[11px] font-bold text-brand-700 leading-tight truncate">Facultad de Educación</span>
-                 <span className={cn("font-serif font-black leading-none text-brand-950 group-hover:text-brand-600 transition-all truncate mt-0.5 -ml-[1px]", scrolled ? "text-xs sm:text-sm lg:text-lg" : "text-sm sm:text-base lg:text-xl")}>Unidad de Posgrado</span>
+                 <span className="text-[5px] sm:text-[6px] lg:text-[7px] font-black uppercase tracking-widest text-muted-foreground leading-tight truncate mb-0.5">
+                   Universidad Nacional del Centro del Perú
+                 </span>
+                 <span className={cn(
+                   "font-black uppercase tracking-tight text-brand-800 leading-none truncate transition-all duration-500",
+                   scrolled ? "text-[9px] sm:text-[11px] lg:text-[13px]" : "text-[10px] sm:text-xs lg:text-sm"
+                 )}>
+                   Facultad de Educación
+                 </span>
+                 <span className={cn(
+                   "font-serif font-black leading-none text-brand-950 group-hover:text-brand-600 transition-all duration-500 truncate mt-0.5",
+                   scrolled ? "text-xs sm:text-sm lg:text-[1.1rem]" : "text-sm sm:text-base lg:text-[1.35rem]"
+                 )}>
+                   Unidad de Posgrado
+                 </span>
                </div>
             </div>
           </Link>
@@ -214,7 +222,7 @@ export default function Header() {
                             {/* COLUMNA DESTACADA */}
                             <div className="w-1/4 bg-brand-50/50 p-10 border-r border-border/50 flex flex-col justify-between shrink-0 relative">
                                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
-                                   <Image src="/images/Escudo_UNCP.webp" alt="" width={200} height={200} />
+                                   <Image src="/images/logo-posgrado-educacion.webp" alt="" width={200} height={200} />
                                 </div>
                                 <div className="relative z-10">
                                     <span className="text-[10px] font-black text-brand-600 uppercase tracking-[0.3em] mb-4 block">Destacado</span>
