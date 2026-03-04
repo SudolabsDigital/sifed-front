@@ -56,11 +56,11 @@ export default function PortalManagementPage() {
       color: "text-green-600 bg-green-50"
     },
     {
-      title: "Publicaciones",
-      description: "Artículos, libros y producción intelectual de la facultad.",
+      title: "Biblioteca Virtual",
+      description: "Acceso a bases de datos, repositorios digitales y recursos bibliográficos.",
       icon: Library,
-      href: "/admin/portal/publicaciones",
-      color: "text-purple-600 bg-purple-50"
+      href: "/admin/portal/biblioteca",
+      color: "text-indigo-600 bg-indigo-50"
     },
     {
       title: "Galería de Fotos",

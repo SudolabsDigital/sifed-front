@@ -55,8 +55,8 @@ import {
         icon: Users,
       },
       {
-        title: "Publicaciones",
-        href: "/admin/portal/publicaciones",
+        title: "Biblioteca Virtual",
+        href: "/admin/portal/biblioteca",
         icon: Library,
       },
       {
