@@ -26,5 +26,8 @@ export function getStorageUrl(path?: string | null): string {
   // Asegurar que el path empiece con / si no lo tiene
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
   
-  return `${baseUrl}${cleanPath}`;
+  // Codificar la URL para evitar problemas con espacios en los nombres de archivos en next/image
+  const encodedPath = encodeURI(cleanPath);
+  
+  return `${baseUrl}${encodedPath}`;
 }
