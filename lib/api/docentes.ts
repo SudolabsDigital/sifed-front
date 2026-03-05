@@ -81,5 +81,14 @@ export const docentesApi = {
     );
     return response.data;
   },
+
+  updateOrden: async (id: string | number, orden: number) => {
+    const response = await axios.patch(
+      `${API_URL}/admin/docentes/${id}/orden`,
+      { orden },
+      { headers: getAuthHeader() }
+    );
+    return response.data;
+  },
 };
 

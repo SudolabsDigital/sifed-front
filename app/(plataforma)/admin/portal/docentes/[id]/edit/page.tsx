@@ -19,6 +19,7 @@ import Link from "next/link";
 import { docentesApi } from "@/lib/api/docentes";
 import { useToast } from "@/hooks/use-toast";
 import { getStorageUrl, cn } from "@/lib/utils";
+import { handleApiError } from "@/lib/error-handler";
 
 interface EditDocentePageProps {
   params: Promise<{ id: string }>;
@@ -54,10 +55,14 @@ export default function EditDocentePage({ params }: EditDocentePageProps) {
   });
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchDocente = async () => {
       try {
         const docente = await docentesApi.getOne(id);
         
+        if (ignore) return;
+
         // Parsear grados (separados por punto)
         const gradosArray = docente.grados 
           ? docente.grados.split(".").map((g: string) => g.trim()).filter(Boolean)
@@ -88,15 +93,20 @@ export default function EditDocentePage({ params }: EditDocentePageProps) {
           setFotoPreview(getStorageUrl(docente.foto_url));
         }
       } catch (error) {
+        if (ignore) return;
         console.error("Error fetching docente:", error);
         showToast("Error al cargar los datos del docente", "error");
         router.push("/admin/portal/docentes");
       } finally {
-        setInitialLoading(false);
+        if (!ignore) setInitialLoading(false);
       }
     };
 
     fetchDocente();
+
+    return () => {
+      ignore = true;
+    };
   }, [id, router, showToast]);
 
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,8 +190,7 @@ export default function EditDocentePage({ params }: EditDocentePageProps) {
       router.push("/admin/portal/docentes");
       router.refresh();
     } catch (error) {
-      console.error(error);
-      showToast("Error al actualizar el docente", "error");
+      handleApiError(error, showToast, "Error al actualizar el docente");
     } finally {
       setLoading(false);
     }

@@ -153,13 +153,6 @@ export default async function DocenteProfilePage({ params }: PageProps) {
             {/* Columna Derecha: Contenido Modular */}
             <div className="lg:col-span-8 space-y-12 pb-24">
               
-              {/* Encabezado Textual (Solo móvil, en desktop el page hero ya lo dice, pero lo reforzamos con diseño editorial) */}
-              <div className="border-b border-brand-100 pb-8">
-                <h2 className="text-4xl lg:text-5xl font-serif font-black text-brand-950 leading-tight mb-4 text-balance">
-                  {docente.nombre_completo}
-                </h2>
-              </div>
-
               {/* Módulo 1: Formación Académica */}
               <div className="space-y-6">
                 <h3 className="text-xs font-black uppercase tracking-[0.25em] text-brand-400 flex items-center gap-3">
