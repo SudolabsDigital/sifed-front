@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { getStorageUrl } from "@/lib/utils";
 
 const UNCP_LOGO = "/images/logo-posgrado-educacion.webp";
 
@@ -23,7 +24,6 @@ export default function LoginHub() {
   };
 
   const handleLoginSuccess = () => {
-    // La cookie ya se encargó de la persistencia, forzamos recarga para que useAuth capte el nuevo estado
     window.location.reload();
   };
 
@@ -164,7 +164,7 @@ export default function LoginHub() {
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-100 to-uncp-gold animate-pulse" />
                     <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-brand-50">
                       {user.foto_url ? (
-                        <Image src={user.foto_url} alt={user.name} fill className="object-cover" />
+                        <Image src={getStorageUrl(user.foto_url)} alt={user.name} fill className="object-cover" />
                       ) : (
                         <UserIcon className="h-10 w-10 text-brand-200" />
                       )}

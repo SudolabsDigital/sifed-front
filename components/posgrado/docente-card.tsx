@@ -1,60 +1,62 @@
-import Image from "next/image";
-import { Docente } from "@/data/docentes";
+import Link from "next/link";
+import { Docente } from "@/types/docente";
 import { GraduationCap } from "lucide-react";
+import SmartProfileImage from "@/components/ui/smart-profile-image";
 
 export default function DocenteCard({ docente }: { docente: Docente }) {
-  // Función para formatear texto (Mayúsculas -> Tipo Oración)
   const formatText = (text: string) => {
     if (!text) return "";
     const lower = text.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);
   };
 
-  // Separar grados por punto y filtrar vacíos
-  const gradosList = docente.grados
+  const gradosList = (docente.grados || "")
     .split(".")
     .map((g) => g.trim())
     .filter((g) => g.length > 0);
+  
+  const gradoPrincipal = gradosList.length > 0 ? formatText(gradosList[0]) : "";
 
   return (
-    <div className="group bg-white border border-border/60 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center h-full hover:border-brand-200">
-      
-      {/* Contenedor de Imagen Compacto (Avatar Grande) */}
-      <div className="relative w-32 h-32 mb-4 rounded-full overflow-hidden border-4 border-brand-50 shadow-inner group-hover:border-brand-100 transition-colors shrink-0">
-        <Image
-          src={docente.imagen}
-          alt={docente.nombre}
-          fill
-          className="object-cover object-top"
-          sizes="128px"
-        />
-      </div>
+    <Link href={`/posgrado/plana-docente/${docente.slug}`} className="block outline-none focus-visible:ring-4 focus-visible:ring-brand-500 rounded-[1.5rem] group h-full">
+      <div className="flex flex-col h-full bg-white border border-border shadow-sm group-hover:shadow-xl transition-all duration-300 rounded-[1.5rem] overflow-hidden group-hover:border-brand-200">
+        
+        {/* Contenedor de Imagen (Retrato Superior) */}
+        <div className="relative aspect-[4/5] w-full bg-brand-50/50 overflow-hidden border-b border-border/50 shrink-0">
+          <SmartProfileImage 
+            src={docente.foto_url} 
+            alt={docente.nombre_completo}
+            className="transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          />
+          {/* Pequeño gradiente sutil abajo para fusionar mejor si la imagen tiene cortes raros */}
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
+        </div>
 
-      {/* Contenido */}
-      <div className="flex flex-col w-full">
-        {/* Encabezado Centrado */}
-        <div className="text-center mb-4">
-          <h3 className="font-serif text-lg font-bold text-brand-950 mb-2 leading-snug group-hover:text-brand-700 transition-colors">
-            {docente.nombre}
-          </h3>
-          <div className="w-8 h-0.5 bg-brand-100 mx-auto rounded-full group-hover:bg-brand-200 transition-colors" />
+        {/* Sección de Texto Compacta */}
+        <div className="p-4 flex flex-col flex-1 justify-between bg-white">
+          <div>
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="inline-block px-2 py-0.5 bg-brand-100 text-brand-700 text-[8px] font-black uppercase tracking-widest rounded-md shrink-0">
+                Docente {docente.categoria}
+              </span>
+            </div>
+            
+            <h3 className="font-serif text-base font-bold text-brand-950 leading-tight line-clamp-2 group-hover:text-brand-700 transition-colors">
+              {docente.nombre_completo}
+            </h3>
+          </div>
+          
+          {gradoPrincipal && (
+            <div className="flex items-start gap-1.5 mt-3 pt-3 border-t border-border/50">
+              <GraduationCap className="w-3.5 h-3.5 text-brand-500 shrink-0 mt-0.5" />
+              <p className="text-[11px] text-muted-foreground font-medium line-clamp-2 leading-snug">
+                {gradoPrincipal}
+              </p>
+            </div>
+          )}
         </div>
         
-        {/* Lista de Grados (Alineada izquierda para lectura) */}
-        <div className="bg-brand-50/50 rounded-lg p-3 w-full flex-grow">
-          <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-2 text-center">
-            Formación Académica
-          </p>
-          <ul className="space-y-2.5">
-            {gradosList.map((grado, index) => (
-              <li key={index} className="flex items-start gap-2.5 text-sm text-foreground/80 leading-snug">
-                <GraduationCap className="w-4 h-4 text-brand-500 mt-0.5 shrink-0" />
-                <span className="text-pretty">{formatText(grado)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
-    </div>
+    </Link>
   );
 }
