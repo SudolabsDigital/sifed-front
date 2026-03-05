@@ -1,26 +1,26 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import useSWR from "swr";
 import { 
   Users, 
   Plus, 
   Search, 
   Filter, 
-  MoreVertical, 
   Edit2, 
   Trash2, 
   FileText, 
-  Eye, 
-  EyeOff, 
   ExternalLink,
   ChevronLeft,
   ChevronRight,
-  Loader2
+  ArrowUpDown
 } from "lucide-react";
 import { docentesApi } from "@/lib/api/docentes";
 import { getStorageUrl, cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/error-handler";
+import Loader from "@/components/ui/loader";
 
 interface Docente {
   id: number;
@@ -30,6 +30,7 @@ interface Docente {
   foto_url: string;
   categoria: string;
   estado: string;
+  orden: number;
   config_visibilidad: {
     mostrar_cv: boolean;
     mostrar_bio: boolean;
@@ -37,73 +38,116 @@ interface Docente {
   };
 }
 
+const fetcher = async ([url, params]: [string, any]) => {
+  return await docentesApi.getAll(params);
+};
+
 export default function DocentesAdminPage() {
-  const [docentes, setDocentes] = useState<Docente[]>([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [categoria, setCategoria] = useState("");
-  const [pagination, setPagination] = useState({
-    current_page: 1,
-    last_page: 1,
-    total: 0
-  });
+  const [page, setPage] = useState(1);
   const { showToast } = useToast();
 
-  const fetchDocentes = useCallback(async (page = 1) => {
-    setLoading(true);
-    try {
-      const data = await docentesApi.getAll({ 
-        page, 
-        search, 
-        categoria,
-        per_page: 10 
-      });
-      setDocentes(data.data);
-      setPagination({
-        current_page: data.current_page,
-        last_page: data.last_page,
-        total: data.total
-      });
-    } catch (error) {
-      console.error("Error fetching docentes:", error);
-      showToast("Error al cargar la lista de docentes", "error");
-    } finally {
-      setLoading(false);
-    }
-  }, [search, categoria, showToast]);
+  const swrKey = ['/api/admin/docentes', { search, categoria, page, per_page: 10 }];
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchDocentes(1);
-    }, 500); // Debounce de búsqueda
-    return () => clearTimeout(timer);
-  }, [search, categoria, fetchDocentes]);
+  const { data, error, isLoading, mutate } = useSWR(
+    swrKey,
+    fetcher,
+    { keepPreviousData: true }
+  );
+
+  const docentes: Docente[] = data?.data || [];
+  const pagination = {
+    current_page: data?.current_page || 1,
+    last_page: data?.last_page || 1,
+    total: data?.total || 0,
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
+
+  const handleCategoriaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategoria(e.target.value);
+    setPage(1);
+  };
 
   const handleToggleVisibility = async (id: number, field: string, currentValue: boolean) => {
-    try {
-      await docentesApi.toggleVisibility(id, field, !currentValue);
-      setDocentes(prev => prev.map(d => 
+    // Actualización optimista: mutamos la caché local de inmediato
+    const optimisticData = {
+      ...data,
+      data: docentes.map(d => 
         d.id === id 
           ? { ...d, config_visibilidad: { ...d.config_visibilidad, [field]: !currentValue } }
           : d
-      ));
+      )
+    };
+
+    try {
+      // Aplicamos optimistically y no revalidamos hasta que termine la API
+      await mutate(optimisticData, false); 
+      
+      // Llamada real al servidor
+      await docentesApi.toggleVisibility(id, field, !currentValue);
       showToast("Visibilidad actualizada", "success");
-    } catch (error) {
-      showToast("Error al actualizar visibilidad", "error");
+      
+      // Revalidación silenciosa
+      mutate(); 
+    } catch (err) {
+      handleApiError(err, showToast, "Error al actualizar visibilidad");
+      mutate(); // Revertir en caso de error
+    }
+  };
+
+  const handleUpdateOrden = async (id: number, newOrden: number, oldOrden: number) => {
+    if (newOrden === oldOrden) return;
+
+    const optimisticData = {
+      ...data,
+      data: docentes.map(d => d.id === id ? { ...d, orden: newOrden } : d)
+    };
+
+    try {
+      await mutate(optimisticData, false);
+      await docentesApi.updateOrden(id, newOrden);
+      showToast("Prioridad actualizada.", "success");
+      mutate();
+    } catch (err) {
+      handleApiError(err, showToast, "Error al actualizar la prioridad");
+      mutate();
     }
   };
 
   const handleDelete = async (id: number, nombre: string) => {
     if (!confirm(`¿Estás seguro de eliminar a "${nombre}"? Esta acción no se puede deshacer.`)) return;
     
+    // Filtramos localmente para respuesta instantánea
+    const optimisticData = {
+      ...data,
+      data: docentes.filter(d => d.id !== id),
+      total: pagination.total - 1
+    };
+
     try {
+      await mutate(optimisticData, false);
       await docentesApi.delete(id);
       showToast("Docente eliminado exitosamente", "success");
-      fetchDocentes(pagination.current_page);
-    } catch (error) {
-      showToast("Error al eliminar docente", "error");
+      mutate();
+    } catch (err) {
+      handleApiError(err, showToast, "Error al eliminar docente");
+      mutate();
     }
   };
+
+  if (error) {
+    return (
+      <div className="w-full py-20 text-center bg-red-50 rounded-2xl border border-red-200">
+        <p className="text-red-600 font-bold mb-2">Error de conexión</p>
+        <p className="text-red-500/80 text-sm">No se pudo cargar la lista de docentes.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -131,7 +175,7 @@ export default function DocentesAdminPage() {
             placeholder="Buscar por nombre o formación..."
             className="w-full pl-11 pr-4 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
         
@@ -141,7 +185,7 @@ export default function DocentesAdminPage() {
             <select 
               className="pl-10 pr-8 py-2.5 bg-muted/30 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm appearance-none cursor-pointer"
               value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
+              onChange={handleCategoriaChange}
             >
               <option value="">Todas las categorías</option>
               <option value="principal">Principal</option>
@@ -160,6 +204,12 @@ export default function DocentesAdminPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-brand-50/50 border-b border-border">
+                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-wider text-brand-900">
+                  <div className="flex items-center gap-1">
+                    <ArrowUpDown className="w-3 h-3" />
+                    Prioridad
+                  </div>
+                </th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-wider text-brand-900">Docente</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-wider text-brand-900">Categoría</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-wider text-brand-900">Visibilidad</th>
@@ -168,16 +218,15 @@ export default function DocentesAdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {loading ? (
+              {isLoading && docentes.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-20 text-center">
-                    <Loader2 className="w-10 h-10 text-brand-500 animate-spin mx-auto mb-4" />
-                    <p className="text-muted-foreground font-medium">Cargando docentes...</p>
+                  <td colSpan={6} className="px-6 py-0">
+                    <Loader text="Cargando directorio..." size="md" />
                   </td>
                 </tr>
               ) : docentes.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-20 text-center">
+                  <td colSpan={6} className="px-6 py-20 text-center">
                     <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Users className="w-8 h-8 text-muted-foreground" />
                     </div>
@@ -187,6 +236,15 @@ export default function DocentesAdminPage() {
               ) : (
                 docentes.map((docente) => (
                   <tr key={docente.id} className="hover:bg-muted/30 transition-colors group">
+                    <td className="px-6 py-4 w-24">
+                      <input 
+                        type="number" 
+                        defaultValue={docente.orden}
+                        onBlur={(e) => handleUpdateOrden(docente.id, parseInt(e.target.value) || 0, docente.orden)}
+                        className="w-16 px-2 py-1 text-center bg-white border border-border rounded-lg focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm font-medium"
+                        title="Un número menor significa mayor prioridad (Ej: 1 aparece antes que 5)"
+                      />
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         <div className="h-12 w-12 rounded-xl bg-brand-50 overflow-hidden border border-brand-100 flex-shrink-0 shadow-sm transition-transform group-hover:scale-105">
@@ -283,15 +341,15 @@ export default function DocentesAdminPage() {
         </div>
 
         {/* Pagination Section */}
-        {!loading && pagination.total > 0 && (
+        {pagination.total > 0 && !error && (
           <div className="px-6 py-4 bg-brand-50/30 border-t border-border flex items-center justify-between">
             <p className="text-xs text-muted-foreground">
               Mostrando <span className="font-bold text-brand-950">{(pagination.current_page - 1) * 10 + 1}</span> a <span className="font-bold text-brand-950">{Math.min(pagination.current_page * 10, pagination.total)}</span> de <span className="font-bold text-brand-950">{pagination.total}</span> docentes
             </p>
             <div className="flex items-center gap-2">
               <button 
-                onClick={() => fetchDocentes(pagination.current_page - 1)}
-                disabled={pagination.current_page === 1}
+                onClick={() => setPage(pagination.current_page - 1)}
+                disabled={pagination.current_page === 1 || isLoading}
                 className="p-2 rounded-xl border border-border bg-white hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -300,8 +358,8 @@ export default function DocentesAdminPage() {
                 Página {pagination.current_page} de {pagination.last_page}
               </span>
               <button 
-                onClick={() => fetchDocentes(pagination.current_page + 1)}
-                disabled={pagination.current_page === pagination.last_page}
+                onClick={() => setPage(pagination.current_page + 1)}
+                disabled={pagination.current_page === pagination.last_page || isLoading}
                 className="p-2 rounded-xl border border-border bg-white hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <ChevronRight className="w-4 h-4" />

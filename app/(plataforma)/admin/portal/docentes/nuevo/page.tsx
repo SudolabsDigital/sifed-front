@@ -18,6 +18,7 @@ import Link from "next/link";
 import { docentesApi } from "@/lib/api/docentes";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { handleApiError } from "@/lib/error-handler";
 
 export default function NuevoDocentePage() {
   const router = useRouter();
@@ -128,8 +129,7 @@ export default function NuevoDocentePage() {
       showToast("Docente creado exitosamente", "success");
       router.push("/admin/portal/docentes");
     } catch (error) {
-      console.error(error);
-      showToast("Error al crear el docente", "error");
+      handleApiError(error, showToast, "Error al crear el docente");
     } finally {
       setLoading(false);
     }
