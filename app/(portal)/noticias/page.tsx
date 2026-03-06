@@ -1,13 +1,13 @@
 "use client";
 
+import useSWR from "swr";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import CategorySection from "@/components/ui/category-section";
 import PageHero from "@/components/ui/page-hero";
-import { NoticiaCategoria } from "@/types/noticia-categoria";
-import { useEffect, useState } from "react";
+import Loader from "@/components/ui/loader";
 
 // Mapeo de estilos visuales para la Exhibición de Arte Digital
-const VISUAL_STYLES = {
+const VISUAL_STYLES: Record<string, { accent: string, bg: string, text: string, border: string }> = {
   green: {
     accent: "text-brand-600",
     bg: "bg-white",
@@ -35,28 +35,19 @@ const VISUAL_STYLES = {
 };
 
 export default function NoticiasPage() {
-  const [categorias, setCategorias] = useState<NoticiaCategoria[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: categorias = [], isLoading } = useSWR(
+    '/portal/noticias-categorias',
+    NoticiaService.getCategoriesWithNews,
+    { keepPreviousData: true }
+  );
 
-  useEffect(() => {
-    const fetchNoticias = async () => {
-      try {
-        const data = await NoticiaService.getCategoriesWithNews();
-        setCategorias(data);
-      } catch (error) {
-        console.error("Error cargando categorías dinámicas:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchNoticias();
-  }, []);
-
-  if (loading) {
+  if (isLoading && categorias.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-uncp-gold animate-pulse font-serif italic text-xl">Preparando Exhibición Editorial...</div>
-      </div>
+      <Loader 
+        text="Preparando Exhibición Editorial..." 
+        size="lg" 
+        className="min-h-screen"
+      />
     );
   }
 
