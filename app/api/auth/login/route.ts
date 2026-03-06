@@ -5,7 +5,14 @@ export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
     
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    
+    if (!baseUrl) {
+      return new Response(JSON.stringify({ 
+        message: "Error de configuración de servidor: NEXT_PUBLIC_API_URL no está definida."
+      }), { status: 500, headers: { "Content-Type": "application/json" } });
+    }
+
     const targetUrl = `${baseUrl}/login`;
 
     const response = await fetch(targetUrl, {

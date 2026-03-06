@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
+    aria-hidden="true"
     viewBox="0 0 24 24" 
     className={className} 
     fill="currentColor" 
@@ -26,7 +27,6 @@ export default function FloatingActions() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Lógica para mostrar/ocultar el botón de scroll
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
@@ -48,14 +48,14 @@ export default function FloatingActions() {
       delay: 0.1
     },
     {
-      icon: <Phone className="w-5 h-5" />,
+      icon: <Phone aria-hidden="true" className="w-5 h-5" />,
       label: "Llamar",
       href: "tel:064481060",
       color: "bg-blue-500",
       delay: 0.2
     },
     {
-      icon: <Mail className="w-5 h-5" />,
+      icon: <Mail aria-hidden="true" className="w-5 h-5" />,
       label: "Correo",
       href: "mailto:posgrado@uncp.edu.pe",
       color: "bg-brand-600",
@@ -77,13 +77,14 @@ export default function FloatingActions() {
                   href={option.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Contactar por ${option.label}`}
                   initial={{ opacity: 0, scale: 0.5, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.5, y: 20 }}
                   transition={{ duration: 0.2, delay: option.delay }}
                   className="group relative flex items-center"
                 >
-                  <span className="absolute right-full mr-4 px-3 py-1.5 rounded-lg bg-brand-950 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity shadow-xl pointer-events-none whitespace-nowrap">
+                  <span aria-hidden="true" className="absolute right-full mr-4 px-3 py-1.5 rounded-lg bg-brand-950 text-white text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity shadow-xl pointer-events-none whitespace-nowrap">
                     {option.label}
                   </span>
                   <div className={cn(
@@ -101,15 +102,17 @@ export default function FloatingActions() {
         {/* Botón Principal de Contacto */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-expanded={isMenuOpen}
+          aria-label={isMenuOpen ? "Cerrar menú de ayuda" : "Abrir menú de ayuda y contacto"}
           className={cn(
             "w-14 h-14 lg:w-16 lg:h-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 transform hover:-translate-y-1 active:scale-95",
             isMenuOpen ? "bg-brand-950 rotate-90" : "bg-brand-950"
           )}
         >
           {isMenuOpen ? (
-            <X className="w-6 h-6 lg:w-7 lg:h-7" />
+            <X aria-hidden="true" className="w-6 h-6 lg:w-7 lg:h-7" />
           ) : (
-            <Headset className="w-6 h-6 lg:w-7 lg:h-7 text-uncp-gold" />
+            <Headset aria-hidden="true" className="w-6 h-6 lg:w-7 lg:h-7 text-uncp-gold" />
           )}
         </button>
       </div>
@@ -122,10 +125,10 @@ export default function FloatingActions() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             onClick={scrollToTop}
-            className="w-12 h-12 rounded-full bg-white border border-border flex items-center justify-center text-brand-950 shadow-xl hover:bg-brand-50 transition-all active:scale-90"
+            className="w-12 h-12 rounded-full bg-white border border-border flex items-center justify-center text-brand-950 shadow-xl hover:bg-brand-50 transition-all active:scale-90 focus-visible:outline-brand-600 focus-visible:outline-2"
             aria-label="Volver arriba"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp aria-hidden="true" className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>

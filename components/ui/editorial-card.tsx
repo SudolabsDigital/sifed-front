@@ -15,7 +15,13 @@ export default function EditorialCard({ noticia }: EditorialCardProps) {
     if (!url) return null;
     if (url.startsWith('http')) return url;
     
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    
+    if (!backendUrl) {
+      console.warn("NEXT_PUBLIC_BACKEND_URL no está definida");
+      return url;
+    }
+    
     return `${backendUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
   };
 

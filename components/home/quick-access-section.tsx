@@ -21,45 +21,45 @@ const accessLinks = [
   {
     title: "Admisión",
     desc: "Guía completa y requisitos vigentes.",
-    icon: <ClipboardCheck className="w-5 h-5" />,
+    icon: <ClipboardCheck aria-hidden="true" className="w-5 h-5" />,
     href: "/posgrado/admision",
-    color: "bg-blue-50 text-blue-600"
+    color: "bg-blue-50 text-blue-700"
   },
   {
     title: "Plana Docente",
     desc: "Investigadores y catedráticos calificados.",
-    icon: <Users className="w-5 h-5" />,
+    icon: <Users aria-hidden="true" className="w-5 h-5" />,
     href: "/posgrado/plana-docente",
-    color: "bg-brand-50 text-brand-600"
+    color: "bg-brand-50 text-brand-700"
   },
   {
     title: "Planes de Estudio",
     desc: "Estructura curricular actualizada.",
-    icon: <GraduationCap className="w-5 h-5" />,
+    icon: <GraduationCap aria-hidden="true" className="w-5 h-5" />,
     href: "/posgrado/programas",
-    color: "bg-amber-50 text-amber-600"
+    color: "bg-amber-50 text-amber-700"
   },
   {
     title: "Documentos",
     desc: "Reglamentos y formatos oficiales.",
-    icon: <FileText className="w-5 h-5" />,
+    icon: <FileText aria-hidden="true" className="w-5 h-5" />,
     href: "/documentos-normativos",
-    color: "bg-purple-50 text-purple-600"
+    color: "bg-purple-50 text-purple-700"
   },
   {
     title: "Mesa de Partes",
     desc: "Envío oficial de documentos.",
-    icon: <Landmark className="w-5 h-5" />,
+    icon: <Landmark aria-hidden="true" className="w-5 h-5" />,
     href: "https://erpcampus.uncp.edu.pe/",
-    color: "bg-emerald-50 text-emerald-600",
+    color: "bg-emerald-50 text-emerald-700",
     external: true
   },
   {
     title: "Aula Virtual",
     desc: "Plataforma de aprendizaje SIFED.",
-    icon: <MonitorPlay className="w-5 h-5" />,
+    icon: <MonitorPlay aria-hidden="true" className="w-5 h-5" />,
     href: "/login",
-    color: "bg-brand-950 text-uncp-gold"
+    color: "bg-brand-950 text-amber-500"
   }
 ];
 
@@ -78,12 +78,12 @@ export default function QuickAccessSection() {
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <section className="py-16 bg-slate-50/50 border-b border-border overflow-hidden">
+    <section className="py-16 bg-slate-50/50 border-b border-border overflow-hidden" aria-label="Enlaces de acceso rápido">
       <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-uncp-gold mb-2 block">Gestión Académica</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-700 mb-2 block">Gestión Académica</span>
             <h2 className="text-3xl md:text-4xl font-serif font-black text-brand-950 leading-tight">
               Accesos Directos
             </h2>
@@ -92,17 +92,17 @@ export default function QuickAccessSection() {
           <div className="flex gap-2">
             <button 
               onClick={scrollPrev}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-brand-950 hover:bg-brand-950 hover:text-white transition-all shadow-sm"
-              aria-label="Anterior"
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-brand-950 hover:bg-brand-950 hover:text-white transition-all shadow-sm focus-visible:outline-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="Deslizar accesos a la izquierda"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft aria-hidden="true" className="w-5 h-5" />
             </button>
             <button 
               onClick={scrollNext}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-brand-950 hover:bg-brand-950 hover:text-white transition-all shadow-sm"
-              aria-label="Siguiente"
+              className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-brand-950 hover:bg-brand-950 hover:text-white transition-all shadow-sm focus-visible:outline-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2"
+              aria-label="Deslizar accesos a la derecha"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight aria-hidden="true" className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -115,6 +115,7 @@ export default function QuickAccessSection() {
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
+                  aria-label={`Acceder a ${item.title}`}
                   className="group relative p-6 rounded-[2.5rem] border-2 border-slate-200 bg-white hover:border-brand-600 hover:ring-4 hover:ring-brand-600/5 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between h-full min-h-[220px]"
                 >
                   <div className="relative z-10">
@@ -124,16 +125,16 @@ export default function QuickAccessSection() {
                     )}>
                       {item.icon}
                     </div>
-                    <h3 className="text-lg font-bold text-brand-950 mb-2 group-hover:text-brand-600 transition-colors leading-tight">
+                    <h3 className="text-lg font-bold text-brand-950 mb-2 group-hover:text-brand-700 transition-colors leading-tight">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       {item.desc}
                     </p>
                   </div>
 
-                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-brand-400 group-hover:text-brand-600 transition-colors">
-                    Ingresar <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                  <div className="mt-6 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-brand-600 group-hover:text-brand-800 transition-colors">
+                    Ingresar <ArrowRight aria-hidden="true" className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                   </div>
                 </Link>
               </div>
