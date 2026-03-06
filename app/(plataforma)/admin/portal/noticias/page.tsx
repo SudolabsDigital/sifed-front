@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import useSWR, { useSWRConfig } from "swr";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import { Noticia } from "@/types/noticia";
 import { NoticiaCategoria } from "@/types/noticia-categoria";
 import { cn } from "@/lib/utils";
+import Loader from "@/components/ui/loader";
+import { useToast } from "@/hooks/use-toast";
+import { handleApiError } from "@/lib/error-handler";
 import {
   Plus,
   Pencil,
@@ -16,70 +20,81 @@ import {
 } from "lucide-react";
 
 export default function AdminNoticiasPage() {
-  const [noticias, setNoticias] = useState<Noticia[]>([]);
-  const [categorias, setCategorias] = useState<NoticiaCategoria[]>([]);
   const [activeTab, setActiveTab] = useState<'noticias' | 'categorias'>('noticias');
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [meta, setMeta] = useState<{ current_page: number; last_page: number; total: number } | null>(null);
+  const { showToast } = useToast();
+  const { mutate: globalMutate } = useSWRConfig();
 
-  const fetchNoticias = async (page = 1) => {
-    try {
-      const response = await NoticiaService.getAllAdmin(page);
-      setNoticias(response.data);
-      setMeta(response.meta);
-      setCurrentPage(page);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Error desconocido";
-      console.error("Error al cargar noticias:", message);
-      setNoticias([]);
-    }
-  };
+  // Hook SWR 1: Paginación de Noticias con caché
+  const { 
+    data: noticiasResponse, 
+    isLoading: loadingNoticias,
+    mutate: mutateNoticias 
+  } = useSWR(
+    ['/admin/noticias', currentPage],
+    () => NoticiaService.getAllAdmin(currentPage),
+    { keepPreviousData: true }
+  );
 
-  const fetchCategorias = async () => {
-    try {
-      const data = await NoticiaService.getAllCategories();
-      setCategorias(data);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Error desconocido";
-      console.error("Error al cargar categorías:", message);
-    }
-  };
+  // Hook SWR 2: Listado de Categorías
+  const { 
+    data: categorias = [], 
+    isLoading: loadingCategorias,
+    mutate: mutateCategorias
+  } = useSWR(
+    '/admin/noticias-categorias',
+    NoticiaService.getAllCategories
+  );
 
-  useEffect(() => {
-    const loadData = async () => {
-        setLoading(true);
-        await Promise.all([fetchNoticias(currentPage), fetchCategorias()]);
-        setLoading(false);
-    };
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const loading = loadingNoticias || loadingCategorias;
+  const noticias = noticiasResponse?.data || [];
+  const meta = noticiasResponse?.meta || null;
 
   const handleDeleteNoticia = async (id: number) => {
     if (confirm("¿Estás seguro de eliminar esta noticia?")) {
+      // 1. Mutación Optimista (UI se actualiza instantáneamente)
+      const optimisticData = {
+        ...noticiasResponse,
+        data: noticias.filter((n: Noticia) => n.id !== id)
+      };
+      // @ts-expect-error ignoramos tipado complejo de SWR en optimismo
+      mutateNoticias(optimisticData, false);
+
       try {
+        // 2. Petición real
         await NoticiaService.delete(id);
-        fetchNoticias(currentPage);
-      } catch {
-        alert("Error al eliminar noticia");
+        showToast("Crónica eliminada exitosamente", "success");
+        // 3. Revalidar con el servidor (en caso de que la paginación haya cambiado drásticamente)
+        mutateNoticias();
+      } catch (error) {
+        // 4. Rollback en caso de error
+        mutateNoticias();
+        handleApiError(error, showToast, "Error al eliminar noticia");
       }
     }
   };
 
   const handleDeleteCategoria = async (cat: NoticiaCategoria) => {
     if (confirm(`¿Estás seguro de eliminar la categoría "${cat.nombre}"?`)) {
+      const optimisticCategorias = categorias.filter((c: NoticiaCategoria) => c.id !== cat.id);
+      mutateCategorias(optimisticCategorias, false);
+
       try {
         await NoticiaService.deleteCategory(cat.id);
-        fetchCategorias();
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : "Error al eliminar categoría";
-        alert(message);
+        showToast("Sección eliminada exitosamente", "success");
+        mutateCategorias();
+        // Si eliminamos una categoría, la data de noticias de la vista pública en SWR se podría ver afectada, revalidamos:
+        globalMutate('/portal/noticias-categorias'); 
+      } catch (error) {
+        mutateCategorias();
+        handleApiError(error, showToast, "Error al eliminar categoría");
       }
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-muted-foreground">Cargando gestión editorial...</div>;
+  if (loading && (!noticias.length && !categorias.length)) {
+    return <Loader text="Cargando gestión editorial..." size="lg" />;
+  }
 
   return (
     <div className="space-y-8">
@@ -137,7 +152,12 @@ export default function AdminNoticiasPage() {
 
       {activeTab === 'noticias' ? (
         /* VISTA: LISTADO DE NOTICIAS */
-        <div className="bg-white rounded-3xl border border-brand-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl border border-brand-100 shadow-sm overflow-hidden relative min-h-[400px]">
+            {loadingNoticias && noticias.length > 0 && (
+                <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                    <Loader text="Actualizando grilla..." size="sm" fullHeight={false} />
+                </div>
+            )}
             <table className="w-full text-sm text-left">
                 <thead className="bg-brand-50/50 text-brand-950/40 uppercase text-[10px] font-black tracking-widest">
                     <tr>
@@ -149,7 +169,7 @@ export default function AdminNoticiasPage() {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-50">
-                    {noticias.length > 0 ? noticias.map((noticia) => (
+                    {noticias.length > 0 ? noticias.map((noticia: Noticia) => (
                         <tr key={noticia.id} className="hover:bg-brand-50/20 transition-colors group">
                             <td className="px-8 py-5 font-bold text-brand-950 max-w-md truncate">
                                 {noticia.titulo}
@@ -217,15 +237,15 @@ export default function AdminNoticiasPage() {
                     </p>
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() => fetchNoticias(currentPage - 1)}
-                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1 || loadingNoticias}
                             className="px-4 py-2 text-xs font-black uppercase tracking-widest bg-white border border-brand-100 rounded-xl disabled:opacity-30 hover:bg-brand-50 transition-colors"
                         >
                             Anterior
                         </button>
                         <button
-                            onClick={() => fetchNoticias(currentPage + 1)}
-                            disabled={currentPage === meta.last_page}
+                            onClick={() => setCurrentPage(prev => Math.min(meta.last_page, prev + 1))}
+                            disabled={currentPage === meta.last_page || loadingNoticias}
                             className="px-4 py-2 text-xs font-black uppercase tracking-widest bg-white border border-brand-100 rounded-xl disabled:opacity-30 hover:bg-brand-50 transition-colors"
                         >
                             Siguiente
@@ -236,7 +256,12 @@ export default function AdminNoticiasPage() {
         </div>
       ) : (
         /* VISTA: GESTIÓN DE CATEGORÍAS */
-        <div className="bg-white rounded-3xl border border-brand-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl border border-brand-100 shadow-sm overflow-hidden relative min-h-[400px]">
+            {loadingCategorias && categorias.length > 0 && (
+                <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                    <Loader text="Actualizando..." size="sm" fullHeight={false} />
+                </div>
+            )}
             <table className="w-full text-sm text-left">
                 <thead className="bg-brand-50/50 text-brand-950/40 uppercase text-[10px] font-black tracking-widest">
                     <tr>
@@ -248,7 +273,7 @@ export default function AdminNoticiasPage() {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-50">
-                    {categorias.map((cat) => (
+                    {categorias.map((cat: NoticiaCategoria) => (
                         <tr key={cat.id} className="hover:bg-brand-50/20 transition-colors group">
                             <td className="px-8 py-5">
                                 <div className="flex items-center gap-2">
