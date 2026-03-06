@@ -2,7 +2,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL) {
+  console.warn("ADVERTENCIA: NEXT_PUBLIC_API_URL no está definida en las variables de entorno.");
+}
 
 const getAuthHeader = () => {
   const token = Cookies.get(AUTH_COOKIE_NAME);

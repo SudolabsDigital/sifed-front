@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-4 mb-8">
                <div className="flex items-center">
-                  <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
+                  <Image src="/images/logo-posgrado-educacion.webp" alt="Logo Posgrado Educación UNCP" width={72} height={72} className="object-contain" />
                </div>
                <div className="flex flex-col justify-center">
                   <span className="text-[7px] font-black uppercase tracking-widest text-muted-foreground leading-tight">UNCP</span>
@@ -34,14 +34,26 @@ export default function Footer() {
               Excelencia académica y formación de investigadores líderes con compromiso social y rigor científico.
             </p>
             <div className="flex gap-4">
-               <Link href="https://facebook.com" className="h-11 w-11 rounded-2xl bg-white border border-border flex items-center justify-center text-muted-foreground hover:bg-brand-600 hover:text-white transition-all shadow-sm">
-                  <Facebook className="h-5 w-5" />
+               <Link 
+                 href="https://facebook.com" 
+                 aria-label="Visitar nuestra página de Facebook"
+                 className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-brand-600 hover:text-white transition-all shadow-sm focus-visible:outline-brand-600 focus-visible:outline-2"
+               >
+                  <Facebook aria-hidden="true" className="h-5 w-5" />
                </Link>
-               <Link href="https://youtube.com" className="h-11 w-11 rounded-2xl bg-white border border-border flex items-center justify-center text-muted-foreground hover:bg-red-600 hover:text-white transition-all shadow-sm">
-                  <Youtube className="h-5 w-5" />
+               <Link 
+                 href="https://youtube.com" 
+                 aria-label="Visitar nuestro canal de YouTube"
+                 className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-red-600 hover:text-white transition-all shadow-sm focus-visible:outline-red-600 focus-visible:outline-2"
+               >
+                  <Youtube aria-hidden="true" className="h-5 w-5" />
                </Link>
-               <Link href="https://linkedin.com" className="h-11 w-11 rounded-2xl bg-white border border-border flex items-center justify-center text-muted-foreground hover:bg-blue-700 hover:text-white transition-all shadow-sm">
-                  <Linkedin className="h-5 w-5" />
+               <Link 
+                 href="https://linkedin.com" 
+                 aria-label="Visitar nuestro perfil de LinkedIn"
+                 className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-blue-700 hover:text-white transition-all shadow-sm focus-visible:outline-blue-700 focus-visible:outline-2"
+               >
+                  <Linkedin aria-hidden="true" className="h-5 w-5" />
                </Link>
             </div>
           </div>
@@ -49,47 +61,47 @@ export default function Footer() {
           {/* Columna Programas */}
           <div>
             <h4 className="mb-8 text-xs font-black text-brand-950 uppercase tracking-[0.2em]">Programas</h4>
-            <ul className="space-y-4 text-sm font-bold text-muted-foreground">
-              <li><Link href="/posgrado/maestrias" className="hover:text-brand-600 transition-colors">Maestrías</Link></li>
-              <li><Link href="/posgrado/doctorados" className="hover:text-brand-600 transition-colors">Doctorados</Link></li>
-              <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors">Proceso de Admisión</Link></li>
-              <li><Link href="/posgrado/plana-docente" className="hover:text-brand-600 transition-colors">Plana Docente</Link></li>
+            <ul className="space-y-4 text-sm font-bold text-slate-600">
+              <li><Link href="/posgrado/maestrias" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Maestrías</Link></li>
+              <li><Link href="/posgrado/doctorados" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Doctorados</Link></li>
+              <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Proceso de Admisión</Link></li>
+              <li><Link href="/posgrado/plana-docente" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Plana Docente</Link></li>
             </ul>
           </div>
 
           {/* Columna Investigación */}
           <div>
             <h4 className="mb-8 text-xs font-black text-brand-950 uppercase tracking-[0.2em]">Investigación</h4>
-            <ul className="space-y-4 text-sm font-bold text-muted-foreground">
-              <li><Link href="/galeria-fotos/investigacion" className="hover:text-brand-600 transition-colors">Galería de Investigación</Link></li>
-              <li><Link href="/galeria-fotos/sustentaciones" className="hover:text-brand-600 transition-colors">Sustentaciones</Link></li>
-              <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors">Normativa de Grados</Link></li>
-              <li><Link href="/noticias" className="hover:text-brand-600 transition-colors">Actualidad</Link></li>
+            <ul className="space-y-4 text-sm font-bold text-slate-600">
+              <li><Link href="/galeria-fotos/investigacion" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Galería de Investigación</Link></li>
+              <li><Link href="/galeria-fotos/sustentaciones" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Sustentaciones</Link></li>
+              <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Normativa de Grados</Link></li>
+              <li><Link href="/noticias" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Actualidad</Link></li>
             </ul>
           </div>
 
           {/* Columna Servicios Digitales */}
           <div>
             <h4 className="mb-8 text-xs font-black text-brand-950 uppercase tracking-[0.2em]">Ecosistema</h4>
-            <ul className="space-y-4 text-sm font-bold text-muted-foreground">
-              <li><Link href="/login" className="hover:text-brand-600 transition-colors flex items-center gap-2"><MonitorPlay className="h-4 w-4" /> Aula Virtual</Link></li>
-              <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors flex items-center gap-2"><BookOpen className="h-4 w-4" /> Guía de Inscripción</Link></li>
-              <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors flex items-center gap-2"><HelpCircle className="h-4 w-4" /> Soporte Académico</Link></li>
-              <li><Link href="mailto:posgrado@uncp.edu.pe" className="hover:text-brand-600 transition-colors flex items-center gap-2"><Mail className="h-4 w-4" /> Mesa de Partes</Link></li>
+            <ul className="space-y-4 text-sm font-bold text-slate-600">
+              <li><Link href="/login" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><MonitorPlay aria-hidden="true" className="h-4 w-4" /> Aula Virtual</Link></li>
+              <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><BookOpen aria-hidden="true" className="h-4 w-4" /> Guía de Inscripción</Link></li>
+              <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><HelpCircle aria-hidden="true" className="h-4 w-4" /> Soporte Académico</Link></li>
+              <li><Link href="mailto:posgrado@uncp.edu.pe" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><Mail aria-hidden="true" className="h-4 w-4" /> Mesa de Partes</Link></li>
             </ul>
           </div>
         </div>
         
-        <div className="border-t border-border pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
+        <div className="border-t border-border pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-black text-slate-500 uppercase tracking-widest">
           <p>© 2026 Universidad Nacional del Centro del Perú.</p>
           <div className="flex gap-8">
-            <Link href="/privacidad" className="hover:text-brand-950 transition-colors">Privacidad</Link>
-            <Link href="/terminos" className="hover:text-brand-950 transition-colors">Términos</Link>
+            <Link href="/privacidad" className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600">Privacidad</Link>
+            <Link href="/terminos" className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600">Términos</Link>
             <Link 
               href="https://reclamos.servicios.gob.pe/?institution_id=252" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="hover:text-brand-950 transition-colors"
+              className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600"
             >
               Reclamaciones
             </Link>

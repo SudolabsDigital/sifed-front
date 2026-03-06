@@ -139,12 +139,14 @@ export default function PosgradoSection() {
               >
                 <div className="text-uncp-gold font-mono text-xs mb-4 font-bold tracking-[0.3em] uppercase">/ 01 Identidad</div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Excelencia en Posgrado</h3>
-                <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
+                <p className="text-brand-50/70 text-lg max-w-md mb-10 leading-relaxed">
                   Descubre nuestra visión institucional y el compromiso con el desarrollo científico y profesional de nuestros egresados.
                 </p>
-                <Link href="/posgrado" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
-                  Conoce más de nosotros <Info className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-                </Link>
+                <motion.div style={{ pointerEvents: pointer0 }}>
+                  <Link href="/posgrado" tabIndex={-1} className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                    Conoce más de nosotros <Info aria-hidden="true" className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                  </Link>
+                </motion.div>
               </motion.div>
 
               {/* 02. MAESTRÍAS */}
@@ -154,12 +156,14 @@ export default function PosgradoSection() {
               >
                 <div className="text-uncp-gold font-mono text-xs mb-4 font-bold tracking-[0.3em] uppercase">/ 02 Programas</div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Maestrías Profesionales</h3>
-                <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
+                <p className="text-brand-50/70 text-lg max-w-md mb-10 leading-relaxed">
                   Especialización diseñada para liderar procesos de cambio pedagógico y administrativo en el sector educativo nacional.
                 </p>
-                <Link href="/posgrado/maestrias" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
-                  Ver Maestrías <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                <motion.div style={{ pointerEvents: pointer1 }}>
+                  <Link href="/posgrado/maestrias" tabIndex={-1} className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                    Ver Maestrías <ArrowRight aria-hidden="true" className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
+                  </Link>
+                </motion.div>
               </motion.div>
 
               {/* 03. DOCTORADOS */}
@@ -169,12 +173,14 @@ export default function PosgradoSection() {
               >
                 <div className="text-uncp-gold font-mono text-xs mb-4 font-bold tracking-[0.3em] uppercase">/ 03 Grados</div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Doctorados Académicos</h3>
-                <p className="text-brand-50/40 text-lg max-w-md mb-10 leading-relaxed">
+                <p className="text-brand-50/70 text-lg max-w-md mb-10 leading-relaxed">
                   El máximo nivel de investigación científica, orientado a generar conocimiento original con estándares globales.
                 </p>
-                <Link href="/posgrado/doctorados" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
-                  Ver Doctorados <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                <motion.div style={{ pointerEvents: pointer2 }}>
+                  <Link href="/posgrado/doctorados" tabIndex={-1} className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600/20 border border-brand-600/30 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-600 transition-all group shadow-xl shadow-brand-600/10">
+                    Ver Doctorados <ArrowRight aria-hidden="true" className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
+                  </Link>
+                </motion.div>
               </motion.div>
 
               {/* 04. INVESTIGACIÓN */}
@@ -184,7 +190,7 @@ export default function PosgradoSection() {
               >
                 <div className="text-uncp-gold font-mono text-xs mb-4 font-bold tracking-[0.3em] uppercase">/ 04 Comunidad</div>
                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Investigadores Renacyt</h3>
-                <p className="text-brand-50/40 text-lg max-w-md mb-8 leading-relaxed">
+                <p className="text-brand-50/70 text-lg max-w-md mb-8 leading-relaxed">
                   Nuestra plana docente está conformada por expertos certificados que lideran la producción científica del posgrado.
                 </p>
                 <div className="flex flex-wrap gap-4 mb-10">
@@ -197,9 +203,11 @@ export default function PosgradoSection() {
                     </span>
                   ))}
                 </div>
-                <Link href="/posgrado/plana-docente" className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-700 transition-all group shadow-xl shadow-brand-600/20">
-                  Ver Plana Docente <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
-                </Link>
+                <motion.div style={{ pointerEvents: pointer3 }}>
+                  <Link href="/posgrado/plana-docente" tabIndex={-1} className="z-30 inline-flex w-fit items-center gap-3 text-white bg-brand-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-brand-700 transition-all group shadow-xl shadow-brand-600/20">
+                    Ver Plana Docente <ArrowRight aria-hidden="true" className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
+                  </Link>
+                </motion.div>
               </motion.div>
 
             </div>

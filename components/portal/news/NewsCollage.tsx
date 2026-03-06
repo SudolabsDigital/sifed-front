@@ -1,41 +1,20 @@
-"use client"
-
-import { useEffect, useState } from 'react';
-import { Noticia } from '@/types/noticia';
 import { NoticiaService } from '@/lib/services/noticia-service';
 import { NewsCard } from './NewsCard';
-import { Loader2, ArrowRight, Calendar, ChevronRight } from 'lucide-react';
+import { ArrowRight, Calendar, ChevronRight } from 'lucide-react';
 import { getStorageUrl } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export function NewsCollage() {
-  const [news, setNews] = useState<Noticia[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await NoticiaService.getAllPublic(1);
-        const data = Array.isArray(response) ? response : (response?.data || []);
-        setNews(data);
-      } catch (error) {
-        console.error("Failed to fetch news:", error);
-        setNews([]); 
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchNews();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="w-full h-[60vh] flex items-center justify-center bg-white">
-        <Loader2 className="h-10 w-10 animate-spin text-brand-300" />
-      </div>
-    );
+export async function NewsCollage() {
+  let news = [];
+  
+  try {
+    const response = await NoticiaService.getAllPublic(1);
+    news = Array.isArray(response) ? response : (response?.data || []);
+  } catch (error) {
+    console.error("Failed to fetch news on server:", error);
+    // En caso de error de red, devolvemos null para no romper la portada
+    return null; 
   }
 
   if (!news || news.length === 0) return null;

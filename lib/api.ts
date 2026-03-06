@@ -4,7 +4,7 @@ import { AUTH_COOKIE_NAME } from './auth-config';
 
 const api = axios.create({
   // Aseguramos que la URL sea absoluta para evitar problemas en rutas dinámicas
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
