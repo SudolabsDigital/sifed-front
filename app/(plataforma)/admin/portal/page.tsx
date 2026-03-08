@@ -28,17 +28,10 @@ export default function PortalManagementPage() {
       color: "text-red-600 bg-red-50"
     },
     {
-      title: "Maestrías",
-      description: "Gestión de programas de maestría, planes y perfiles.",
+      title: "Programas Académicos",
+      description: "Gestión de Maestrías, Doctorados, Cursos, planes de estudio y costos.",
       icon: GraduationCap,
-      href: "/admin/portal/maestrias",
-      color: "text-brand-600 bg-brand-50"
-    },
-    {
-      title: "Doctorados",
-      description: "Gestión de programas de doctorado y especializaciones.",
-      icon: GraduationCap,
-      href: "/admin/portal/doctorados",
+      href: "/admin/portal/programas",
       color: "text-brand-600 bg-brand-50"
     },
     {

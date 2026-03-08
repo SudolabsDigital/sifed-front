@@ -34,6 +34,7 @@ export const PROGRAMAS_DATA: ProgramData[] = [
       "Investigador en administración de la educación."
     ],
     planEstudios: curriculums.find(c => c.id === "maestria-gestion")?.ciclos || [],
+  horarios: [],
     certificacionDetalle: "Al concluir satisfactoriamente el plan de estudios y sustentar la tesis, se otorga el grado académico de Maestro en Educación con mención en Gestión Educativa."
   },
   {
@@ -67,6 +68,7 @@ export const PROGRAMAS_DATA: ProgramData[] = [
       "Especialista en diseño curricular superior."
     ],
     planEstudios: curriculums.find(c => c.id === "maestria-superior")?.ciclos || [],
+  horarios: [],
     certificacionDetalle: "Se otorga el grado académico de Maestro en Educación con mención en Educación Superior."
   },
   {
@@ -99,6 +101,7 @@ export const PROGRAMAS_DATA: ProgramData[] = [
       "Investigador en psicología del aprendizaje."
     ],
     planEstudios: curriculums.find(c => c.id === "maestria-psicologia")?.ciclos || [],
+  horarios: [],
     certificacionDetalle: "Se otorga el grado académico de Maestro en Educación con mención en Psicología Educativa."
   },
   {
@@ -131,6 +134,7 @@ export const PROGRAMAS_DATA: ProgramData[] = [
       "Diseñador de recursos didácticos digitales."
     ],
     planEstudios: curriculums.find(c => c.id === "maestria-ensenanza")?.ciclos || [],
+  horarios: [],
     certificacionDetalle: "Se otorga el grado académico de Maestro en Educación con mención en Enseñanza Estratégica."
   },
   {
@@ -163,6 +167,7 @@ export const PROGRAMAS_DATA: ProgramData[] = [
       "Líder de institutos de investigación y posgrado."
     ],
     planEstudios: curriculums.find(c => c.id === "doctorado-ciencias")?.ciclos || [],
+  horarios: [],
     certificacionDetalle: "Se otorga el grado académico de Doctor en Ciencias de la Educación, máximo reconocimiento universitario."
   }
 ];

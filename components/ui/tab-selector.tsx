@@ -20,16 +20,17 @@ export default function TabSelector({
   className,
 }: TabSelectorProps) {
   return (
-    <div className={cn("flex flex-wrap items-center justify-center gap-2 p-1.5 bg-muted/50 rounded-2xl border border-border", className)}>
+    <div className={cn("flex flex-wrap items-center gap-1 p-1.5 bg-brand-50 rounded-2xl w-fit border border-brand-100/50", className)}>
       {options.map((option) => (
         <button
           key={option.id}
+          type="button"
           onClick={() => onChange(option.id)}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 text-sm font-bold rounded-xl transition-all duration-300",
+            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black transition-all",
             activeTab === option.id
-              ? "bg-white text-brand-700 shadow-md scale-[1.02]"
-              : "text-muted-foreground hover:text-foreground hover:bg-white/50"
+              ? "bg-white text-brand-600 shadow-sm border border-brand-100"
+              : "text-brand-950/40 hover:text-brand-950"
           )}
         >
           {option.icon && <span className="shrink-0">{option.icon}</span>}

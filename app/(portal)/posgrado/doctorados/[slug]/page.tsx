@@ -1,4 +1,4 @@
-import { PROGRAMAS_DATA } from "@/data/programas";
+import { programasApi, mapToProgramData } from "@/lib/api/programas";
 import ProgramDetailLayout from "@/components/posgrado/program-detail-layout";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -9,31 +9,42 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const program = PROGRAMAS_DATA.find((p) => p.slug === slug && p.tipo === "doctorado");
-  
-  if (!program) return { title: "Programa no encontrado" };
-
-  return {
-    title: `${program.titulo} | Posgrado Educación UNCP`,
-    description: program.descripcionCorta,
-  };
+  try {
+    const rawProgram = await programasApi.getPublicBySlug(slug);
+    if (!rawProgram || rawProgram.tipo !== "doctorado") return { title: "Programa no encontrado" };
+    return {
+      title: `${rawProgram.titulo} | Posgrado Educación UNCP`,
+      description: rawProgram.descripcion_corta,
+    };
+  } catch (error) {
+    return { title: "Programa no encontrado" };
+  }
 }
 
 export default async function DoctoradoDetailPage({ params }: Props) {
   const { slug } = await params;
-  const program = PROGRAMAS_DATA.find((p) => p.slug === slug && p.tipo === "doctorado");
+  
+  try {
+    const rawProgram = await programasApi.getPublicBySlug(slug);
 
-  if (!program) {
+    if (!rawProgram || rawProgram.tipo !== "doctorado") {
+      notFound();
+    }
+
+    const program = mapToProgramData(rawProgram);
+    return <ProgramDetailLayout program={program} />;
+  } catch (error) {
     notFound();
   }
-
-  return <ProgramDetailLayout program={program} />;
 }
 
 export async function generateStaticParams() {
-  return PROGRAMAS_DATA
-    .filter((p) => p.tipo === "doctorado")
-    .map((p) => ({
+  try {
+    const programs = await programasApi.getPublicAll({ tipo: "doctorado" });
+    return programs.map((p) => ({
       slug: p.slug,
     }));
+  } catch (error) {
+    return [];
+  }
 }
