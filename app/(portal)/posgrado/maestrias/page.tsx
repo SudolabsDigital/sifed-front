@@ -1,6 +1,7 @@
 import PageHero from "@/components/ui/page-hero";
 import ProgramGrid from "@/components/posgrado/program-grid";
-import { PROGRAMAS_DATA } from "@/data/programas";
+import { programasApi, mapToProgramData } from "@/lib/api/programas";
+import { ProgramData } from "@/types/programa";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,8 +9,16 @@ export const metadata: Metadata = {
   description: "Explora nuestras maestrías en Gestión, Educación Superior, Psicología y Enseñanza Estratégica.",
 };
 
-export default function MaestríasPage() {
-  const maestrias = PROGRAMAS_DATA.filter((p) => p.tipo === "maestria");
+export const revalidate = 3600;
+
+export default async function MaestríasPage() {
+  let maestrias: ProgramData[] = [];
+  try {
+    const rawPrograms = await programasApi.getPublicAll({ tipo: "maestria" });
+    maestrias = rawPrograms.map(mapToProgramData);
+  } catch (error) {
+    console.error("Error fetching maestrías:", error);
+  }
 
   return (
     <>

@@ -19,6 +19,12 @@ export function getStorageUrl(path?: string | null): string {
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
+
+  // Si la ruta no es de Laravel Storage, asumimos que es un asset estático del frontend (Next.js public folder)
+  // Ej: "/images/programas/...", "/banner/..."
+  if (!path.startsWith("/storage/")) {
+    return path;
+  }
   
   // Si es http://localhost:8000/api => http://localhost:8000
   const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "";

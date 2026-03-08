@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, GraduationCap, Award } from "lucide-react";
+import { ArrowRight, Clock, GraduationCap, ClipboardList, BookOpen } from "lucide-react";
 import { ProgramData } from "@/types/programa";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,13 @@ interface ProgramCardProps {
 }
 
 export default function ProgramCard({ program }: ProgramCardProps) {
-  const detailHref = `/posgrado/${program.tipo}s/${program.slug}`;
+  // Aseguramos que la ruta base coincida con el tipo
+  const basePath = program.tipo === "maestria" ? "maestrias" : 
+                   program.tipo === "doctorado" ? "doctorados" : 
+                   program.tipo === "diplomado" ? "diplomados" : "cursos";
+                   
+  const detailHref = `/posgrado/${basePath}/${program.slug}`;
+  const inscripcionHref = `${detailHref}#admision`;
 
   return (
     <motion.div
@@ -22,13 +28,15 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       className="group bg-white rounded-[2.5rem] border border-border overflow-hidden hover:border-brand-200 hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
     >
       {/* Portada */}
-      <div className="relative h-64 overflow-hidden">
-        <Image
-          src={program.imagenPortada}
-          alt={program.titulo}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
-        />
+      <div className="relative h-64 overflow-hidden bg-muted/20">
+        {program.imagenPortada && (
+          <Image
+            src={program.imagenPortada}
+            alt={program.titulo}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 to-transparent" />
         
         {/* Badge de Categoría */}
@@ -59,7 +67,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <Clock className="w-4 h-4" />
             </div>
             <div className="text-[10px] font-bold text-muted-foreground uppercase leading-tight">
-              {program.infoGeneral.duracion}
+              {program.infoGeneral.duracion || "No definida"}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -67,7 +75,7 @@ export default function ProgramCard({ program }: ProgramCardProps) {
               <GraduationCap className="w-4 h-4" />
             </div>
             <div className="text-[10px] font-bold text-muted-foreground uppercase leading-tight truncate">
-              {program.infoGeneral.certificacion}
+              {program.infoGeneral.certificacion || "No definida"}
             </div>
           </div>
         </div>

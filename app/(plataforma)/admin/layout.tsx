@@ -35,13 +35,8 @@ import {
         icon: Newspaper,
       },
       {
-        title: "Maestrías",
-        href: "/admin/portal/maestrias",
-        icon: GraduationCap,
-      },
-      {
-        title: "Doctorados",
-        href: "/admin/portal/doctorados",
+        title: "Programas Académicos",
+        href: "/admin/portal/programas",
         icon: GraduationCap,
       },
       {

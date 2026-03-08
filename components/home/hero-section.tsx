@@ -6,15 +6,17 @@ import {
   ArrowRight, ChevronRight, ChevronLeft, BookOpen,
   ClipboardList, Clock, GraduationCap, Layers,
 } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, getStorageUrl } from "@/lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import useSWR from "swr";
+import { programasApi } from "@/lib/api/programas";
 
 const AUTOPLAY_DELAY = 12000;
 
-const slides = [
+const staticSlides = [
   {
     id: 1,
     src: "/banner/maestria01.jpg",
@@ -30,8 +32,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/maestrias/gestion-educativa",
-    inscripcionLink: "/posgrado/maestrias/gestion-educativa#admision",
+    curriculumLink: "/posgrado/maestrias/maestria-gestion-educativa",
+    inscripcionLink: "/posgrado/maestrias/maestria-gestion-educativa#admision",
   },
   {
     id: 2,
@@ -48,8 +50,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/maestrias/educacion-superior",
-    inscripcionLink: "/posgrado/maestrias/educacion-superior#admision",
+    curriculumLink: "/posgrado/maestrias/maestria-educacion-superior",
+    inscripcionLink: "/posgrado/maestrias/maestria-educacion-superior#admision",
   },
   {
     id: 3,
@@ -66,8 +68,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/maestrias/psicologia-educativa",
-    inscripcionLink: "/posgrado/maestrias/psicologia-educativa#admision",
+    curriculumLink: "/posgrado/maestrias/maestria-psicologia-educativa",
+    inscripcionLink: "/posgrado/maestrias/maestria-psicologia-educativa#admision",
   },
   {
     id: 4,
@@ -84,8 +86,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "49 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Magíster" },
     ],
-    curriculumLink: "/posgrado/maestrias/ensenanza-estrategica",
-    inscripcionLink: "/posgrado/maestrias/ensenanza-estrategica#admision",
+    curriculumLink: "/posgrado/maestrias/maestria-ensenanza-estrategica",
+    inscripcionLink: "/posgrado/maestrias/maestria-ensenanza-estrategica#admision",
   },
   {
     id: 5,
@@ -102,8 +104,8 @@ const slides = [
       { icon: Layers, label: "Créditos", value: "72 créditos" },
       { icon: GraduationCap, label: "Grado", value: "Doctor" },
     ],
-    curriculumLink: "/posgrado/doctorados/ciencias-educacion",
-    inscripcionLink: "/posgrado/doctorados/ciencias-educacion#admision",
+    curriculumLink: "/posgrado/doctorados/doctorado-ciencias-educacion",
+    inscripcionLink: "/posgrado/doctorados/doctorado-ciencias-educacion#admision",
   },
 ];
 
@@ -138,6 +140,39 @@ const statsCard: Variants = {
 // ── Componente ───────────────────────────────────────────────────────────────
 
 export default function HeroSection() {
+  const { data: programas } = useSWR('/api/portal/programas/hero', () => programasApi.getPublicAll({ en_hero: true }));
+
+  const slides = useMemo(() => {
+    if (!programas || programas.length === 0) return staticSlides;
+    return programas.map((p, idx) => {
+      const d = p.detalles_json || {};
+      const info = d.info_general || {};
+      
+      let baseLink = "/posgrado/maestrias";
+      if (p.tipo === "doctorado") baseLink = "/posgrado/doctorados";
+      else if (p.tipo === "diplomado") baseLink = "/posgrado/diplomados";
+      else if (p.tipo === "curso") baseLink = "/posgrado/cursos";
+      
+      return {
+        id: p.id || idx + 100,
+        src: d.hero_imagen_url ? getStorageUrl(d.hero_imagen_url) : staticSlides[0].src,
+        alt: p.titulo,
+        badge: d.categoria || p.tipo,
+        preTitle: d.hero_pre_title || "",
+        title: d.hero_titulo || p.titulo,
+        subtitle: d.hero_subtitle || "",
+        description: d.hero_descripcion || p.descripcion_corta || "",
+        stats: [
+          { icon: Clock, label: "Duración", value: info.duracion || "" },
+          { icon: Layers, label: "Créditos", value: info.total_creditos ? `${info.total_creditos} créditos` : "" },
+          { icon: GraduationCap, label: "Grado", value: info.certificacion || "" },
+        ].filter(s => s.value !== ""),
+        curriculumLink: `${baseLink}/${p.slug}`,
+        inscripcionLink: `${baseLink}/${p.slug}#admision`,
+      };
+    });
+  }, [programas]);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 40 }, [
     Autoplay({ delay: AUTOPLAY_DELAY, stopOnInteraction: false, stopOnMouseEnter: false }),
   ]);
@@ -211,40 +246,30 @@ export default function HeroSection() {
 
       {/* ── Contenido principal ──────────────────────────────────────────── */}
       <div className="absolute inset-0 z-10 flex items-center px-8 md:px-16 xl:px-24 pointer-events-none">
-        <div className="w-full flex items-center justify-between gap-12">
+        <div className="w-full flex items-center justify-between gap-8 xl:gap-12">
 
           {/* —— Texto (izquierda) —— */}
           <AnimatePresence mode="wait">
             <motion.div
               key={`text-${selectedIndex}`}
-              className="flex-1 max-w-xl pointer-events-auto"
+              className="flex-1 max-w-4xl pointer-events-auto"
               initial="hidden"
               animate="visible"
               exit="exit"
             >
               {/* Pre-título A11y: text-white/40 a text-white/70 */}
-              <motion.p
-                variants={fadeUp} custom={0.05}
-                className="text-xs font-bold tracking-[0.2em] uppercase text-white/70 mb-3"
-              >
-                {slide.preTitle}
-              </motion.p>
-
-              {/* Badge con ping */}
-              <motion.span
-                variants={fadeUp} custom={0.1}
-                className="inline-flex items-center gap-2 mb-5 px-5 py-2.5 rounded-full border border-uncp-gold/50 bg-uncp-gold/10 backdrop-blur-sm text-uncp-gold text-sm font-black tracking-widest uppercase"
-              >
-                <span aria-hidden="true" className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-uncp-gold opacity-60" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-uncp-gold" />
-                </span>
-                {slide.badge}
-              </motion.span>
+              {slide.preTitle && (
+                <motion.span
+                  variants={fadeUp} custom={0.05}
+                  className="block text-uncp-gold font-bold uppercase tracking-[0.3em] text-xs mb-4 drop-shadow-md"
+                >
+                  {slide.preTitle}
+                </motion.span>
+              )}
 
               {/* Título */}
-              <h1 className="font-serif text-4xl md:text-5xl xl:text-[3.75rem] font-black leading-[1.1] text-white tracking-tight mb-3 drop-shadow-xl">
-                {slide.title.split(" ").map((word, i) => (
+              <h1 className="font-serif text-5xl md:text-6xl xl:text-7xl 2xl:text-[5.5rem] font-black leading-[1.05] text-white tracking-tighter mb-5 drop-shadow-xl">
+                {slide.title.split(" ").map((word: string, i: number) => (
                   <motion.span
                     key={`${selectedIndex}-w${i}`}
                     initial={{ opacity: 0, y: 32, rotateX: -20 }}
@@ -262,7 +287,7 @@ export default function HeroSection() {
               {/* Subtítulo */}
               <motion.p
                 variants={fadeUp} custom={0.45}
-                className="text-base md:text-lg font-semibold text-uncp-gold mb-4 tracking-wide"
+                className="text-base md:text-xl font-semibold text-uncp-gold mb-5 tracking-wide max-w-3xl"
               >
                 {slide.subtitle}
               </motion.p>
@@ -271,7 +296,7 @@ export default function HeroSection() {
               <motion.div
                 variants={fadeUp} custom={0.52}
                 aria-hidden="true"
-                className="flex items-center gap-3 mb-5"
+                className="flex items-center gap-3 mb-6"
               >
                 <div className="h-px w-10 bg-uncp-gold/80 rounded-full" />
                 <div className="h-px flex-1 max-w-[4rem] bg-white/30 rounded-full" />
@@ -280,7 +305,7 @@ export default function HeroSection() {
               {/* Descripción A11y: text-white/75 a text-white/90 */}
               <motion.p
                 variants={fadeUp} custom={0.6}
-                className="text-sm md:text-[0.95rem] text-white/90 font-medium leading-relaxed mb-8 max-w-md"
+                className="text-sm md:text-base text-white/90 font-medium leading-relaxed mb-8 max-w-2xl"
               >
                 {slide.description}
               </motion.p>
@@ -288,12 +313,12 @@ export default function HeroSection() {
               {/* Botones */}
               <motion.div
                 variants={fadeUp} custom={0.7}
-                className="flex flex-col sm:flex-row gap-3"
+                className="flex flex-col sm:flex-row gap-4"
               >
                 <Link
                   href={slide.curriculumLink}
                   aria-label={`Conocer más detalles de la ${slide.title}`}
-                  className="group/btn relative overflow-hidden flex h-12 items-center justify-center gap-2.5 rounded-xl bg-brand-600 px-6 text-sm font-extrabold text-white shadow-lg shadow-brand-950/40 transition-all hover:bg-brand-500 hover:-translate-y-0.5 hover:shadow-2xl border border-brand-500/40"
+                  className="group/btn relative overflow-hidden flex h-14 items-center justify-center gap-3 rounded-xl bg-brand-600 px-8 text-sm font-extrabold text-white shadow-lg shadow-brand-950/40 transition-all hover:bg-brand-500 hover:-translate-y-0.5 hover:shadow-2xl border border-brand-500/40"
                 >
                   <span aria-hidden="true" className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
                   <BookOpen aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={2.5} />
@@ -304,7 +329,7 @@ export default function HeroSection() {
                 <Link
                   href={slide.inscripcionLink}
                   aria-label={`Guía de inscripción para la ${slide.title}`}
-                  className="group/btn flex h-12 items-center justify-center gap-2.5 rounded-xl bg-white/10 backdrop-blur-md border-2 border-white/30 px-6 text-sm font-bold text-white transition-all hover:bg-uncp-gold hover:border-uncp-gold hover:text-brand-950 hover:-translate-y-0.5"
+                  className="group/btn flex h-14 items-center justify-center gap-3 rounded-xl bg-white/10 backdrop-blur-md border-2 border-white/30 px-8 text-sm font-bold text-white transition-all hover:bg-uncp-gold hover:border-uncp-gold hover:text-brand-950 hover:-translate-y-0.5"
                 >
                   <ClipboardList aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={2.5} />
                   <span>Guía de Inscripción</span>
@@ -318,7 +343,7 @@ export default function HeroSection() {
           <AnimatePresence mode="wait">
             <motion.div
               key={`stats-${selectedIndex}`}
-              className="hidden xl:flex flex-col gap-3 shrink-0 w-52 pointer-events-auto"
+              className="hidden xl:flex flex-col gap-4 shrink-0 w-64 pointer-events-auto"
               initial="hidden" animate="visible" exit="exit"
             >
               {slide.stats.map((stat, i) => (
