@@ -72,8 +72,11 @@ export function MarketingTab({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={fotoHeroPreview} alt="Preview Hero" className="w-full h-full object-cover" />
                 <button 
-                  onClick={clearHero}
-                  className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 z-10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    clearHero();
+                  }}
+                  className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 z-20"
                   title="Eliminar imagen seleccionada"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -85,14 +88,13 @@ export function MarketingTab({
                 <span className="text-sm font-medium">Click para subir banner panorámico (WebP, JPG)</span>
               </div>
             )}
-            {!fotoHeroPreview && (
-              <input 
-                type="file" 
-                accept="image/jpeg, image/png, image/webp" 
-                onChange={handleHeroChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-            )}
+            
+            <input 
+              type="file" 
+              accept="image/jpeg, image/png, image/webp" 
+              onChange={handleHeroChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
           </div>
         </div>
       </div>

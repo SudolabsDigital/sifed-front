@@ -71,8 +71,11 @@ export function HeroContenidoTab({
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={fotoPortadaPreview} alt="Preview Hero Contenido" className="w-full h-full object-cover" />
                 <button 
-                  onClick={clearPortada}
-                  className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 z-10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    clearPortada();
+                  }}
+                  className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700 z-20"
                   title="Eliminar imagen seleccionada"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -84,14 +87,13 @@ export function HeroContenidoTab({
                 <span className="text-sm font-medium">Click para subir imagen (WebP, JPG)</span>
               </div>
             )}
-            {!fotoPortadaPreview && (
-              <input 
-                type="file" 
-                accept="image/jpeg, image/png, image/webp" 
-                onChange={handlePortadaChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-            )}
+            
+            <input 
+              type="file" 
+              accept="image/jpeg, image/png, image/webp" 
+              onChange={handlePortadaChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            />
           </div>
         </div>
       </div>
