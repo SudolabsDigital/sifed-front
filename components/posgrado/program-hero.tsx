@@ -23,7 +23,7 @@ export default function ProgramHero({ program }: ProgramHeroProps) {
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 bg-cover bg-center grayscale opacity-60 contrast-110 brightness-50 z-0 transition-transform duration-[20s] hover:scale-105"
-          style={{ backgroundImage: `url('${program.imagenHero}')` }}
+          style={{ backgroundImage: `url('${program.imagenPortada}')` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-brand-950/40 to-transparent z-10" />
       </div>
@@ -52,13 +52,13 @@ export default function ProgramHero({ program }: ProgramHeroProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {program.preTitle && (
+            {program.contenidoPreTitle && (
               <span className="block text-uncp-gold font-bold uppercase tracking-[0.3em] text-xs mb-6 drop-shadow-md">
-                {program.preTitle}
+                {program.contenidoPreTitle}
               </span>
             )}
             <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[1.05] tracking-tighter drop-shadow-xl">
-              {program.tituloHero}
+              {program.contenidoTitulo}
             </h1>
             <p className="text-lg text-brand-50/90 leading-relaxed max-w-xl mb-10 font-medium drop-shadow-md">
               {program.descripcionCorta}

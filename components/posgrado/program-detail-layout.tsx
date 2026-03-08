@@ -20,7 +20,7 @@ import {
   CreditCard,
   FileCheck
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface ProgramDetailLayoutProps {
@@ -51,11 +51,12 @@ export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProp
 
   const tabs = allTabs.filter(t => t.show);
 
-  // Asegurar que activeTab siempre sea válido (por si se oculta un tab activo)
-  // Aunque 'info' siempre está visible, lo mantenemos seguro.
-  if (!tabs.find(t => t.id === activeTab)) {
+  // Solución al antipatrón: Usar useEffect para actualizar el estado derivado sin romper el ciclo de renderizado
+  useEffect(() => {
+    if (!tabs.find(t => t.id === activeTab)) {
       setActiveTab("info");
-  }
+    }
+  }, [tabs, activeTab]);
 
   return (
     <main className="flex-1 w-full bg-white">
@@ -115,10 +116,14 @@ export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProp
               </div>
               
               <div className="prose prose-lg md:prose-xl text-muted-foreground mx-auto font-medium leading-relaxed mb-16 text-justify">
-                <p>{program.acercaDe}</p>
+                {program.acercaDe?.split('\n').map((paragraph, idx) => (
+                  <p key={idx} className="mb-4 last:mb-0">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
 
-              {program.certificacionDetalle && (
+              {(program.configVisibilidad?.mostrar_certificacion !== false && program.certificacionDetalle) && (
                 <div className="mt-10 p-8 md:p-10 rounded-[2rem] bg-brand-50 border border-brand-100 flex flex-col md:flex-row items-center md:items-start gap-8">
                   <div className="w-16 h-16 shrink-0 rounded-full bg-uncp-gold/20 flex items-center justify-center">
                     <Award className="w-8 h-8 text-uncp-gold" />

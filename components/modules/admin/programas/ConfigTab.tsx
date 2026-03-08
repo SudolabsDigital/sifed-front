@@ -32,6 +32,13 @@ export function ConfigTab({ configData, setConfigData }: ConfigTabProps) {
       badge: "[Sección Global]"
     },
     {
+      id: "mostrar_certificacion",
+      title: "Banner de Certificación",
+      desc: "Muestra el bloque destacado de certificación debajo de la descripción general del programa.",
+      activeColor: "bg-indigo-600",
+      badge: "[Pestaña Información]"
+    },
+    {
       id: "mostrar_perfiles",
       title: "Perfiles Académicos",
       desc: "Muestra la sección del perfil del ingresante y perfil del egresado.",

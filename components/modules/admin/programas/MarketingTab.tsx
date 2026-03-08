@@ -47,11 +47,10 @@ export function MarketingTab({
       
       {/* SECCIÓN: Contexto */}
       <div className="bg-brand-50 p-6 rounded-2xl border border-brand-100">
-        <h3 className="text-lg font-black text-brand-950 mb-2">Marketing y Hero</h3>
+        <h3 className="text-lg font-black text-brand-950 mb-2">Hero del Home (Global)</h3>
         <p className="text-sm text-muted-foreground">
-          Aquí configuras cómo se verá este programa en los banners principales. <br />
-          <strong>Hero Global:</strong> Si en la pestaña "Visibilidad" activas "Hero del Home", esta imagen y textos aparecerán en el carrusel de la página de inicio.<br />
-          <strong>Hero de Contenido:</strong> También se usará como la cabecera principal dentro de la página individual del programa.
+          Aquí configuras cómo se verá este programa en el gran carrusel de la <strong>página principal (Home)</strong> de Posgrado. <br />
+          Para que este banner aparezca públicamente, debes encender el interruptor "Hero del Home" en la pestaña de <em>Visibilidad</em>.
         </p>
       </div>
 

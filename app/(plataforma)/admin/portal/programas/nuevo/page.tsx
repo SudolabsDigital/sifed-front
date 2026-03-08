@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Info, BookOpen, Clock, Wallet, Settings, Save, X, Megaphone, Users } from "lucide-react";
+import { Info, BookOpen, Clock, Wallet, Settings, Save, X, Megaphone, Users, LayoutTemplate, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { programasApi } from "@/lib/api/programas";
 import TabSelector from "@/components/ui/tab-selector";
@@ -10,6 +10,8 @@ import { BackButton } from "@/components/ui/BackButton";
 
 import { InfoGeneralTab } from "@/components/modules/admin/programas/InfoGeneralTab";
 import { MarketingTab } from "@/components/modules/admin/programas/MarketingTab";
+import { HeroContenidoTab } from "@/components/modules/admin/programas/HeroContenidoTab";
+import { AcercaDeTab } from "@/components/modules/admin/programas/AcercaDeTab";
 import { PlanEstudioTab } from "@/components/modules/admin/programas/PlanEstudioTab";
 import { HorariosTab } from "@/components/modules/admin/programas/HorariosTab";
 import { AdmisionTab } from "@/components/modules/admin/programas/AdmisionTab";
@@ -32,8 +34,11 @@ export default function NuevoProgramaPage() {
     detalles_json: {
       categoria: "",
       hero_pre_title: "",
+      hero_titulo: "",
       hero_subtitle: "",
       hero_descripcion: "",
+      contenido_pre_title: "",
+      contenido_titulo: "",
       info_general: { duracion: "", modalidad: "", certificacion: "", total_creditos: 0 },
       acerca_de: "",
       objetivos: [] as string[],
@@ -49,7 +54,8 @@ export default function NuevoProgramaPage() {
       mostrar_admision: true,
       mostrar_plan_estudio: true,
       mostrar_horarios: false,
-      mostrar_perfiles: true
+      mostrar_perfiles: true,
+      mostrar_certificacion: true
     }
   };
 
@@ -111,7 +117,9 @@ export default function NuevoProgramaPage() {
 
   const TABS = [
     { id: "info", label: "Información", icon: <Info className="w-4 h-4" /> },
-    { id: "marketing", label: "Marketing", icon: <Megaphone className="w-4 h-4" /> },
+    { id: "marketing", label: "Hero Global", icon: <Megaphone className="w-4 h-4" /> },
+    { id: "hero-contenido", label: "Hero Contenido", icon: <LayoutTemplate className="w-4 h-4" /> },
+    { id: "acerca-de", label: "Acerca del Programa", icon: <FileText className="w-4 h-4" /> },
     { id: "perfiles", label: "Perfiles", icon: <Users className="w-4 h-4" /> },
     { id: "plan", label: "Plan de Estudio", icon: <BookOpen className="w-4 h-4" /> },
     { id: "horarios", label: "Horarios", icon: <Clock className="w-4 h-4" /> },
@@ -214,8 +222,6 @@ export default function NuevoProgramaPage() {
         {activeTab === "info" && (
           <InfoGeneralTab 
             formData={formData as any} setFormData={setFormData}
-            fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
-            fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
           />
         )}
 
@@ -224,6 +230,20 @@ export default function NuevoProgramaPage() {
             formData={formData as any} setFormData={setFormData}
             fotoHeroFile={fotoHeroFile} setFotoHeroFile={setFotoHeroFile}
             fotoHeroPreview={fotoHeroPreview} setFotoHeroPreview={setFotoHeroPreview}
+          />
+        )}
+
+        {activeTab === "hero-contenido" && (
+          <HeroContenidoTab 
+            formData={formData as any} setFormData={setFormData}
+            fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
+            fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
+          />
+        )}
+
+        {activeTab === "acerca-de" && (
+          <AcercaDeTab 
+            formData={formData as any} setFormData={setFormData}
           />
         )}
 

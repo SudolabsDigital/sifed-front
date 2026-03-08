@@ -11,12 +11,15 @@ import Loader from "@/components/ui/loader";
 
 import { InfoGeneralTab } from "@/components/modules/admin/programas/InfoGeneralTab";
 import { MarketingTab } from "@/components/modules/admin/programas/MarketingTab";
+import { HeroContenidoTab } from "@/components/modules/admin/programas/HeroContenidoTab";
+import { AcercaDeTab } from "@/components/modules/admin/programas/AcercaDeTab";
 import { PlanEstudioTab } from "@/components/modules/admin/programas/PlanEstudioTab";
 import { HorariosTab } from "@/components/modules/admin/programas/HorariosTab";
 import { AdmisionTab } from "@/components/modules/admin/programas/AdmisionTab";
 import { ConfigTab } from "@/components/modules/admin/programas/ConfigTab";
 import { PerfilesTab } from "@/components/modules/admin/programas/PerfilesTab";
 import { getStorageUrl } from "@/lib/utils";
+import { LayoutTemplate, FileText } from "lucide-react";
 
 export default function EditarProgramaPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -38,8 +41,11 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
     detalles_json: {
       categoria: "",
       hero_pre_title: "",
+      hero_titulo: "",
       hero_subtitle: "",
       hero_descripcion: "",
+      contenido_pre_title: "",
+      contenido_titulo: "",
       info_general: { duracion: "", modalidad: "", certificacion: "", total_creditos: 0 },
       acerca_de: "",
       objetivos: [] as string[],
@@ -55,7 +61,8 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
       mostrar_admision: true,
       mostrar_plan_estudio: true,
       mostrar_horarios: false,
-      mostrar_perfiles: true
+      mostrar_perfiles: true,
+      mostrar_certificacion: true
     }
   });
 
@@ -87,7 +94,8 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
             mostrar_admision: data.config_visibilidad?.mostrar_admision ?? false,
             mostrar_plan_estudio: data.config_visibilidad?.mostrar_plan_estudio ?? false,
             mostrar_horarios: data.config_visibilidad?.mostrar_horarios ?? false,
-            mostrar_perfiles: data.config_visibilidad?.mostrar_perfiles ?? false
+            mostrar_perfiles: data.config_visibilidad?.mostrar_perfiles ?? false,
+            mostrar_certificacion: data.config_visibilidad?.mostrar_certificacion ?? true
           }
         };
 
@@ -163,7 +171,9 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
 
   const TABS = [
     { id: "info", label: "Información", icon: <Info className="w-4 h-4" /> },
-    { id: "marketing", label: "Marketing", icon: <Megaphone className="w-4 h-4" /> },
+    { id: "marketing", label: "Hero Global", icon: <Megaphone className="w-4 h-4" /> },
+    { id: "hero-contenido", label: "Hero Contenido", icon: <LayoutTemplate className="w-4 h-4" /> },
+    { id: "acerca-de", label: "Acerca del Programa", icon: <FileText className="w-4 h-4" /> },
     { id: "perfiles", label: "Perfiles", icon: <Users className="w-4 h-4" /> },
     { id: "plan", label: "Plan de Estudio", icon: <BookOpen className="w-4 h-4" /> },
     { id: "horarios", label: "Horarios", icon: <Clock className="w-4 h-4" /> },
@@ -273,8 +283,6 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
         {activeTab === "info" && (
           <InfoGeneralTab 
             formData={formData as any} setFormData={setFormData}
-            fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
-            fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
           />
         )}
 
@@ -283,6 +291,20 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
             formData={formData as any} setFormData={setFormData}
             fotoHeroFile={fotoHeroFile} setFotoHeroFile={setFotoHeroFile}
             fotoHeroPreview={fotoHeroPreview} setFotoHeroPreview={setFotoHeroPreview}
+          />
+        )}
+
+        {activeTab === "hero-contenido" && (
+          <HeroContenidoTab 
+            formData={formData as any} setFormData={setFormData}
+            fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
+            fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
+          />
+        )}
+
+        {activeTab === "acerca-de" && (
+          <AcercaDeTab 
+            formData={formData as any} setFormData={setFormData}
           />
         )}
 

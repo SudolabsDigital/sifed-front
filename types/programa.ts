@@ -35,6 +35,7 @@ export interface ConfigVisibilidad {
   mostrar_plan_estudio?: boolean;
   mostrar_horarios?: boolean;
   mostrar_perfiles?: boolean;
+  mostrar_certificacion?: boolean;
 }
 
 export interface ProgramData {
@@ -44,6 +45,8 @@ export interface ProgramData {
   titulo: string;
   preTitle?: string;
   tituloHero: string;
+  contenidoPreTitle?: string;
+  contenidoTitulo?: string;
   descripcionCorta: string;
   imagenPortada: string;
   imagenHero: string;

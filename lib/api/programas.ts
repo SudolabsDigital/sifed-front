@@ -41,6 +41,7 @@ export interface Programa {
     mostrar_plan_estudio?: boolean;
     mostrar_horarios?: boolean;
     mostrar_perfiles?: boolean;
+    mostrar_certificacion?: boolean;
   };
 }
 
@@ -53,6 +54,8 @@ export function mapToProgramData(programa: Programa): ProgramData {
     titulo: programa.titulo,
     preTitle: d.hero_pre_title || "",
     tituloHero: d.hero_titulo || programa.titulo,
+    contenidoPreTitle: d.contenido_pre_title || "",
+    contenidoTitulo: d.contenido_titulo || programa.titulo,
     descripcionCorta: programa.descripcion_corta || "",
     imagenPortada: programa.imagen_portada_url ? getStorageUrl(programa.imagen_portada_url) : "",
     imagenHero: d.hero_imagen_url ? getStorageUrl(d.hero_imagen_url) : "",
