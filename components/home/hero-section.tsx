@@ -152,6 +152,7 @@ export default function HeroSection() {
       if (p.tipo === "doctorado") baseLink = "/posgrado/doctorados";
       else if (p.tipo === "diplomado") baseLink = "/posgrado/diplomados";
       else if (p.tipo === "curso") baseLink = "/posgrado/cursos";
+      else if (p.tipo === "taller") baseLink = "/posgrado/talleres";
       
       return {
         id: p.id || idx + 100,
@@ -208,6 +209,7 @@ export default function HeroSection() {
             <div className="flex-[0_0_100%] min-w-0 relative h-full" key={s.id}>
               <Image
                 src={s.src} alt={s.alt} fill
+                unoptimized
                 className={cn(
                   "object-cover object-center transition-transform duration-[9000ms] ease-linear",
                   idx === selectedIndex ? "scale-[1.08]" : "scale-100"
