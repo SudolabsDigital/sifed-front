@@ -14,7 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowUpDown,
-  GraduationCap
+  GraduationCap,
+  Loader2
 } from "lucide-react";
 import { programasApi, Programa } from "@/lib/api/programas";
 import { getStorageUrl, cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export default function ProgramasAdminPage() {
   const [search, setSearch] = useState("");
   const [tipo, setTipo] = useState("");
   const [page, setPage] = useState(1);
+  const [updatingOrdenId, setUpdatingOrdenId] = useState<number | null>(null);
   const { showToast } = useToast();
 
   const swrKey = ['/api/admin/programas', { search, tipo, page, per_page: 10 }];
@@ -60,7 +62,7 @@ export default function ProgramasAdminPage() {
     };
 
     try {
-      await mutate(optimisticData); 
+      await mutate(optimisticData, { revalidate: false }); 
       await programasApi.toggleVisibility(id, field, !currentValue);
       showToast("Visibilidad actualizada", "success");
       mutate(); 
@@ -73,6 +75,7 @@ export default function ProgramasAdminPage() {
   const handleUpdateOrden = async (id: number, newOrden: number, oldOrden: number) => {
     if (newOrden === oldOrden) return;
 
+    setUpdatingOrdenId(id);
     const optimisticData = {
       data: programas.map(p => p.id === id ? { ...p, orden: newOrden } : p),
       current_page: pagination.current_page,
@@ -81,13 +84,15 @@ export default function ProgramasAdminPage() {
     };
 
     try {
-      await mutate(optimisticData);
+      await mutate(optimisticData, { revalidate: false });
       await programasApi.updateOrden(id, newOrden);
       showToast("Prioridad actualizada.", "success");
       mutate();
     } catch (err) {
       handleApiError(err, showToast, "Error al actualizar la prioridad");
       mutate();
+    } finally {
+      setUpdatingOrdenId(null);
     }
   };
 
@@ -102,7 +107,7 @@ export default function ProgramasAdminPage() {
     };
 
     try {
-      await mutate(optimisticData);
+      await mutate(optimisticData, { revalidate: false });
       await programasApi.delete(id);
       showToast("Programa eliminado exitosamente", "success");
       mutate();
@@ -209,12 +214,18 @@ export default function ProgramasAdminPage() {
                 programas.map((programa) => (
                   <tr key={programa.id} className="hover:bg-muted/30 transition-colors group">
                     <td className="px-6 py-4">
-                      <input 
-                        type="number" 
-                        defaultValue={programa.orden}
-                        onBlur={(e) => handleUpdateOrden(programa.id, parseInt(e.target.value) || 0, programa.orden)}
-                        className="w-16 px-2 py-1 text-center bg-white border border-border rounded-lg focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm font-medium"
-                      />
+                      {updatingOrdenId === programa.id ? (
+                        <div className="flex justify-center items-center w-16 h-[34px]">
+                          <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
+                        </div>
+                      ) : (
+                        <input 
+                          type="number" 
+                          defaultValue={programa.orden}
+                          onBlur={(e) => handleUpdateOrden(programa.id, parseInt(e.target.value) || 0, programa.orden)}
+                          className="w-16 px-2 py-1 text-center bg-white border border-border rounded-lg focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm font-medium"
+                        />
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">

@@ -22,36 +22,49 @@ export function ConfigTab({ configData, setConfigData }: ConfigTabProps) {
     title: string;
     desc: string;
     activeColor: string;
+    badge?: string;
   }[] = [
     {
       id: "mostrar_en_hero",
-      title: "Mostrar en Hero Principal (Home)",
-      desc: "Habilita que este programa aparezca en el gran carrusel de la página de inicio. Requiere que hayas subido la Imagen de Hero.",
-      activeColor: "bg-purple-600"
+      title: "Hero del Home (Página Principal)",
+      desc: "Muestra este programa en el gran carrusel de la página principal. Requiere haber configurado la pestaña 'Marketing'.",
+      activeColor: "bg-purple-600",
+      badge: "[Sección Global]"
     },
     {
-      id: "mostrar_admision",
-      title: "Módulo de Admisión e Inversión",
-      desc: "Muestra u oculta la sección de costos, inversión y requisitos en el portal público.",
-      activeColor: "bg-blue-600"
+      id: "mostrar_certificacion",
+      title: "Banner de Certificación",
+      desc: "Muestra el bloque destacado de certificación debajo de la descripción general del programa.",
+      activeColor: "bg-indigo-600",
+      badge: "[Pestaña Información]"
+    },
+    {
+      id: "mostrar_perfiles",
+      title: "Perfiles Académicos",
+      desc: "Muestra la sección del perfil del ingresante y perfil del egresado.",
+      activeColor: "bg-slate-700",
+      badge: "[Pestaña 1]"
     },
     {
       id: "mostrar_plan_estudio",
       title: "Malla Curricular",
       desc: "Muestra la tabla del plan de estudios con los ciclos y asignaturas.",
-      activeColor: "bg-emerald-600"
+      activeColor: "bg-emerald-600",
+      badge: "[Pestaña 2]"
     },
     {
       id: "mostrar_horarios",
       title: "Horarios",
       desc: "Muestra la pestaña de horarios con los módulos que hayas configurado.",
-      activeColor: "bg-amber-600"
+      activeColor: "bg-amber-600",
+      badge: "[Pestaña 3]"
     },
     {
-      id: "mostrar_perfiles",
-      title: "Perfiles Académicos",
-      desc: "Muestra el perfil del ingresante y perfil del egresado.",
-      activeColor: "bg-slate-700"
+      id: "mostrar_admision",
+      title: "Admisión e Inversión",
+      desc: "Muestra u oculta la sección de costos, inversión y requisitos en el portal público.",
+      activeColor: "bg-blue-600",
+      badge: "[Pestaña 4]"
     }
   ];
 
@@ -80,7 +93,17 @@ export function ConfigTab({ configData, setConfigData }: ConfigTabProps) {
                 )}
               >
                 <div className="flex flex-col">
-                  <span className={cn("font-bold text-base transition-colors", isActive ? "text-brand-950" : "text-muted-foreground")}>{opt.title}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={cn("font-bold text-base transition-colors", isActive ? "text-brand-950" : "text-muted-foreground")}>{opt.title}</span>
+                    {opt.badge && (
+                      <span className={cn(
+                        "text-[10px] font-bold px-2 py-0.5 rounded-full",
+                        isActive ? "bg-brand-100 text-brand-700" : "bg-muted text-muted-foreground"
+                      )}>
+                        {opt.badge}
+                      </span>
+                    )}
+                  </div>
                   <span className="text-sm text-muted-foreground mt-1">{opt.desc}</span>
                 </div>
 
