@@ -2,7 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { Info, BookOpen, Clock, Wallet, Settings, Save, X } from "lucide-react";
+import { Info, BookOpen, Clock, Wallet, Settings, Save, X, Megaphone, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { programasApi } from "@/lib/api/programas";
 import TabSelector from "@/components/ui/tab-selector";
@@ -10,6 +10,7 @@ import { BackButton } from "@/components/ui/BackButton";
 import Loader from "@/components/ui/loader";
 
 import { InfoGeneralTab } from "@/components/modules/admin/programas/InfoGeneralTab";
+import { MarketingTab } from "@/components/modules/admin/programas/MarketingTab";
 import { PlanEstudioTab } from "@/components/modules/admin/programas/PlanEstudioTab";
 import { HorariosTab } from "@/components/modules/admin/programas/HorariosTab";
 import { AdmisionTab } from "@/components/modules/admin/programas/AdmisionTab";
@@ -58,6 +59,9 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
     }
   });
 
+  const [initialDataHash, setInitialDataHash] = useState<string>("");
+  const [isDirty, setIsDirty] = useState(false);
+
   const [fotoPortadaFile, setFotoPortadaFile] = useState<File | null>(null);
   const [fotoPortadaPreview, setFotoPortadaPreview] = useState<string | null>(null);
 
@@ -69,7 +73,7 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
       try {
         const data = await programasApi.getOne(programaId);
         
-        setFormData({
+        const loadedData = {
           titulo: data.titulo,
           tipo: data.tipo,
           descripcion_corta: data.descripcion_corta,
@@ -85,14 +89,17 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
             mostrar_horarios: data.config_visibilidad?.mostrar_horarios ?? false,
             mostrar_perfiles: data.config_visibilidad?.mostrar_perfiles ?? false
           }
-        });
+        };
+
+        setFormData(loadedData);
+        setInitialDataHash(JSON.stringify(loadedData));
 
         if (data.imagen_portada_url) {
           setFotoPortadaPreview(getStorageUrl(data.imagen_portada_url));
         }
         
         if (data.detalles_json?.hero_imagen_url) {
-           setFotoHeroPreview(data.detalles_json.hero_imagen_url); // Might be external or local based on seed
+           setFotoHeroPreview(data.detalles_json.hero_imagen_url);
         }
 
       } catch (error) {
@@ -129,9 +136,35 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
     }
   }, [formData.plan_estudio_json]);
 
+  // Detector de cambios
+  useEffect(() => {
+    if (initialDataHash) {
+      const currentDataHash = JSON.stringify(formData);
+      setIsDirty(
+        currentDataHash !== initialDataHash ||
+        fotoPortadaFile !== null ||
+        fotoHeroFile !== null
+      );
+    }
+  }, [formData, initialDataHash, fotoPortadaFile, fotoHeroFile]);
+
+  // Alerta al intentar salir de la página sin guardar
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
   const TABS = [
     { id: "info", label: "Información", icon: <Info className="w-4 h-4" /> },
-    { id: "perfiles", label: "Perfiles", icon: <BookOpen className="w-4 h-4" /> },
+    { id: "marketing", label: "Marketing", icon: <Megaphone className="w-4 h-4" /> },
+    { id: "perfiles", label: "Perfiles", icon: <Users className="w-4 h-4" /> },
     { id: "plan", label: "Plan de Estudio", icon: <BookOpen className="w-4 h-4" /> },
     { id: "horarios", label: "Horarios", icon: <Clock className="w-4 h-4" /> },
     { id: "admision", label: "Admisión", icon: <Wallet className="w-4 h-4" /> },
@@ -160,6 +193,12 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
       if (fotoHeroFile) fd.append("hero_imagen", fotoHeroFile);
 
       await programasApi.update(programaId, fd);
+      
+      // Reiniciar estado sucio
+      setInitialDataHash(JSON.stringify(formData));
+      setFotoPortadaFile(null);
+      setFotoHeroFile(null);
+      
       showToast("Programa actualizado exitosamente", "success");
       router.push("/admin/portal/programas");
     } catch (error) {
@@ -179,7 +218,10 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
         <div className="flex items-center gap-4">
           <BackButton />
           <div>
-            <h2 className="text-2xl font-serif font-black text-brand-950">Editar Programa</h2>
+            <h2 className="text-2xl font-serif font-black text-brand-950 flex items-center gap-2">
+              Editar Programa
+              {isDirty && <span className="text-brand-500 text-sm font-bold bg-brand-50 px-2 py-0.5 rounded-full ml-2">Modificado *</span>}
+            </h2>
             <p className="text-sm text-muted-foreground">{formData.titulo}</p>
           </div>
         </div>
@@ -197,7 +239,10 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
 
           <button
             type="button"
-            onClick={() => router.push("/admin/portal/programas")}
+            onClick={() => {
+              if (isDirty && !confirm("Tienes cambios sin guardar. ¿Estás seguro que quieres salir?")) return;
+              router.push("/admin/portal/programas");
+            }}
             className="p-2.5 text-muted-foreground hover:bg-muted rounded-xl transition-all"
           >
             <X className="w-5 h-5" />
@@ -205,8 +250,8 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
           
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm disabled:opacity-70"
+            disabled={!isDirty || isSubmitting}
+            className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save className="w-4 h-4" />
             {isSubmitting ? "Guardando..." : "Guardar Cambios"}
@@ -230,6 +275,12 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
             formData={formData as any} setFormData={setFormData}
             fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
             fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
+          />
+        )}
+
+        {activeTab === "marketing" && (
+          <MarketingTab 
+            formData={formData as any} setFormData={setFormData}
             fotoHeroFile={fotoHeroFile} setFotoHeroFile={setFotoHeroFile}
             fotoHeroPreview={fotoHeroPreview} setFotoHeroPreview={setFotoHeroPreview}
           />
