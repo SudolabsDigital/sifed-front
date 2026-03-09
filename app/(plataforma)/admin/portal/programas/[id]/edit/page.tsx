@@ -46,7 +46,7 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
       hero_descripcion: "",
       contenido_pre_title: "",
       contenido_titulo: "",
-      info_general: { duracion: "", modalidad: "", certificacion: "", total_creditos: 0 },
+      info_general: { duracion: "", modalidad: "", certificacion: "", totalCreditos: 0 },
       acerca_de: "",
       objetivos: [] as string[],
       perfil_estudiante: [] as string[],
@@ -127,7 +127,7 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
     const duracion = `${ciclos.length} Semestre${ciclos.length !== 1 ? 's' : ''}`;
     
     if (
-      formData.detalles_json.info_general?.total_creditos !== total ||
+      formData.detalles_json.info_general?.totalCreditos !== total ||
       formData.detalles_json.info_general?.duracion !== duracion
     ) {
       setFormData((prev) => ({
@@ -137,7 +137,7 @@ export default function EditarProgramaPage({ params }: { params: Promise<{ id: s
           info_general: {
             ...prev.detalles_json.info_general,
             duracion,
-            total_creditos: total
+            totalCreditos: total
           }
         }
       }));

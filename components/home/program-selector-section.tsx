@@ -24,15 +24,15 @@ const categories = [
     title: "Diplomados",
     desc: "Programas de actualización profesional de corta duración.",
     icon: <Award aria-hidden="true" className="w-8 h-8" />,
-    href: "/posgrado/programas",
-    count: "Próximamente",
+    href: "/posgrado/diplomados",
+    count: "Especialización",
     color: "bg-white text-brand-950 border-border"
   },
   {
     title: "Formación Continua",
     desc: "Cursos y talleres para potenciar habilidades específicas.",
     icon: <Zap aria-hidden="true" className="w-8 h-8" />,
-    href: "/posgrado/programas",
+    href: "/posgrado/formacion-continua",
     count: "Capacitación",
     color: "bg-white text-brand-950 border-border"
   }

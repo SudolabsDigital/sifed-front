@@ -30,17 +30,17 @@ const programCategories = [
     title: "Diplomados",
     desc: "Programas de actualización profesional de corta duración.",
     icon: <Award className="w-8 h-8" />,
-    href: "/posgrado/en-construccion",
+    href: "/posgrado/diplomados",
     image: "/images/portada-4.webp",
-    stats: "Próximamente"
+    stats: "Especialización"
   },
   {
-    title: "Cursos y Talleres",
+    title: "Formación Continua",
     desc: "Capacitación continua en herramientas digitales y nuevas metodologías.",
     icon: <Zap className="w-8 h-8" />,
-    href: "/posgrado/en-construccion",
+    href: "/posgrado/formacion-continua",
     image: "/images/portada-5.webp",
-    stats: "Capacitación"
+    stats: "Cursos y Talleres"
   }
 ];
 

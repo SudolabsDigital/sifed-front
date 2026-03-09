@@ -63,7 +63,7 @@ export function mapToProgramData(programa: Programa): ProgramData {
       duracion: d.info_general?.duracion || "",
       modalidad: d.info_general?.modalidad || "",
       certificacion: d.info_general?.certificacion || "",
-      totalCreditos: Number(d.info_general?.total_creditos) || 0,
+      totalCreditos: Number(d.info_general?.totalCreditos) || 0,
     },
     acercaDe: d.acerca_de || "",
     objetivos: d.objetivos || [],

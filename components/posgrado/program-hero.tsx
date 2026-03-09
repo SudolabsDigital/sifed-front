@@ -76,7 +76,7 @@ export default function ProgramHero({ program }: ProgramHeroProps) {
             <div className="grid grid-cols-2 gap-3">
               {[
                 { icon: Clock, label: "Duración", value: program.infoGeneral.duracion },
-                { icon: Hash, label: "Créditos", value: `${program.infoGeneral.totalCreditos} Totales` },
+                { icon: Hash, label: "Créditos", value: `${program.infoGeneral.totalCreditos || 0} Totales` },
                 { icon: GraduationCap, label: "Grado", value: program.infoGeneral.certificacion, className: "col-span-2" },
               ].map((stat, idx) => (
                 <div key={idx} className={cn("p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-xl", stat.className)}>

@@ -2,7 +2,7 @@ import PageHero from "@/components/ui/page-hero";
 import PosgradoIdentity from "@/components/posgrado/posgrado-identity";
 import StrategicAxes from "@/components/posgrado/strategic-axes";
 import PosgradoCTA from "@/components/posgrado/posgrado-cta";
-import { GraduationCap, BookOpen, Users, FileText } from "lucide-react";
+import { GraduationCap, BookOpen, Users, FileText, Award, Zap } from "lucide-react";
 
 export const metadata = {
   title: "Unidad de Posgrado | Facultad de Educación - UNCP",
@@ -32,6 +32,18 @@ export default function PosgradoPage() {
             href: "/posgrado/doctorados", 
             variant: "primary",
             icon: <GraduationCap className="w-4 h-4" />
+          },
+          { 
+            label: "Diplomados", 
+            href: "/posgrado/diplomados", 
+            variant: "primary",
+            icon: <Award className="w-4 h-4" />
+          },
+          { 
+            label: "Formación Continua", 
+            href: "/posgrado/formacion-continua", 
+            variant: "primary",
+            icon: <Zap className="w-4 h-4" />
           },
           { 
             label: "Admisión", 

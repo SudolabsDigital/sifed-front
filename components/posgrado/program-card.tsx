@@ -1,21 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, GraduationCap, ClipboardList, BookOpen } from "lucide-react";
+import { ArrowRight, Clock, GraduationCap, ClipboardList, BookOpen, Image as ImageIcon } from "lucide-react";
 import { ProgramData } from "@/types/programa";
-import { cn } from "@/lib/utils";
+import { cn, getStorageUrl } from "@/lib/utils";
 
 interface ProgramCardProps {
   program: ProgramData;
 }
 
 export default function ProgramCard({ program }: ProgramCardProps) {
+  const [imgError, setImgError] = useState(false);
+  
   // Aseguramos que la ruta base coincida con el tipo
   const basePath = program.tipo === "maestria" ? "maestrias" : 
                    program.tipo === "doctorado" ? "doctorados" : 
-                   program.tipo === "diplomado" ? "diplomados" : "cursos";
+                   program.tipo === "diplomado" ? "diplomados" : 
+                   program.tipo === "taller" ? "talleres" : "cursos";
                    
   const detailHref = `/posgrado/${basePath}/${program.slug}`;
   const inscripcionHref = `${detailHref}#admision`;
@@ -28,14 +32,20 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       className="group bg-white rounded-[2.5rem] border border-border overflow-hidden hover:border-brand-200 hover:shadow-2xl transition-all duration-500 flex flex-col h-full"
     >
       {/* Portada */}
-      <div className="relative h-64 overflow-hidden bg-muted/20">
-        {program.imagenPortada && (
+      <div className="relative h-64 overflow-hidden bg-muted/20 flex items-center justify-center">
+        {program.imagenPortada && !imgError ? (
           <Image
-            src={program.imagenPortada}
+            src={getStorageUrl(program.imagenPortada)}
             alt={program.titulo}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
+            unoptimized
+            onError={() => setImgError(true)}
           />
+        ) : (
+          <div className="absolute inset-0 bg-brand-50 flex items-center justify-center">
+            <ImageIcon className="w-12 h-12 text-brand-200" />
+          </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 to-transparent" />
         

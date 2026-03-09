@@ -39,7 +39,7 @@ export default function NuevoProgramaPage() {
       hero_descripcion: "",
       contenido_pre_title: "",
       contenido_titulo: "",
-      info_general: { duracion: "", modalidad: "", certificacion: "", total_creditos: 0 },
+      info_general: { duracion: "", modalidad: "", certificacion: "", totalCreditos: 0 },
       acerca_de: "",
       objetivos: [] as string[],
       perfil_estudiante: [] as string[],
@@ -71,11 +71,11 @@ export default function NuevoProgramaPage() {
 
   useEffect(() => {
     const ciclos = formData.plan_estudio_json?.ciclos || [];
-    const total = ciclos.reduce((sum: number, c: any) => sum + (Number(c.total_creditos) || 0), 0);
+    const total = ciclos.reduce((sum: number, c: any) => sum + (Number(c.totalCreditos) || 0), 0);
     const duracion = `${ciclos.length} Semestre${ciclos.length !== 1 ? 's' : ''}`;
     
     if (
-      formData.detalles_json.info_general?.total_creditos !== total ||
+      formData.detalles_json.info_general?.totalCreditos !== total ||
       formData.detalles_json.info_general?.duracion !== duracion
     ) {
       setFormData((prev) => ({
@@ -85,7 +85,7 @@ export default function NuevoProgramaPage() {
           info_general: {
             ...prev.detalles_json.info_general,
             duracion,
-            total_creditos: total
+            totalCreditos: total
           }
         }
       }));
