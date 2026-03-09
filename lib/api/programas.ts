@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 import { ProgramType, ProgramData } from "@/types/programa";
 import { getStorageUrl } from "@/lib/utils";
+import { ProgramaDetallesJson, ProgramaPlanEstudioJson, ProgramaConfigVisibilidad, HorarioModulo } from "@/types/admin-programa";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -10,67 +11,59 @@ if (!API_URL) {
   console.warn("ADVERTENCIA: NEXT_PUBLIC_API_URL no está definida en las variables de entorno.");
 }
 
-const getAuthHeader = () => {
-  const token = Cookies.get(AUTH_COOKIE_NAME);
-  if (!token) console.warn("No se encontró token en las cookies");
-  return { Authorization: `Bearer ${token}` };
-};
-
-interface PaginatedResponse<T> {
-  data: T[];
-  current_page: number;
-  last_page: number;
-  total: number;
-}
-
 export interface Programa {
   id: number;
+  titulo: string;
   slug: string;
   tipo: ProgramType;
-  titulo: string;
   descripcion_corta: string;
   imagen_portada_url: string;
-  estado: "activo" | "inactivo" | "borrador";
+  estado: string;
   orden: number;
-  detalles_json?: any;
-  plan_estudio_json?: any;
-  horarios_json?: any;
-  config_visibilidad?: {
-    mostrar_en_hero?: boolean;
-    mostrar_admision?: boolean;
-    mostrar_plan_estudio?: boolean;
-    mostrar_horarios?: boolean;
-    mostrar_perfiles?: boolean;
-    mostrar_certificacion?: boolean;
-  };
+  detalles_json: ProgramaDetallesJson;
+  plan_estudio_json: ProgramaPlanEstudioJson;
+  horarios_json: HorarioModulo[];
+  config_visibilidad: ProgramaConfigVisibilidad;
+  created_at: string;
 }
 
-export function mapToProgramData(programa: Programa): ProgramData {
+export const mapToProgramData = (programa: Programa): ProgramData => {
   const d = programa.detalles_json || {};
+  const info = d.info_general || {};
+
   return {
+    id: programa.id,
     slug: programa.slug,
     tipo: programa.tipo,
     categoria: d.categoria || programa.tipo,
     titulo: programa.titulo,
+    descripcionCorta: programa.descripcion_corta,
+    imagenPortada: programa.imagen_portada_url ? getStorageUrl(programa.imagen_portada_url) : "",
+    
+    // Marketing & Hero
     preTitle: d.hero_pre_title || "",
     tituloHero: d.hero_titulo || programa.titulo,
+    subtitleHero: d.hero_subtitle || "",
+    descripcionHero: d.hero_descripcion || "",
+    imagenHero: d.hero_imagen_url ? getStorageUrl(d.hero_imagen_url) : "",
+    
     contenidoPreTitle: d.contenido_pre_title || "",
     contenidoTitulo: d.contenido_titulo || programa.titulo,
-    descripcionCorta: programa.descripcion_corta || "",
-    imagenPortada: programa.imagen_portada_url ? getStorageUrl(programa.imagen_portada_url) : "",
-    imagenHero: d.hero_imagen_url ? getStorageUrl(d.hero_imagen_url) : "",
+
     infoGeneral: {
-      duracion: d.info_general?.duracion || "",
-      modalidad: d.info_general?.modalidad || "",
-      certificacion: d.info_general?.certificacion || "",
-      totalCreditos: Number(d.info_general?.total_creditos) || 0,
+      duracion: info.duracion || "",
+      modalidad: info.modalidad || "",
+      certificacion: info.certificacion || "",
+      totalCreditos: Number(info.totalCreditos) || 0,
     },
+
     acercaDe: d.acerca_de || "",
-    objetivos: d.objetivos || [],
-    perfilEstudiante: d.perfil_estudiante || [],
-    perfilEgresado: d.perfil_egresado || [],
+    objetivos: Array.isArray(d.objetivos) ? d.objetivos : [],
+    perfilEstudiante: Array.isArray(d.perfil_estudiante) ? d.perfil_estudiante : [],
+    perfilEgresado: Array.isArray(d.perfil_egresado) ? d.perfil_egresado : [],
     planEstudios: programa.plan_estudio_json?.ciclos || [],
     horarios: Array.isArray(programa.horarios_json) ? programa.horarios_json : [],
+    
     certificacionDetalle: d.certificacion_detalle || "",
     admision: d.admision || undefined,
     configVisibilidad: programa.config_visibilidad || undefined,
@@ -79,69 +72,77 @@ export function mapToProgramData(programa: Programa): ProgramData {
 
 export const programasApi = {
   // Admin Methods
-  getAll: async (params?: Record<string, any>): Promise<PaginatedResponse<Programa>> => {
-    const response = await axios.get(`${API_URL}/admin/programas`, {
-      params,
-      headers: getAuthHeader(),
+  getAll: async (params: Record<string, unknown> = {}) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.get(`${API_URL}/admin/portal/programas`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params
     });
     return response.data;
   },
 
   getOne: async (id: string | number): Promise<Programa> => {
-    const response = await axios.get(`${API_URL}/admin/programas/${id}`, {
-      headers: getAuthHeader(),
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.get(`${API_URL}/admin/portal/programas/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   },
 
-  create: async (formData: FormData): Promise<{ message: string; data: Programa }> => {
-    const response = await axios.post(`${API_URL}/admin/programas`, formData, {
-      headers: {
-        ...getAuthHeader(),
-        "Content-Type": "multipart/form-data",
-      },
+  create: async (data: FormData) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.post(`${API_URL}/admin/portal/programas`, data, {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
     });
     return response.data;
   },
 
-  update: async (id: string | number, formData: FormData): Promise<{ message: string; data: Programa }> => {
-    formData.append("_method", "PUT"); // Laravel method spoofing
-    const response = await axios.post(`${API_URL}/admin/programas/${id}`, formData, {
-      headers: {
-        ...getAuthHeader(),
-        "Content-Type": "multipart/form-data",
-      },
+  update: async (id: string | number, data: FormData) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    // Laravel bug with PUT and FormData: use POST with _method=PUT
+    data.append('_method', 'PUT');
+    const response = await axios.post(`${API_URL}/admin/portal/programas/${id}`, data, {
+      headers: { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
     });
     return response.data;
   },
 
-  delete: async (id: number): Promise<void> => {
-    const response = await axios.delete(`${API_URL}/admin/programas/${id}`, {
-      headers: getAuthHeader(),
+  delete: async (id: number) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    await axios.delete(`${API_URL}/admin/portal/programas/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
+
+  toggleVisibility: async (id: number, field: string, value: boolean) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.patch(`${API_URL}/admin/portal/programas/${id}/toggle-visibility`, {
+      field,
+      value
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
   },
 
-  toggleVisibility: async (id: number, field: string, value: boolean): Promise<void> => {
-    const response = await axios.patch(
-      `${API_URL}/admin/programas/${id}/toggle-visibility`,
-      { field, value },
-      { headers: getAuthHeader() }
-    );
-    return response.data;
-  },
-
-  updateOrden: async (id: number, orden: number): Promise<void> => {
-    const response = await axios.patch(
-      `${API_URL}/admin/programas/${id}/orden`,
-      { orden },
-      { headers: getAuthHeader() }
-    );
+  updateOrden: async (id: number, orden: number) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.patch(`${API_URL}/admin/portal/programas/${id}/orden`, {
+      orden
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
     return response.data;
   },
 
   // Public Methods
-  getPublicAll: async (params?: { tipo?: ProgramType; en_hero?: boolean }): Promise<Programa[]> => {
+  getPublicAll: async (params: Record<string, unknown> = {}) => {
     const baseUrl = typeof window === 'undefined' 
       ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
       : API_URL;

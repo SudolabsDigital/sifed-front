@@ -1,4 +1,4 @@
-import { Asignatura, Ciclo } from "@/types/curriculum";
+import { Ciclo } from "@/types/curriculum";
 
 export interface ProgramaCurricular {
   id: string;

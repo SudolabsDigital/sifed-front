@@ -4,9 +4,7 @@ import {
   MonitorPlay, 
   BookOpen, 
   HelpCircle,
-  MapPin, 
   Mail, 
-  Phone,
   Facebook,
   Youtube,
   Linkedin

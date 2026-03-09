@@ -1,25 +1,11 @@
 "use client";
 
 import { Info } from "lucide-react";
-
-interface InfoGeneralFormData {
-  titulo: string;
-  tipo: string;
-  descripcion_corta: string;
-  detalles_json: {
-    categoria?: string;
-    info_general?: {
-      duracion?: string;
-      modalidad?: string;
-      total_creditos?: number;
-      certificacion?: string;
-    };
-  };
-}
+import { ProgramaAdminFormData } from "@/types/admin-programa";
 
 interface InfoGeneralTabProps {
-  formData: InfoGeneralFormData;
-  setFormData: (data: any) => void;
+  formData: ProgramaAdminFormData;
+  setFormData: (data: ProgramaAdminFormData) => void;
 }
 
 export function InfoGeneralTab({ formData, setFormData }: InfoGeneralTabProps) {
@@ -30,29 +16,27 @@ export function InfoGeneralTab({ formData, setFormData }: InfoGeneralTabProps) {
       {/* SECCIÓN: Información Básica */}
       <div className="bg-white p-6 rounded-2xl border border-border shadow-sm space-y-6">
         <h3 className="text-lg font-black text-brand-950 flex items-center gap-2">
-          <Info className="w-5 h-5 text-brand-600" /> Datos Principales
+          <Info className="w-5 h-5 text-brand-600" /> Información Principal
         </h3>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-brand-950">Título del Programa *</label>
+            <label className="text-sm font-bold text-brand-950">Título del Programa</label>
             <input
-              required
               type="text"
               value={formData.titulo}
               onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm"
-              placeholder="Ej: Maestría en Gestión Educativa"
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm font-medium"
+              placeholder="Ej: Maestría en Ciencias de la Educación"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-brand-950">Tipo de Programa *</label>
+            <label className="text-sm font-bold text-brand-950">Tipo de Programa</label>
             <select
-              required
               value={formData.tipo}
               onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
-              className="w-full px-4 py-3 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm appearance-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm font-bold"
             >
               <option value="maestria">Maestría</option>
               <option value="doctorado">Doctorado</option>
@@ -61,44 +45,54 @@ export function InfoGeneralTab({ formData, setFormData }: InfoGeneralTabProps) {
               <option value="taller">Taller</option>
             </select>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-brand-950">Descripción Corta *</label>
-          <textarea
-            required
-            value={formData.descripcion_corta}
-            onChange={(e) => setFormData({ ...formData, descripcion_corta: e.target.value })}
-            className="w-full px-4 py-3 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm resize-none"
-            placeholder="Breve descripción que aparecerá en las tarjetas de listado..."
-            rows={3}
-          />
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-bold text-brand-950">Descripción Corta (Para tarjetas)</label>
+            <textarea
+              value={formData.descripcion_corta}
+              onChange={(e) => setFormData({ ...formData, descripcion_corta: e.target.value })}
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm resize-none"
+              placeholder="Breve resumen que aparece en los listados generales..."
+              rows={2}
+            />
+          </div>
         </div>
       </div>
 
-      {/* SECCIÓN: Metadatos Específicos */}
+      {/* SECCIÓN: Atributos Académicos */}
       <div className="bg-white p-6 rounded-2xl border border-border shadow-sm space-y-6">
-        <h3 className="text-lg font-black text-brand-950">Metadatos Académicos</h3>
+        <h3 className="text-lg font-black text-brand-950 flex items-center gap-2">
+          Métrica y Modalidad
+        </h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-brand-950">Categoría (Badge)</label>
+            <label className="text-sm font-bold text-brand-950">Mención / Categoría</label>
             <input
               type="text"
               value={formData.detalles_json.categoria || ''}
-              onChange={(e) => setFormData({ ...formData, detalles_json: { ...formData.detalles_json, categoria: e.target.value } })}
+              onChange={(e) => setFormData({ 
+                ...formData, 
+                detalles_json: { ...formData.detalles_json, categoria: e.target.value } 
+              })}
               className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm"
-              placeholder="Ej: Gestión"
+              placeholder="Ej: Gestión Educativa"
             />
           </div>
-          
+
           <div className="space-y-2">
-            <label className="text-sm font-bold text-brand-950">Duración (Auto-calculado)</label>
+            <label className="text-sm font-bold text-brand-950">Duración</label>
             <input
               type="text"
-              readOnly
               value={formData.detalles_json.info_general?.duracion || ''}
-              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/50 cursor-not-allowed focus:outline-none transition-all text-sm font-medium text-muted-foreground"
+              onChange={(e) => setFormData({ 
+                ...formData, 
+                detalles_json: { 
+                  ...formData.detalles_json, 
+                  info_general: { ...formData.detalles_json.info_general, duracion: e.target.value } 
+                } 
+              })}
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm"
               placeholder="Ej: 3 Semestres"
             />
           </div>
@@ -116,37 +110,26 @@ export function InfoGeneralTab({ formData, setFormData }: InfoGeneralTabProps) {
                 } 
               })}
               className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm"
-              placeholder="Ej: Presencial / Virtual"
+              placeholder="Ej: Presencial / Híbrida"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-brand-950">Total Créditos (Auto-calculado)</label>
+            <label className="text-sm font-bold text-brand-950">Grado / Certificación</label>
             <input
-              type="number"
-              readOnly
-              value={formData.detalles_json.info_general?.total_creditos || ''}
-              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/50 cursor-not-allowed focus:outline-none transition-all text-sm font-medium text-muted-foreground"
-              placeholder="Ej: 49"
+              type="text"
+              value={formData.detalles_json.info_general?.certificacion || ''}
+              onChange={(e) => setFormData({ 
+                ...formData, 
+                detalles_json: { 
+                  ...formData.detalles_json, 
+                  info_general: { ...formData.detalles_json.info_general, certificacion: e.target.value } 
+                } 
+              })}
+              className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm"
+              placeholder="Ej: Magíster en Educación"
             />
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-brand-950">Grado / Certificación Otorgada</label>
-          <input
-            type="text"
-            value={formData.detalles_json.info_general?.certificacion || ''}
-            onChange={(e) => setFormData({ 
-              ...formData, 
-              detalles_json: { 
-                ...formData.detalles_json, 
-                info_general: { ...formData.detalles_json.info_general, certificacion: e.target.value } 
-              } 
-            })}
-            className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all text-sm"
-            placeholder="Ej: Magíster en Educación"
-          />
         </div>
       </div>
 

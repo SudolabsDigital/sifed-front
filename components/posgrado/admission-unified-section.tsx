@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, FileText, MessageCircle, Info, Printer, Maximize2 } from "lucide-react";
+import { MessageCircle, Info, Printer, Maximize2 } from "lucide-react";
 import { AdmissionData } from "@/data/admission-config";
 
 interface AdmissionUnifiedSectionProps {

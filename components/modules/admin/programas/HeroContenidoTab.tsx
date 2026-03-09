@@ -1,18 +1,11 @@
 "use client";
 
 import { LayoutTemplate, Image as ImageIcon, Trash2 } from "lucide-react";
-
-interface HeroContenidoFormData {
-  titulo: string;
-  detalles_json: {
-    contenido_pre_title?: string;
-    contenido_titulo?: string;
-  };
-}
+import { ProgramaAdminFormData } from "@/types/admin-programa";
 
 interface HeroContenidoTabProps {
-  formData: HeroContenidoFormData;
-  setFormData: (data: any) => void;
+  formData: ProgramaAdminFormData;
+  setFormData: (data: ProgramaAdminFormData) => void;
   fotoPortadaFile: File | null;
   setFotoPortadaFile: (file: File | null) => void;
   fotoPortadaPreview: string | null;
@@ -22,7 +15,6 @@ interface HeroContenidoTabProps {
 export function HeroContenidoTab({ 
   formData, 
   setFormData,
-  fotoPortadaFile,
   setFotoPortadaFile,
   fotoPortadaPreview,
   setFotoPortadaPreview
@@ -49,7 +41,7 @@ export function HeroContenidoTab({
         <h3 className="text-lg font-black text-brand-950 mb-2">Cabecera del Programa (Contenido)</h3>
         <p className="text-sm text-muted-foreground">
           Configura los textos y la imagen que aparecerán en el gran bloque oscuro al inicio de la página individual de este programa. <br className="mb-2" />
-          <strong>Nota:</strong> Esta imagen panorámica también se reutilizará automáticamente como la "miniatura" o tarjeta principal del programa en los listados generales.
+          <strong>Nota:</strong> Esta imagen panorámica también se reutilizará automáticamente como la &quot;miniatura&quot; o tarjeta principal del programa en los listados generales.
         </p>
       </div>
 

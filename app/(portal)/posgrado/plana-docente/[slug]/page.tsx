@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${docente.nombre_completo} | Plana Docente | SIFED`,
       description: docente.biografia?.substring(0, 160) || `Perfil de ${docente.nombre_completo}, docente en la Universidad Nacional del Centro del Perú.`,
     };
-  } catch (error) {
+  } catch {
     return {
       title: "Docente no encontrado | SIFED",
     };
@@ -33,7 +33,7 @@ export default async function DocenteProfilePage({ params }: PageProps) {
   
   try {
     docente = await docentesApi.getPortalSlug(resolvedParams.slug);
-  } catch (error) {
+  } catch {
     notFound();
   }
 

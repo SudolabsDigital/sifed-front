@@ -1,130 +1,90 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { ConfigVisibilidad } from "@/types/programa";
+import { Settings, Eye, EyeOff } from "lucide-react";
+import { ProgramaConfigVisibilidad } from "@/types/admin-programa";
 
 interface ConfigTabProps {
-  configData: ConfigVisibilidad;
-  setConfigData: (data: ConfigVisibilidad) => void;
+  configData: ProgramaConfigVisibilidad;
+  setConfigData: (data: ProgramaConfigVisibilidad) => void;
 }
 
 export function ConfigTab({ configData, setConfigData }: ConfigTabProps) {
-  
-  const toggleSetting = (key: keyof ConfigVisibilidad) => {
+
+  const toggleField = (field: keyof ProgramaConfigVisibilidad) => {
     setConfigData({
       ...configData,
-      [key]: !configData[key]
+      [field]: !configData[field]
     });
   };
 
-  const configOptions: {
-    id: keyof ConfigVisibilidad;
-    title: string;
-    desc: string;
-    activeColor: string;
-    badge?: string;
-  }[] = [
-    {
-      id: "mostrar_en_hero",
-      title: "Hero del Home (Página Principal)",
-      desc: "Muestra este programa en el gran carrusel de la página principal. Requiere haber configurado la pestaña 'Marketing'.",
-      activeColor: "bg-purple-600",
-      badge: "[Sección Global]"
+  const configItems = [
+    { 
+      id: 'mostrar_en_hero', 
+      label: 'Hero del Home', 
+      desc: 'Si se activa, el programa aparecerá en el carrusel de la página principal.' 
     },
-    {
-      id: "mostrar_certificacion",
-      title: "Banner de Certificación",
-      desc: "Muestra el bloque destacado de certificación debajo de la descripción general del programa.",
-      activeColor: "bg-indigo-600",
-      badge: "[Pestaña Información]"
+    { 
+      id: 'mostrar_admision', 
+      label: 'Sección de Inversión', 
+      desc: 'Muestra u oculta la pestaña de costos y requisitos de admisión.' 
     },
-    {
-      id: "mostrar_perfiles",
-      title: "Perfiles Académicos",
-      desc: "Muestra la sección del perfil del ingresante y perfil del egresado.",
-      activeColor: "bg-slate-700",
-      badge: "[Pestaña 1]"
+    { 
+      id: 'mostrar_plan_estudio', 
+      label: 'Malla Curricular', 
+      desc: 'Muestra u oculta la pestaña del plan de estudios detallado.' 
     },
-    {
-      id: "mostrar_plan_estudio",
-      title: "Malla Curricular",
-      desc: "Muestra la tabla del plan de estudios con los ciclos y asignaturas.",
-      activeColor: "bg-emerald-600",
-      badge: "[Pestaña 2]"
+    { 
+      id: 'mostrar_horarios', 
+      label: 'Pestaña de Horarios', 
+      desc: 'Habilita la visualización de los cronogramas de clases.' 
     },
-    {
-      id: "mostrar_horarios",
-      title: "Horarios",
-      desc: "Muestra la pestaña de horarios con los módulos que hayas configurado.",
-      activeColor: "bg-amber-600",
-      badge: "[Pestaña 3]"
+    { 
+      id: 'mostrar_perfiles', 
+      label: 'Perfiles y Objetivos', 
+      desc: 'Muestra los perfiles del ingresante, egresado y objetivos del programa.' 
     },
-    {
-      id: "mostrar_admision",
-      title: "Admisión e Inversión",
-      desc: "Muestra u oculta la sección de costos, inversión y requisitos en el portal público.",
-      activeColor: "bg-blue-600",
-      badge: "[Pestaña 4]"
-    }
+    { 
+      id: 'mostrar_certificacion', 
+      label: 'Certificación Final', 
+      desc: 'Muestra el detalle del grado o diploma que se otorga al finalizar.' 
+    },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
       
-      <div className="bg-white p-8 rounded-3xl border border-border shadow-sm">
-        <div className="mb-8">
-          <h3 className="text-xl font-black text-brand-950 mb-2">Control de Visibilidad Global</h3>
-          <p className="text-muted-foreground text-sm max-w-2xl">
-            Enciende o apaga pestañas completas del portal público. Ideal para ocultar módulos cuando no hay convocatorias activas o si el programa aún está en estructuración, sin necesidad de borrar los datos.
-          </p>
-        </div>
-
-        <div className="grid gap-4">
-          {configOptions.map((opt) => {
-            const isActive = configData[opt.id] ?? true; // Por defecto true si no está definido
-            
+      <div className="bg-white p-6 rounded-2xl border border-border shadow-sm space-y-6">
+        <h3 className="text-lg font-black text-brand-950 flex items-center gap-2 uppercase tracking-tight">
+          <Settings className="w-5 h-5 text-brand-600" /> Configuración de Visibilidad
+        </h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {configItems.map((item) => {
+            const isVisible = !!configData[item.id as keyof ProgramaConfigVisibilidad];
             return (
               <div 
-                key={opt.id}
-                onClick={() => toggleSetting(opt.id)}
-                className={cn(
-                  "flex items-center justify-between p-5 rounded-2xl border-2 transition-all cursor-pointer group",
-                  isActive ? "border-brand-200 bg-brand-50/30" : "border-border bg-white hover:border-brand-100 opacity-70"
-                )}
+                key={item.id}
+                className={`p-5 rounded-2xl border transition-all flex items-start gap-4 cursor-pointer select-none ${
+                  isVisible ? 'bg-brand-50/50 border-brand-200' : 'bg-muted/20 border-border opacity-60'
+                }`}
+                onClick={() => toggleField(item.id as keyof ProgramaConfigVisibilidad)}
               >
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <span className={cn("font-bold text-base transition-colors", isActive ? "text-brand-950" : "text-muted-foreground")}>{opt.title}</span>
-                    {opt.badge && (
-                      <span className={cn(
-                        "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                        isActive ? "bg-brand-100 text-brand-700" : "bg-muted text-muted-foreground"
-                      )}>
-                        {opt.badge}
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-sm text-muted-foreground mt-1">{opt.desc}</span>
+                <div className={`mt-1 p-2 rounded-lg ${isVisible ? 'bg-brand-600 text-white' : 'bg-muted text-muted-foreground'}`}>
+                  {isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                 </div>
-
-                <div className="ml-4 shrink-0">
-                  <div className={cn(
-                    "relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-300 ease-in-out",
-                    isActive ? opt.activeColor : "bg-muted-foreground/30"
-                  )}>
-                    <span
-                      className={cn(
-                        "inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition duration-300 ease-in-out",
-                        isActive ? "translate-x-6" : "translate-x-1"
-                      )}
-                    />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-black text-brand-950 uppercase">{item.label}</span>
+                    <div className={`w-10 h-5 rounded-full relative transition-colors ${isVisible ? 'bg-brand-600' : 'bg-muted-foreground/30'}`}>
+                      <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${isVisible ? 'left-6' : 'left-1'}`} />
+                    </div>
                   </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             );
           })}
         </div>
-
       </div>
 
     </div>

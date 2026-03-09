@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, GraduationCap, Award, Search } from "lucide-react";
+import { ArrowRight, GraduationCap, Award, Search, BookOpen, Zap } from "lucide-react";
 
 export default function PosgradoCTA() {
   return (
@@ -29,7 +29,7 @@ export default function PosgradoCTA() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
           
           {/* TARJETA MAESTRÍAS */}
           <motion.div
@@ -42,12 +42,12 @@ export default function PosgradoCTA() {
             <Link href="/posgrado/maestrias" className="block h-full">
               <div className="relative h-full bg-brand-50 rounded-[2rem] p-8 lg:p-10 border border-brand-100 shadow-xl shadow-brand-950/5 transition-all duration-500 hover:shadow-2xl hover:shadow-brand-600/10 hover:-translate-y-1 overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-brand-950 group-hover:scale-110 transition-transform duration-700">
-                  <GraduationCap size={180} strokeWidth={1} />
+                  <BookOpen size={180} strokeWidth={1} />
                 </div>
                 
                 <div className="relative z-10 flex flex-col h-full">
                   <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500">
-                    <GraduationCap className="h-6 w-6" />
+                    <BookOpen className="h-6 w-6" />
                   </div>
                   
                   <h3 className="text-3xl font-black text-brand-950 mb-3 tracking-tight">Maestrías</h3>
@@ -74,12 +74,12 @@ export default function PosgradoCTA() {
             <Link href="/posgrado/doctorados" className="block h-full">
               <div className="relative h-full bg-brand-950 rounded-[2rem] p-8 lg:p-10 border border-white/5 shadow-2xl transition-all duration-500 hover:shadow-uncp-gold/10 hover:-translate-y-1 overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity text-white group-hover:scale-110 transition-transform duration-700">
-                  <Award size={180} strokeWidth={1} />
+                  <GraduationCap size={180} strokeWidth={1} />
                 </div>
                 
                 <div className="relative z-10 flex flex-col h-full">
                   <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-uncp-gold group-hover:text-brand-950 transition-all duration-500">
-                    <Award className="h-6 w-6 text-uncp-gold group-hover:text-brand-950" />
+                    <GraduationCap className="h-6 w-6 text-uncp-gold group-hover:text-brand-950" />
                   </div>
                   
                   <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Doctorados</h3>
@@ -89,6 +89,70 @@ export default function PosgradoCTA() {
                   
                   <div className="mt-auto flex items-center gap-3 text-uncp-gold font-black uppercase tracking-widest text-[10px] group-hover:gap-5 transition-all">
                     Ver Grados Académicos <ArrowRight size={16} />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* TARJETA DIPLOMADOS */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="group"
+          >
+            <Link href="/posgrado/diplomados" className="block h-full">
+              <div className="relative h-full bg-white rounded-[2rem] p-8 lg:p-10 border border-border shadow-xl shadow-brand-950/5 transition-all duration-500 hover:border-brand-200 hover:shadow-2xl hover:shadow-brand-600/5 hover:-translate-y-1 overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-brand-950 group-hover:scale-110 transition-transform duration-700">
+                  <Award size={180} strokeWidth={1} />
+                </div>
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500">
+                    <Award className="h-6 w-6 text-brand-600 group-hover:text-white" />
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-brand-950 mb-3 tracking-tight">Diplomados</h3>
+                  <p className="text-muted-foreground text-sm lg:text-base leading-relaxed mb-8 font-medium">
+                    Programas de corta duración enfocados en la actualización profesional y desarrollo de habilidades prácticas.
+                  </p>
+                  
+                  <div className="mt-auto flex items-center gap-3 text-brand-600 font-black uppercase tracking-widest text-[10px] group-hover:gap-5 transition-all">
+                    Explorar Diplomados <ArrowRight size={16} />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* TARJETA FORMACIÓN CONTINUA */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="group"
+          >
+            <Link href="/posgrado/formacion-continua" className="block h-full">
+              <div className="relative h-full bg-white rounded-[2rem] p-8 lg:p-10 border border-border shadow-xl shadow-brand-950/5 transition-all duration-500 hover:border-brand-200 hover:shadow-2xl hover:shadow-brand-600/5 hover:-translate-y-1 overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity text-brand-950 group-hover:scale-110 transition-transform duration-700">
+                  <Zap size={180} strokeWidth={1} />
+                </div>
+                
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="w-12 h-12 rounded-xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500">
+                    <Zap className="h-6 w-6 text-brand-600 group-hover:text-white" />
+                  </div>
+                  
+                  <h3 className="text-3xl font-black text-brand-950 mb-3 tracking-tight">Formación Continua</h3>
+                  <p className="text-muted-foreground text-sm lg:text-base leading-relaxed mb-8 font-medium">
+                    Cursos y talleres dinámicos orientados a potenciar competencias específicas y metodologías modernas.
+                  </p>
+                  
+                  <div className="mt-auto flex items-center gap-3 text-brand-600 font-black uppercase tracking-widest text-[10px] group-hover:gap-5 transition-all">
+                    Ver Cursos y Talleres <ArrowRight size={16} />
                   </div>
                 </div>
               </div>

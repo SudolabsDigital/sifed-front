@@ -2,25 +2,6 @@ import { Ciclo } from "./curriculum";
 
 export type ProgramType = "maestria" | "doctorado" | "diplomado" | "curso" | "taller";
 
-export interface ProgramInfoGeneral {
-  duracion: string;
-  modalidad: string;
-  certificacion: string;
-  totalCreditos: number;
-}
-
-export interface ClaseEspecifica {
-  asignatura: string;
-  dia_hora: string;
-  docente: string;
-}
-
-export interface HorarioModulo {
-  titulo_modulo: string;
-  descripcion_general: string;
-  clases_especificas?: ClaseEspecifica[];
-}
-
 export interface ProgramAdmision {
   costo_inscripcion?: string;
   matricula?: string;
@@ -38,25 +19,51 @@ export interface ConfigVisibilidad {
   mostrar_certificacion?: boolean;
 }
 
+export interface HorarioClase {
+  asignatura: string;
+  dia_hora: string;
+  docente: string;
+}
+
+export interface HorarioModulo {
+  titulo_modulo: string;
+  descripcion_general: string;
+  clases_especificas: HorarioClase[];
+}
+
 export interface ProgramData {
+  id: number;
   slug: string;
   tipo: ProgramType;
   categoria?: string;
   titulo: string;
-  preTitle?: string;
-  tituloHero: string;
-  contenidoPreTitle?: string;
-  contenidoTitulo?: string;
   descripcionCorta: string;
   imagenPortada: string;
-  imagenHero: string;
-  infoGeneral: ProgramInfoGeneral;
+  
+  // Marketing & Hero
+  preTitle?: string;
+  tituloHero: string;
+  subtitleHero?: string;
+  descripcionHero?: string;
+  imagenHero?: string;
+  
+  contenidoPreTitle?: string;
+  contenidoTitulo?: string;
+
+  infoGeneral: {
+    duracion: string;
+    modalidad: string;
+    certificacion: string;
+    totalCreditos: number;
+  };
+
   acercaDe: string;
   objetivos: string[];
   perfilEstudiante: string[];
   perfilEgresado: string[];
   planEstudios: Ciclo[];
   horarios: HorarioModulo[];
+  
   certificacionDetalle: string;
   admision?: ProgramAdmision;
   configVisibilidad?: ConfigVisibilidad;

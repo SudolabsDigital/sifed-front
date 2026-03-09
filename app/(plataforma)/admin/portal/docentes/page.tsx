@@ -38,7 +38,7 @@ interface Docente {
   };
 }
 
-const fetcher = async ([url, params]: [string, any]) => {
+const fetcher = async ([, params]: [string, Record<string, unknown>]) => {
   return await docentesApi.getAll(params);
 };
 

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import PageHero from "@/components/ui/page-hero";
 import AdmissionUnifiedSection from "@/components/posgrado/admission-unified-section";
@@ -16,17 +15,10 @@ import {
   Calendar,
   CheckCircle2,
   ChevronDown,
-  Clock3,
-  CreditCard,
   Download,
-  FileText,
-  GraduationCap,
-  Landmark,
   Lightbulb,
-  ListChecks,
   MessageCircle,
   Presentation,
-  Sparkles,
   Target,
   TrendingUp,
   Users,
@@ -230,12 +222,6 @@ const menciones = [
   },
 ];
 
-const stats = [
-  { numero: "4", etiqueta: "Menciones", sub: "especializaciones" },
-  { numero: "49", etiqueta: "Créditos", sub: "académicos totales" },
-  { numero: "3", etiqueta: "Semestres", sub: "año y medio" },
-];
-
 const propuestaValor = [
   {
     titulo: "Formación para liderar",
@@ -256,45 +242,6 @@ const propuestaValor = [
     titulo: "Enfoque estratégico",
     descripcion: "Integra pensamiento crítico, creatividad y análisis de datos para potenciar tu perfil.",
     icono: Lightbulb,
-  },
-];
-
-const pasosPostulacion = [
-  {
-    paso: "01",
-    titulo: "Realiza el pago de inscripción",
-    detalle: "Caja Huancayo o Banco de la Nación. Derecho de inscripción: S/ 211.00 (código 1671, consignando DNI).",
-    icono: CreditCard,
-  },
-  {
-    paso: "02",
-    titulo: "Ubica usuario y clave en tu voucher",
-    detalle: "Con esos datos podrás continuar la inscripción en línea. Conserva tu comprobante de pago.",
-    icono: FileText,
-  },
-  {
-    paso: "03",
-    titulo: "Desarrolla tu perfil de investigación",
-    detalle: "Descarga el formato oficial y prepara tu perfil según los lineamientos solicitados.",
-    icono: Download,
-  },
-  {
-    paso: "04",
-    titulo: "Inscríbete en la plataforma de admisión",
-    detalle: "Completa tu inscripción en línea luego de 24 horas de realizado el pago.",
-    icono: GraduationCap,
-  },
-  {
-    paso: "05",
-    titulo: "Descarga tu constancia de inscripción",
-    detalle: "Al finalizar el registro podrás guardar la constancia para tu expediente.",
-    icono: BadgeCheck,
-  },
-  {
-    paso: "06",
-    titulo: "Envía tu expediente en un solo PDF",
-    detalle: "Incluye DNI, bachiller, perfil, CV descriptivo, voucher y constancia según el orden establecido.",
-    icono: ListChecks,
   },
 ];
 

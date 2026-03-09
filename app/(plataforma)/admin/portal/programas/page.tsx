@@ -9,7 +9,6 @@ import {
   Filter, 
   Edit2, 
   Trash2, 
-  BookOpen,
   Image as ImageIcon,
   ChevronLeft,
   ChevronRight,
@@ -23,10 +22,9 @@ import { useToast } from "@/hooks/use-toast";
 import { handleApiError } from "@/lib/error-handler";
 import Loader from "@/components/ui/loader";
 
-const fetcher = async ([url, params]: [string, any]) => {
+const fetcher = async ([, params]: [string, Record<string, unknown>]) => {
   return await programasApi.getAll(params);
 };
-
 export default function ProgramasAdminPage() {
   const [search, setSearch] = useState("");
   const [tipo, setTipo] = useState("");
