@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -15,13 +15,13 @@ export default function GalleryGrid({ folder, images, title, description }: Prop
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const open = (index: number) => setActiveIndex(index);
-  const close = () => setActiveIndex(null);
+  const close = useCallback(() => setActiveIndex(null), []);
 
-  const next = () =>
-    setActiveIndex((prev) => (prev! + 1) % images.length);
+  const next = useCallback(() =>
+    setActiveIndex((prev) => (prev! + 1) % images.length), [images.length]);
 
-  const prev = () =>
-    setActiveIndex((prev) => (prev! - 1 + images.length) % images.length);
+  const prev = useCallback(() =>
+    setActiveIndex((prev) => (prev! - 1 + images.length) % images.length), [images.length]);
 
   // 👉 Permite navegar con teclado
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function GalleryGrid({ folder, images, title, description }: Prop
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [activeIndex]);
+  }, [activeIndex, close, next, prev]);
 
   return (
     <section className="py-24 bg-gradient-to-b from-neutral-50 to-white">

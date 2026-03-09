@@ -10,7 +10,7 @@ import { docentesApi } from "@/lib/api/docentes";
 import { Docente } from "@/types/docente";
 
 // Función "fetcher" que SWR usará para obtener los datos
-const fetcher = async ([url, params]: [string, any]) => {
+const fetcher = async ([, params]: [string, Record<string, unknown>]) => {
   return await docentesApi.getPortalList(params);
 };
 

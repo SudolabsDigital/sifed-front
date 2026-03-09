@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -43,23 +43,23 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
     return initialMenus;
   });
 
-  // Sincronizar menús si cambia la ruta
-  useEffect(() => {
-    const newMenus: Record<string, boolean> = {};
+  // Sincronización en tiempo de renderizado (Recomendado para props -> state sync)
+  const [prevPath, setPrevPath] = useState(pathname);
+  if (pathname !== prevPath) {
+    setPrevPath(pathname);
+    const updates: Record<string, boolean> = {};
     let changed = false;
-    
     items.forEach(item => {
       const shouldOpen = item.children?.some(child => pathname.startsWith(child.href));
       if (shouldOpen && !openMenus[item.title]) {
-        newMenus[item.title] = true;
+        updates[item.title] = true;
         changed = true;
       }
     });
-
     if (changed) {
-      setTimeout(() => setOpenMenus(prev => ({ ...prev, ...newMenus })), 0);
+      setOpenMenus(prev => ({ ...prev, ...updates }));
     }
-  }, [pathname, items]);
+  }
 
   const toggleMenu = (title: string) => {
     setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));

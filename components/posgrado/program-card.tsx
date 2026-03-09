@@ -4,9 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, GraduationCap, ClipboardList, BookOpen, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, Clock, GraduationCap, Image as ImageIcon } from "lucide-react";
 import { ProgramData } from "@/types/programa";
-import { cn, getStorageUrl } from "@/lib/utils";
+import { getStorageUrl } from "@/lib/utils";
 
 interface ProgramCardProps {
   program: ProgramData;
@@ -22,7 +22,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
                    program.tipo === "taller" ? "talleres" : "cursos";
                    
   const detailHref = `/posgrado/${basePath}/${program.slug}`;
-  const inscripcionHref = `${detailHref}#admision`;
 
   return (
     <motion.div

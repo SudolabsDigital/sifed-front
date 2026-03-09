@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus, Trash2, ArrowUp, ArrowDown, CheckSquare, Square } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Ciclo, Asignatura } from "@/types/curriculum";
 
 interface PlanEstudioData {

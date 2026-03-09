@@ -1,17 +1,16 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ProgramData } from "@/types/programa";
+import { ProgramData, HorarioModulo, HorarioClase } from "@/types/programa";
 import ProgramHero from "./program-hero";
 import CurriculumTable from "./curriculum-table";
 import AdmissionUnifiedSection from "./admission-unified-section";
 import { ADMISSION_CONFIG } from "@/data/admission-config";
-import { 
-  Target, 
-  Users, 
-  UserCheck, 
-  Award, 
-  BookOpen, 
+import {
+  Target,
+  Users,
+  Award,
+  BookOpen,
   CheckCircle2,
   ArrowRight,
   Wallet,
@@ -20,8 +19,7 @@ import {
   CreditCard,
   FileCheck
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState } from "react";import { cn } from "@/lib/utils";
 
 interface ProgramDetailLayoutProps {
   program: ProgramData;
@@ -50,13 +48,6 @@ export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProp
   ];
 
   const tabs = allTabs.filter(t => t.show);
-
-  // Solución al antipatrón: Usar useEffect para actualizar el estado derivado sin romper el ciclo de renderizado
-  useEffect(() => {
-    if (!tabs.find(t => t.id === activeTab)) {
-      setActiveTab("info");
-    }
-  }, [tabs, activeTab]);
 
   return (
     <main className="flex-1 w-full bg-white">
@@ -273,7 +264,7 @@ export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProp
                 </div>
               ) : (
                 <div className="grid gap-8 max-w-4xl mx-auto">
-                  {program.horarios.map((modulo, i) => (
+                  {program.horarios.map((modulo: HorarioModulo, i: number) => (
                     <div key={i} className="bg-white border border-border shadow-sm rounded-[2rem] overflow-hidden">
                       <div className="p-8 bg-brand-50/50 border-b border-border">
                         <div className="flex items-center gap-4 mb-3">
@@ -297,7 +288,7 @@ export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProp
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-border">
-                                {modulo.clases_especificas.map((clase, idx) => (
+                                {modulo.clases_especificas.map((clase: HorarioClase, idx: number) => (
                                   <tr key={idx} className="hover:bg-neutral-50 transition-colors">
                                     <td className="py-4 text-sm font-bold text-brand-900 pr-4">{clase.asignatura}</td>
                                     <td className="py-4 text-sm text-muted-foreground pr-4 whitespace-nowrap">{clase.dia_hora}</td>

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import PageHero from "@/components/ui/page-hero";
 import AdmissionUnifiedSection from "@/components/posgrado/admission-unified-section";
@@ -8,23 +7,14 @@ import { ADMISSION_CONFIG } from "@/data/admission-config";
 import {
   ArrowRight,
   Award,
-  BadgeCheck,
   BookOpen,
   Brain,
   Calendar,
-  CheckCircle2,
   ChevronDown,
-  Clock3,
-  CreditCard,
   Download,
-  FileText,
-  GraduationCap,
-  Landmark,
   Lightbulb,
-  ListChecks,
   MessageCircle,
   Microscope,
-  Sparkles,
   Target,
   TrendingUp,
   Users,
@@ -101,12 +91,6 @@ const ciclosDoctorado: Ciclo[] = [
   },
 ];
 
-const stats = [
-  { numero: "6", etiqueta: "Ciclos", sub: "semestres académicos" },
-  { numero: "72", etiqueta: "Créditos", sub: "académicos totales" },
-  { numero: "3", etiqueta: "Años", sub: "de formación" },
-];
-
 const propuestaValor = [
   {
     titulo: "Formación investigadora",
@@ -127,45 +111,6 @@ const propuestaValor = [
     titulo: "Liderazgo académico",
     descripcion: "Dirige proyectos educativos y equipos de investigación a nivel nacional e internacional.",
     icono: Lightbulb,
-  },
-];
-
-const pasosPostulacion = [
-  {
-    paso: "01",
-    titulo: "Realiza el pago de inscripción",
-    detalle: "Pago por derecho de inscripción consignando el N° de DNI del postulante al doctorado. S/. 231.00 al código 1672.",
-    icono: CreditCard,
-  },
-  {
-    paso: "02",
-    titulo: "Ubica usuario y clave en tu voucher",
-    detalle: "Identifique en su voucher de pago su USUARIO y CLAVE para continuar con la inscripción en línea.",
-    icono: FileText,
-  },
-  {
-    paso: "03",
-    titulo: "Desarrolla tu perfil de investigación",
-    detalle: "Descarga el formato oficial del perfil de proyecto de investigación, desarrolla el perfil según lo que se solicita y guárdalo en formato Word.",
-    icono: Download,
-  },
-  {
-    paso: "04",
-    titulo: "Inscríbete en la plataforma de admisión",
-    detalle: "Luego que hayan transcurrido 24 horas desde que realizó el pago, inscríbase en línea en la plataforma oficial.",
-    icono: GraduationCap,
-  },
-  {
-    paso: "05",
-    titulo: "Descarga tu constancia de inscripción",
-    detalle: "Cuando haya culminado su inscripción le saldrá una opción para descargar/guardar la constancia. Active dicha opción y guarde el documento.",
-    icono: BadgeCheck,
-  },
-  {
-    paso: "06",
-    titulo: "Envía tu expediente en un solo PDF",
-    detalle: "Incluye: DNI, diploma de bachiller, perfil del proyecto, CV descriptivo (máx. 1 página), voucher de pago y constancia de inscripción, en ese orden.",
-    icono: ListChecks,
   },
 ];
 

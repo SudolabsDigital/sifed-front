@@ -17,6 +17,8 @@ import { HorariosTab } from "@/components/modules/admin/programas/HorariosTab";
 import { AdmisionTab } from "@/components/modules/admin/programas/AdmisionTab";
 import { ConfigTab } from "@/components/modules/admin/programas/ConfigTab";
 import { PerfilesTab } from "@/components/modules/admin/programas/PerfilesTab";
+import { ProgramaAdminFormData } from "@/types/admin-programa";
+import { Ciclo } from "@/types/curriculum";
 
 export default function NuevoProgramaPage() {
   const router = useRouter();
@@ -25,7 +27,7 @@ export default function NuevoProgramaPage() {
   const [activeTab, setActiveTab] = useState("info");
 
   // Estado unificado
-  const defaultFormData = {
+  const defaultFormData: ProgramaAdminFormData = {
     titulo: "",
     tipo: "maestria",
     descripcion_corta: "",
@@ -41,14 +43,14 @@ export default function NuevoProgramaPage() {
       contenido_titulo: "",
       info_general: { duracion: "", modalidad: "", certificacion: "", totalCreditos: 0 },
       acerca_de: "",
-      objetivos: [] as string[],
-      perfil_estudiante: [] as string[],
-      perfil_egresado: [] as string[],
+      objetivos: [],
+      perfil_estudiante: [],
+      perfil_egresado: [],
       certificacion_detalle: "",
-      admision: { costo_inscripcion: "", matricula: "", pension: "", costo_adicional: "", requisitos: [] as string[] }
+      admision: { costo_inscripcion: "", matricula: "", pension: "", costo_adicional: "", requisitos: [] }
     },
-    plan_estudio_json: { nota_general: "", ciclos: [] as any[] },
-    horarios_json: [] as any[],
+    plan_estudio_json: { nota_general: "", ciclos: [] },
+    horarios_json: [],
     config_visibilidad: {
       mostrar_en_hero: false,
       mostrar_admision: true,
@@ -59,7 +61,7 @@ export default function NuevoProgramaPage() {
     }
   };
 
-  const [formData, setFormData] = useState(defaultFormData);
+  const [formData, setFormData] = useState<ProgramaAdminFormData>(defaultFormData);
   const [initialDataHash] = useState<string>(JSON.stringify(defaultFormData));
   const [isDirty, setIsDirty] = useState(false);
 
@@ -71,14 +73,14 @@ export default function NuevoProgramaPage() {
 
   useEffect(() => {
     const ciclos = formData.plan_estudio_json?.ciclos || [];
-    const total = ciclos.reduce((sum: number, c: any) => sum + (Number(c.totalCreditos) || 0), 0);
+    const total = ciclos.reduce((sum: number, c: Ciclo) => sum + (Number(c.totalCreditos) || 0), 0);
     const duracion = `${ciclos.length} Semestre${ciclos.length !== 1 ? 's' : ''}`;
-    
+
     if (
       formData.detalles_json.info_general?.totalCreditos !== total ||
       formData.detalles_json.info_general?.duracion !== duracion
     ) {
-      setFormData((prev) => ({
+      setFormData((prev: ProgramaAdminFormData) => ({
         ...prev,
         detalles_json: {
           ...prev.detalles_json,
@@ -90,8 +92,7 @@ export default function NuevoProgramaPage() {
         }
       }));
     }
-  }, [formData.plan_estudio_json]);
-
+  }, [formData.plan_estudio_json?.ciclos, formData.detalles_json.info_general?.totalCreditos, formData.detalles_json.info_general?.duracion]);
   // Detector de cambios
   useEffect(() => {
     const currentDataHash = JSON.stringify(formData);
@@ -178,7 +179,7 @@ export default function NuevoProgramaPage() {
         <div className="flex items-center gap-3">
           <select
             value={formData.estado}
-            onChange={(e) => setFormData({ ...formData, estado: e.target.value as any })}
+            onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
             className="px-4 py-2.5 rounded-xl border border-border bg-muted/30 focus:outline-none focus:ring-2 focus:ring-brand-500 font-bold text-sm"
           >
             <option value="borrador">Borrador</option>
@@ -221,21 +222,21 @@ export default function NuevoProgramaPage() {
       <div className="min-h-[500px]">
         {activeTab === "info" && (
           <InfoGeneralTab 
-            formData={formData as any} setFormData={setFormData}
+            formData={formData} setFormData={setFormData}
           />
         )}
 
         {activeTab === "marketing" && (
           <MarketingTab 
-            formData={formData as any} setFormData={setFormData}
-            fotoHeroFile={fotoHeroFile} setFotoHeroFile={setFotoHeroFile}
+            formData={formData} setFormData={setFormData}
+            setFotoHeroFile={setFotoHeroFile}
             fotoHeroPreview={fotoHeroPreview} setFotoHeroPreview={setFotoHeroPreview}
           />
         )}
 
         {activeTab === "hero-contenido" && (
           <HeroContenidoTab 
-            formData={formData as any} setFormData={setFormData}
+            formData={formData} setFormData={setFormData}
             fotoPortadaFile={fotoPortadaFile} setFotoPortadaFile={setFotoPortadaFile}
             fotoPortadaPreview={fotoPortadaPreview} setFotoPortadaPreview={setFotoPortadaPreview}
           />
@@ -243,7 +244,7 @@ export default function NuevoProgramaPage() {
 
         {activeTab === "acerca-de" && (
           <AcercaDeTab 
-            formData={formData as any} setFormData={setFormData}
+            formData={formData} setFormData={setFormData}
           />
         )}
 
@@ -267,18 +268,18 @@ export default function NuevoProgramaPage() {
 
         {activeTab === "admision" && (
           <AdmisionTab 
-            admisionData={formData.detalles_json.admision as any} 
+            admisionData={formData.detalles_json.admision} 
             setAdmisionData={(data) => setFormData({ 
               ...formData, 
-              detalles_json: { ...formData.detalles_json, admision: data as any } 
+              detalles_json: { ...formData.detalles_json, admision: data } 
             })} 
           />
         )}
 
         {activeTab === "config" && (
           <ConfigTab 
-            configData={formData.config_visibilidad as any} 
-            setConfigData={(data) => setFormData({ ...formData, config_visibilidad: data as any })} 
+            configData={formData.config_visibilidad} 
+            setConfigData={(data) => setFormData({ ...formData, config_visibilidad: data })} 
           />
         )}
       </div>
