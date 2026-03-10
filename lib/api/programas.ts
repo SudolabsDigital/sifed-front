@@ -74,7 +74,7 @@ export const programasApi = {
   // Admin Methods
   getAll: async (params: Record<string, unknown> = {}) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    const response = await axios.get(`${API_URL}/admin/portal/programas`, {
+    const response = await axios.get(`${API_URL}/admin/programas`, {
       headers: { Authorization: `Bearer ${token}` },
       params
     });
@@ -83,7 +83,7 @@ export const programasApi = {
 
   getOne: async (id: string | number): Promise<Programa> => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    const response = await axios.get(`${API_URL}/admin/portal/programas/${id}`, {
+    const response = await axios.get(`${API_URL}/admin/programas/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -91,7 +91,7 @@ export const programasApi = {
 
   create: async (data: FormData) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    const response = await axios.post(`${API_URL}/admin/portal/programas`, data, {
+    const response = await axios.post(`${API_URL}/admin/programas`, data, {
       headers: { 
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data'
@@ -104,7 +104,7 @@ export const programasApi = {
     const token = Cookies.get(AUTH_COOKIE_NAME);
     // Laravel bug with PUT and FormData: use POST with _method=PUT
     data.append('_method', 'PUT');
-    const response = await axios.post(`${API_URL}/admin/portal/programas/${id}`, data, {
+    const response = await axios.post(`${API_URL}/admin/programas/${id}`, data, {
       headers: { 
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data'
@@ -115,14 +115,14 @@ export const programasApi = {
 
   delete: async (id: number) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    await axios.delete(`${API_URL}/admin/portal/programas/${id}`, {
+    await axios.delete(`${API_URL}/admin/programas/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
   },
 
   toggleVisibility: async (id: number, field: string, value: boolean) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    const response = await axios.patch(`${API_URL}/admin/portal/programas/${id}/toggle-visibility`, {
+    const response = await axios.patch(`${API_URL}/admin/programas/${id}/toggle-visibility`, {
       field,
       value
     }, {
@@ -133,7 +133,7 @@ export const programasApi = {
 
   updateOrden: async (id: number, orden: number) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
-    const response = await axios.patch(`${API_URL}/admin/portal/programas/${id}/orden`, {
+    const response = await axios.patch(`${API_URL}/admin/programas/${id}/orden`, {
       orden
     }, {
       headers: { Authorization: `Bearer ${token}` }
