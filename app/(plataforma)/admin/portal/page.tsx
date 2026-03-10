@@ -59,7 +59,7 @@ export default function PortalManagementPage() {
       title: "Galería de Fotos",
       description: "Álbumes de eventos, ceremonias y actividades académicas.",
       icon: ImageIcon,
-      href: "/admin/portal/galeria",
+      href: "/admin/portal/galerias",
       color: "text-pink-600 bg-pink-50"
     },
     {

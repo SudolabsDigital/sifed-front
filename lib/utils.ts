@@ -16,24 +16,30 @@ export function cn(...inputs: ClassValue[]) {
 export function getStorageUrl(path?: string | null): string {
   if (!path) return "";
   
+  // Si ya es una URL absoluta, devolverla tal cual
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
 
-  // Si la ruta no es de Laravel Storage, asumimos que es un asset estático del frontend (Next.js public folder)
-  // Ej: "/images/programas/...", "/banner/..."
+  // 🚨 REGLA CRÍTICA DE ASSETS HÍBRIDOS (SIFED)
+  // Si la ruta NO empieza con /storage/, es un asset estático que vive en Next.js /public
+  // Ej: "/images/galeria/foto.webp"
   if (!path.startsWith("/storage/")) {
     return path;
   }
   
-  // Si es http://localhost:8000/api => http://localhost:8000
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || "";
+  // Si empieza con /storage/, es un asset dinámico de Laravel.
+  // Usamos NEXT_PUBLIC_BACKEND_URL si existe, de lo contrario limpiamos API_URL.
+  let baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 
+                process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, "") || 
+                "";
   
-  // Asegurar que el path empiece con / si no lo tiene
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  // Limpiar barras finales del baseUrl y barras iniciales del path para evitar el error de doble barra //
+  baseUrl = baseUrl.replace(/\/+$/, "");
+  const cleanPath = path.replace(/^\/+/, "");
   
-  // Codificar la URL para evitar problemas con espacios en los nombres de archivos en next/image
-  const encodedPath = encodeURI(cleanPath);
-  
-  return `${baseUrl}${encodedPath}`;
+  const finalUrl = `${baseUrl}/${cleanPath}`;
+
+  // Codificar para evitar problemas con espacios en los nombres de archivos en next/image
+  return encodeURI(finalUrl);
 }

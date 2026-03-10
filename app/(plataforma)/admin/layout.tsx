@@ -56,7 +56,7 @@ import {
       },
       {
         title: "Galería de Fotos",
-        href: "/admin/portal/galeria",
+        href: "/admin/portal/galerias",
         icon: ImageIcon,
       },
       {
