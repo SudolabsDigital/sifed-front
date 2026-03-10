@@ -2,6 +2,20 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 
+export interface Docente {
+  id: number;
+  nombre_completo: string;
+  slug: string;
+  grados?: string | null;
+  foto_url?: string | null;
+  biografia?: string | null;
+  cv_url?: string | null;
+  categoria?: string | null;
+  especialidad?: string | null;
+  estado: "activo" | "inactivo";
+  orden: number;
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 if (!API_URL) {
