@@ -41,7 +41,7 @@ import {
       },
       {
         title: "Documentos Normativos",
-        href: "/admin/portal/normatividad",
+        href: "/admin/portal/documentos-normativos",
         icon: Scale,
       },
       {

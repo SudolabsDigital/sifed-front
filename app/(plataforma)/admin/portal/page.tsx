@@ -38,7 +38,7 @@ export default function PortalManagementPage() {
       title: "Documentos Normativos",
       description: "Reglamentos, resoluciones y directivas institucionales.",
       icon: Scale,
-      href: "/admin/portal/normatividad",
+      href: "/admin/portal/documentos-normativos",
       color: "text-orange-600 bg-orange-50"
     },
     {

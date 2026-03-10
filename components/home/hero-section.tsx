@@ -205,7 +205,7 @@ export default function HeroSection() {
       {/* ── Imágenes (Embla) ─────────────────────────────────────────────── */}
       <div className="overflow-hidden absolute inset-0" ref={emblaRef}>
         <div className="flex h-full w-full touch-pan-y">
-          {slides.map((s: any, idx: number) => (
+          {slides.map((s: { id: number; src: string; alt: string; }, idx: number) => (
             <div className="flex-[0_0_100%] min-w-0 relative h-full" key={s.id}>
               <Image
                 src={s.src} alt={s.alt} fill
@@ -348,7 +348,7 @@ export default function HeroSection() {
               className="hidden xl:flex flex-col gap-4 shrink-0 w-64 pointer-events-auto"
               initial="hidden" animate="visible" exit="exit"
             >
-              {slide.stats.map((stat: any, i: number) => (
+              {slide.stats.map((stat: { label: string; value: string; icon: React.ElementType }, i: number) => (
                 <motion.div
                   key={stat.label}
                   variants={statsCard}
