@@ -62,8 +62,8 @@ export default function Footer() {
             <ul className="space-y-4 text-sm font-bold text-slate-600">
               <li><Link href="/posgrado/maestrias" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Maestrías</Link></li>
               <li><Link href="/posgrado/doctorados" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Doctorados</Link></li>
+              <li><Link href="/posgrado/formacion-continua" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Formación Continua</Link></li>
               <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Proceso de Admisión</Link></li>
-              <li><Link href="/posgrado/plana-docente" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Plana Docente</Link></li>
             </ul>
           </div>
 
@@ -71,10 +71,10 @@ export default function Footer() {
           <div>
             <h4 className="mb-8 text-xs font-black text-brand-950 uppercase tracking-[0.2em]">Investigación</h4>
             <ul className="space-y-4 text-sm font-bold text-slate-600">
-              <li><Link href="/galeria-fotos/investigacion" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Galería de Investigación</Link></li>
-              <li><Link href="/galeria-fotos/sustentaciones" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Sustentaciones</Link></li>
+              <li><Link href="/biblioteca-virtual" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Biblioteca Virtual</Link></li>
               <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Normativa de Grados</Link></li>
-              <li><Link href="/noticias" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Actualidad</Link></li>
+              <li><Link href="/galeria-fotos" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Memoria Visual (Galería)</Link></li>
+              <li><Link href="/posgrado/plana-docente" className="hover:text-brand-600 transition-colors focus-visible:outline-brand-600">Plana Docente</Link></li>
             </ul>
           </div>
 
