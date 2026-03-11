@@ -20,24 +20,26 @@ const menuItems = [
     },
     cols: [
       {
-        title: "Programas Académicos",
+        title: "Posgrado",
         links: [
           { label: "Maestrías", href: "/posgrado/maestrias" },
           { label: "Doctorados", href: "/posgrado/doctorados" }
         ]
       },
       {
-        title: "Admisión",
+        title: "Formación Continua",
         links: [
-          { label: "Proceso de Admisión", href: "/posgrado/admision" },
-          { label: "Guía Maestría", href: "/posgrado/maestrias#admision" },
-          { label: "Guía Doctorado", href: "/posgrado/doctorados#admision" }
+          { label: "Diplomados", href: "/posgrado/diplomados" },
+          { label: "Cursos", href: "/posgrado/cursos" },
+          { label: "Talleres", href: "/posgrado/talleres" }
         ]
       },
       {
-        title: "Comunidad",
+        title: "Admisión",
         links: [
-          { label: "Plana Docente", href: "/posgrado/plana-docente" },
+          { label: "Información General", href: "/posgrado/admision" },
+          { label: "Admisión Maestría", href: "/posgrado/admision/maestria" },
+          { label: "Admisión Doctorado", href: "/posgrado/admision/doctorado" }
         ]
       }
     ]
@@ -45,23 +47,29 @@ const menuItems = [
   {
     label: "Investigación",
     featured: {
-        title: "Investigación",
-        desc: "Producción científica y sustentación de tesis doctorales.",
-        link: "/galeria-fotos/investigacion",
+        title: "Biblioteca e Investigación",
+        desc: "Accede a nuestra biblioteca virtual, producción científica y sustentaciones.",
+        link: "/biblioteca-virtual",
         image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
-        title: "Producción",
+        title: "Recursos y Normativa",
         links: [
-          { label: "Galería de Investigación", href: "/galeria-fotos/investigacion" },
-          { label: "Sustentaciones", href: "/galeria-fotos/sustentaciones" }
+          { label: "Biblioteca Virtual", href: "/biblioteca-virtual" },
+          { label: "Normativa de Grados", href: "/documentos-normativos" }
         ]
       },
       {
-        title: "Recursos",
+        title: "Producción Científica",
         links: [
-          { label: "Normativa de Grados", href: "/documentos-normativos" }
+          { label: "Memoria Visual y Sustentaciones", href: "/galeria-fotos" }
+        ]
+      },
+      {
+        title: "Comunidad Académica",
+        links: [
+          { label: "Plana Docente", href: "/posgrado/plana-docente" }
         ]
       }
     ]
@@ -70,22 +78,21 @@ const menuItems = [
     label: "Actualidad",
     featured: {
         title: "Noticias y Eventos",
-        desc: "Entérate de lo último en nuestra facultad.",
+        desc: "Entérate de las últimas novedades, comunicados y eventos de la facultad.",
         link: "/noticias",
         image: "/images/logo-posgrado-educacion.webp"
     },
     cols: [
       {
-        title: "Noticias",
+        title: "Información",
         links: [
           { label: "Últimas Noticias", href: "/noticias" }
         ]
       },
       {
-        title: "Galería Multimedia",
+        title: "Multimedia",
         links: [
-          { label: "Galería General", href: "/galeria-fotos" },
-          { label: "Eventos Académicos", href: "/galeria-fotos/eventos" }
+          { label: "Galería Institucional", href: "/galeria-fotos" }
         ]
       }
     ]
@@ -93,8 +100,8 @@ const menuItems = [
   {
     label: "Transparencia",
     featured: {
-        title: "Documentos",
-        desc: "Acceso a la información pública y normativa institucional.",
+        title: "Documentos y Normativas",
+        desc: "Acceso a la información pública, directivas y normativa institucional.",
         link: "/documentos-normativos",
         image: "/images/logo-posgrado-educacion.webp"
     },
