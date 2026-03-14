@@ -44,7 +44,7 @@ export default function PageHero({
     <section 
       className={cn(
         "relative w-full flex items-center justify-center overflow-hidden bg-black",
-        isCompact ? "h-[50vh] min-h-[400px]" : "h-[calc(100vh-96px)]"
+        isCompact ? "h-[50vh] min-h-[400px]" : "h-[calc(100vh-80px)]"
       )}
     >
       {/* Background */}

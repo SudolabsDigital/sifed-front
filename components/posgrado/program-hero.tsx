@@ -18,7 +18,7 @@ export default function ProgramHero({ program }: ProgramHeroProps) {
   ];
 
   return (
-    <section className="relative w-full h-[calc(100vh-96px)] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
+    <section className="relative w-full h-[calc(100vh-80px)] min-h-[600px] flex items-center justify-center overflow-hidden bg-black">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div
