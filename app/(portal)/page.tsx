@@ -1,4 +1,5 @@
 import HeroSection from "@/components/home/hero-section";
+import InstitutionalShowcase from "@/components/home/institutional-showcase";
 import { NewsCollage } from "@/components/portal/news/NewsCollage";
 import EcosistemaSection from "@/components/home/ecosistema-section";
 import ProgramSelectorSection from "@/components/home/program-selector-section";
@@ -7,15 +8,21 @@ import InfoSection from "@/components/home/info-section";
 import FAQSection from "@/components/home/faq-section";
 import QuickAccessSection from "@/components/home/quick-access-section";
 
-// Revalidar la home cada 4 horas
+// Revalidar la home cada 4 horas (14400 segundos) para máximo performance y SEO
 export const revalidate = 14400;
 
 export default function Home() {
   return (
     <>
       <HeroSection />
-      <ProgramSelectorSection />
+
+      {/* VITRINA INSTITUCIONAL */}
+      <InstitutionalShowcase />
+
+      {/* OFERTA ACADÉMICA */}
       <PosgradoSection />
+
+      <ProgramSelectorSection />
       <QuickAccessSection />
       <FAQSection />
       <NewsCollage />

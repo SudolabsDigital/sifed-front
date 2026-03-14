@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight, ChevronRight, ChevronLeft, BookOpen,
-  ClipboardList, Clock, GraduationCap, Layers,
+  ClipboardList, Clock, GraduationCap, Layers, LucideIcon,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
@@ -29,7 +29,7 @@ interface Slide {
 }
 
 // Mapa de iconos para resolver el componente en el cliente
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, LucideIcon> = {
   Clock,
   Layers,
   GraduationCap,
@@ -40,7 +40,7 @@ interface HeroCarouselProps {
   slides: Slide[];
 }
 
-// ── Variantes ────────────────────────────────────────────────────────────────
+// Variantes
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
@@ -97,7 +97,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
   return (
     <section className="relative w-full min-h-[calc(100vh-5rem)] bg-brand-950 overflow-hidden group/hero" aria-label="Carrusel de Programas Académicos Destacados">
 
-      {/* ── Imágenes (Embla) ─────────────────────────────────────────────── */}
+      {/* Imágenes */}
       <div className="overflow-hidden absolute inset-0" ref={emblaRef}>
         <div className="flex h-full w-full touch-pan-y">
           {slides.map((s, idx) => (
@@ -116,16 +116,16 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
         </div>
       </div>
 
-      {/* ── Overlays ─────────────────────────────────────────────────────── */}
+      {/* Overlays */}
       <div aria-hidden="true" className="absolute inset-0 z-[1] bg-gradient-to-r from-brand-950/98 via-brand-950/80 to-brand-950/40 pointer-events-none" />
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 z-[1] h-48 bg-gradient-to-t from-brand-950/90 to-transparent pointer-events-none" />
 
-      {/* ── Orbes decorativos animados ───────────────────────────────────── */}
+      {/* Orbes decorativos animados */}
       <div aria-hidden="true" className="absolute top-1/4 right-[20%] z-[1] w-[28rem] h-[28rem] rounded-full bg-brand-600/10 blur-[100px] animate-pulse pointer-events-none" />
       <div aria-hidden="true" className="absolute bottom-1/4 right-[30%] z-[1] w-72 h-72 rounded-full bg-uncp-gold/6 blur-[80px] pointer-events-none"
         style={{ animation: "pulse 5s ease-in-out infinite", animationDelay: "2.5s" }} />
 
-      {/* ── Número de slide decorativo ───────────────────────────────────── */}
+      {/* Número de slide decorativo */}
       <AnimatePresence mode="wait">
         <motion.span
           key={`num-${selectedIndex}`}
@@ -141,11 +141,11 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
         </motion.span>
       </AnimatePresence>
 
-      {/* ── Contenido principal ──────────────────────────────────────────── */}
+      {/* Contenido principal */}
       <div className="absolute inset-0 z-10 flex items-center px-8 md:px-16 xl:px-24 pointer-events-none">
         <div className="w-full flex items-center justify-between gap-8 xl:gap-12">
 
-          {/* —— Texto (izquierda) —— */}
+          {/* Texto (izquierda) */}
           <AnimatePresence mode="wait">
             <motion.div
               key={`text-${selectedIndex}`}
@@ -267,7 +267,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
         </div>
       </div>
 
-      {/* ── Flechas ──────────────────────────────────────────────────────── */}
+      {/* Flechas */}
       <div className="absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-4 pointer-events-none">
         <button
           onClick={scrollPrev}
@@ -285,7 +285,7 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
         </button>
       </div>
 
-      {/* ── Barra de progreso + indicadores ─────────────────────────────── */}
+      {/* Barra de progreso + indicadores */}
       <div className="absolute bottom-0 left-0 right-0 z-20 flex flex-col gap-4 pb-6 px-8 md:px-16">
 
         {/* Línea de progreso */}
