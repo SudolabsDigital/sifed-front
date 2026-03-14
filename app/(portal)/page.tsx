@@ -7,6 +7,9 @@ import InfoSection from "@/components/home/info-section";
 import FAQSection from "@/components/home/faq-section";
 import QuickAccessSection from "@/components/home/quick-access-section";
 
+// Revalidar la home cada 4 horas
+export const revalidate = 14400;
+
 export default function Home() {
   return (
     <>
