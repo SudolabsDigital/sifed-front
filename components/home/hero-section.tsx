@@ -200,7 +200,7 @@ export default function HeroSection() {
   const slide = slides[selectedIndex] ?? slides[0];
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-6rem)] bg-brand-950 overflow-hidden group/hero" aria-label="Carrusel de Programas Académicos Destacados">
+    <section className="relative w-full min-h-[calc(100vh-5rem)] bg-brand-950 overflow-hidden group/hero" aria-label="Carrusel de Programas Académicos Destacados">
 
       {/* ── Imágenes (Embla) ─────────────────────────────────────────────── */}
       <div className="overflow-hidden absolute inset-0" ref={emblaRef}>

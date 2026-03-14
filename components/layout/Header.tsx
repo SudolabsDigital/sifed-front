@@ -120,22 +120,37 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const pathname = usePathname();
 
-  // Lógica para detectar scroll y reducir altura
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 120) {
+        // Scrolling down y pasado un umbral inicial
+        setIsVisible(false);
+      } else {
+        // Scrolling up o en el tope de la página
+        setIsVisible(true);
+      }
+
+      setScrolled(currentScrollY > 20);
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
     const t = setTimeout(() => {
       setMobileMenuOpen(false);
       setActiveSubmenu(null);
+      setIsVisible(true);
     }, 10);
     return () => clearTimeout(t);
   }, [pathname]);
@@ -160,16 +175,18 @@ export default function Header() {
     <>
       <header className={cn(
         "sticky top-0 z-50 w-full transition-all duration-500 border-b font-sans",
+        "h-20 lg:h-20", // Altura fija para evitar layout shifts
         scrolled 
-          ? "h-16 lg:h-20 bg-background/90 backdrop-blur-xl border-border/80 shadow-lg" 
-          : "h-20 lg:h-24 bg-background border-border"
+          ? "bg-background/90 backdrop-blur-xl border-border/80 shadow-lg" 
+          : "bg-background border-border",
+        !isVisible && !mobileMenuOpen && "-translate-y-full shadow-none" // Ocultar al bajar
       )}>
         <div className="mx-auto flex h-full max-w-[1920px] items-center justify-between px-4 sm:px-6 lg:px-12 relative z-50">
           
           {/* BRAND */}
           <Link href="/" className="flex items-center gap-2 lg:gap-4 flex-shrink-0 cursor-pointer group relative z-50 max-w-[85%] lg:max-w-none">
             {/* Logo Posgrado */}
-            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación UNCP" width={60} height={60} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-8 w-auto lg:h-10" : "h-10 w-auto lg:h-12")} />
+            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación UNCP" width={60} height={60} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-8 w-auto lg:h-10" : "h-10 w-auto lg:h-10")} />
             
             {/* Texto */}
             <div className="flex items-center gap-2 lg:gap-3 overflow-hidden">
@@ -179,13 +196,13 @@ export default function Header() {
                  </span>
                  <span className={cn(
                    "font-black uppercase tracking-tight text-brand-800 leading-none truncate transition-all duration-500",
-                   scrolled ? "text-[9px] sm:text-[11px] lg:text-[13px]" : "text-[10px] sm:text-xs lg:text-sm"
+                   scrolled ? "text-[9px] sm:text-[11px] lg:text-[12px]" : "text-[10px] sm:text-xs lg:text-sm"
                  )}>
                    Facultad de Educación
                  </span>
                  <span className={cn(
                    "font-serif font-black leading-none text-brand-950 group-hover:text-brand-600 transition-all duration-500 truncate mt-0.5",
-                   scrolled ? "text-xs sm:text-sm lg:text-[1.1rem]" : "text-sm sm:text-base lg:text-[1.35rem]"
+                   scrolled ? "text-xs sm:text-sm lg:text-[1.15rem]" : "text-sm sm:text-base lg:text-[1.35rem]"
                  )}>
                    Unidad de Posgrado
                  </span>
