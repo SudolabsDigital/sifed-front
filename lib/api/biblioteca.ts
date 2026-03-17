@@ -1,5 +1,6 @@
 import api from "@/lib/api";
 import { Docente } from "./docentes";
+import { fetchPublic } from "@/lib/fetch-public";
 
 export interface BibliotecaCategoria {
   id: number;
@@ -89,7 +90,6 @@ export const bibliotecaApi = {
 
   // --- Portal Público ---
   getPublic: async (params?: Record<string, unknown>) => {
-    const response = await api.get<PublicBibliotecaResponse>("/portal/biblioteca", { params });
-    return response.data;
+    return await fetchPublic<PublicBibliotecaResponse>('portal/biblioteca', { params: params as Record<string, string | number | boolean> });
   },
 };

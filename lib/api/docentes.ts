@@ -1,16 +1,17 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
+import { fetchPublic } from "@/lib/fetch-public";
 
 export interface Docente {
   id: number;
   nombre_completo: string;
   slug: string;
-  grados?: string | null;
-  foto_url?: string | null;
+  grados: string;
+  foto_url: string | null;
   biografia?: string | null;
   cv_url?: string | null;
-  categoria?: string | null;
+  categoria: string;
   especialidad?: string | null;
   estado: "activo" | "inactivo";
   orden: number;
@@ -31,20 +32,11 @@ const getAuthHeader = () => {
 export const docentesApi = {
   // === PUBLIC PORTAL API ===
   getPortalList: async (params = {}) => {
-    // Para SSR se debe asegurar que se puede alcanzar la URL absoluta
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-    const response = await axios.get(`${baseUrl}/portal/docentes`, { params });
-    return response.data;
+    return await fetchPublic<any>('portal/docentes', { params: params as Record<string, string | number | boolean> });
   },
 
   getPortalSlug: async (slug: string) => {
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-    const response = await axios.get(`${baseUrl}/portal/docentes/${slug}`);
-    return response.data;
+    return await fetchPublic<Docente>(`portal/docentes/${slug}`);
   },
 
   // === ADMIN API ===
