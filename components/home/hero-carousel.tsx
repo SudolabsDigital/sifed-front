@@ -104,7 +104,9 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
             <div className="flex-[0_0_100%] min-w-0 relative h-full" key={s.id}>
               <Image
                 src={s.src} alt={s.alt} fill
-                unoptimized
+                unoptimized={process.env.NODE_ENV === 'development'}
+                quality={85}
+                sizes="100vw"
                 className={cn(
                   "object-cover object-center transition-transform duration-[9000ms] ease-linear",
                   idx === selectedIndex ? "scale-[1.08]" : "scale-100"

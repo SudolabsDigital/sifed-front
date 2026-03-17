@@ -43,7 +43,7 @@ export default function SmartProfileImage({
         className
       )}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      unoptimized
+      unoptimized={process.env.NODE_ENV === 'development'}
       onError={() => setError(true)}
     />
   );

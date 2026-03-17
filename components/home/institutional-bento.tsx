@@ -27,14 +27,14 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
         transition={{ duration: 0.8 }}
         className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] shadow-2xl border border-brand-100"
       >
-        <Image 
-          src={photos[0].url} 
-          alt={photos[0].title} 
-          fill 
-          unoptimized
+        <Image
+          src={photos[0].url}
+          alt={photos[0].title}
+          fill
+          unoptimized={process.env.NODE_ENV === 'development'}
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-1000 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+        />        <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
         <div className="absolute bottom-10 left-10 right-10 z-20">
            <span className="bg-uncp-gold px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-brand-950 mb-4 inline-block shadow-xl">
              {photos[0].category}
@@ -61,7 +61,8 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
               src={photos[1].url} 
               alt={photos[1].title} 
               fill 
-              unoptimized
+              unoptimized={process.env.NODE_ENV === 'development'}
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
             />
             <div className="absolute inset-0 bg-brand-950/20 group-hover:bg-transparent transition-colors" />
@@ -89,7 +90,8 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
                 src={photos[idx].url} 
                 alt={photos[idx].title} 
                 fill 
-                unoptimized
+                unoptimized={process.env.NODE_ENV === 'development'}
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-110"
               />
             )}

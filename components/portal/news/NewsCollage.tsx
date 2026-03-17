@@ -73,7 +73,8 @@ export async function NewsCollage() {
                         src={getStorageUrl(item.imagen_url)}
                         alt={item.titulo}
                         fill
-                        unoptimized
+                        unoptimized={process.env.NODE_ENV === 'development'}
+                        sizes="(max-width: 768px) 96px, 128px"
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
