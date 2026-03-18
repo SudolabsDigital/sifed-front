@@ -43,3 +43,15 @@ export function getStorageUrl(path?: string | null): string {
   // Codificar para evitar problemas con espacios en los nombres de archivos en next/image
   return encodeURI(finalUrl);
 }
+
+/**
+ * Determina si una imagen debe cargarse sin optimización.
+ * Útil para desarrollo local y para evitar errores de resolución de IP privada en Next.js.
+ */
+export function shouldUnoptimize(path?: string | null): boolean {
+  if (process.env.NODE_ENV === 'development') return true;
+  if (!path) return false;
+  
+  const url = getStorageUrl(path);
+  return url.includes('localhost') || url.includes('127.0.0.1');
+}

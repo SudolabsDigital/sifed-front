@@ -12,7 +12,6 @@ import {
   Book,
   FileText,
   User,
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
   Library,

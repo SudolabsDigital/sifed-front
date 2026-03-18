@@ -14,7 +14,6 @@ import {
   ChevronRight,
   ArrowUpDown,
   Camera,
-  Loader2,
   Calendar
 } from "lucide-react";
 import { galeriasApi, Galeria } from "@/lib/api/galerias";

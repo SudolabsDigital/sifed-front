@@ -38,6 +38,7 @@ export interface UnidadPosgrado {
     mostrar_vision?: boolean;
     mostrar_autoridades?: boolean;
     mostrar_directorio?: boolean;
+    mostrar_organigrama?: boolean;
   } | null;
 }
 

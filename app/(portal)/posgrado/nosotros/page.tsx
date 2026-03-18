@@ -3,7 +3,7 @@ import Image from "next/image";
 import { unidadPosgradoApi, UnidadPosgrado, Autoridad } from "@/lib/api/unidad-posgrado";
 import PageHero from "@/components/ui/page-hero";
 import { Target, Flag, Phone, Mail, FileText, Building2 } from "lucide-react";
-import { getStorageUrl, cn } from "@/lib/utils";
+import { getStorageUrl } from "@/lib/utils";
 import SmartProfileImage from "@/components/ui/smart-profile-image";
 
 export const revalidate = 60; // ISR cada 60 segundos
@@ -32,7 +32,7 @@ export default async function NosotrosPage() {
   const showVision = config?.mostrar_vision !== false;
   const showAutoridades = config?.mostrar_autoridades !== false;
   const showDirectorio = config?.mostrar_directorio !== false;
-  const showOrganigrama = (config as any)?.mostrar_organigrama !== false;
+  const showOrganigrama = config?.mostrar_organigrama !== false;
 
   const autoridades = unidad?.autoridades_json || [];
   const directorio = unidad?.directorio_json || [];

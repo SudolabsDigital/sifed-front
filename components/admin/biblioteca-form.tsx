@@ -2,22 +2,20 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import useSWR from "swr";
 import { 
   Save, 
-  X, 
   Upload, 
   Book,
   FileText,
   User,
   Loader2,
-  Calendar,
-  AlertCircle,
   Image as ImageIcon
 } from "lucide-react";
 import { bibliotecaApi, BibliotecaRecurso } from "@/lib/api/biblioteca";
-import { docentesApi } from "@/lib/api/docentes";
-import { getStorageUrl, cn } from "@/lib/utils";
+import { docentesApi, Docente } from "@/lib/api/docentes";
+import { getStorageUrl } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiError } from "@/lib/error-handler";
 
@@ -39,7 +37,7 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
     docente_id: "",
     recomendador_externo: "",
     fecha_subida: new Date().toLocaleDateString('en-CA'),
-    estado: "activo",
+    estado: "activo" as "activo" | "borrador",
     orden: 0,
   });
 
@@ -62,7 +60,7 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
         docente_id: initialData.docente_id?.toString() || "",
         recomendador_externo: initialData.recomendador_externo || "",
         fecha_subida: initialData.fecha_subida ? initialData.fecha_subida.split('T')[0] : new Date().toLocaleDateString('en-CA'),
-        estado: initialData.estado || "activo",
+        estado: (initialData.estado as "activo" | "borrador") || "activo",
         orden: initialData.orden || 0,
       });
       if (initialData.imagen_portada_url) {
@@ -76,7 +74,8 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
 
   // Data dinámicas (Categorías y Docentes)
   const { data: categorias } = useSWR('/api/admin/biblioteca-categorias', () => bibliotecaApi.getCategorias());
-  const { data: docentes } = useSWR('/api/admin/docentes', () => docentesApi.getAll({ per_page: 100 }));
+  const { data: docentesResponse } = useSWR('/api/admin/docentes', () => docentesApi.getAll({ per_page: 100 }));
+  const docentes = docentesResponse?.data as Docente[] | undefined;
 
   const handlePortadaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -201,7 +200,7 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
                 value={formData.docente_id} onChange={e => setFormData({...formData, docente_id: e.target.value, recomendador_externo: ""})}
               >
                 <option value="">Ninguno seleccionado...</option>
-                {docentes?.data?.map((doc: any) => <option key={doc.id} value={doc.id}>{doc.nombre_completo}</option>)}
+                {docentes?.map((doc) => <option key={doc.id} value={doc.id}>{doc.nombre_completo}</option>)}
               </select>
             </div>
 
@@ -253,7 +252,13 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
             className="aspect-[3/4] rounded-xl border-2 border-dashed border-border overflow-hidden relative group cursor-pointer hover:border-brand-500 transition-all bg-muted/30"
           >
             {portadaPreview ? (
-              <img src={portadaPreview} alt="Preview" className="w-full h-full object-cover" />
+              <Image 
+                src={portadaPreview} 
+                alt="Preview" 
+                fill
+                unoptimized
+                className="w-full h-full object-cover" 
+              />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground p-4 text-center">
                 <Upload className="w-6 h-6 mb-2 opacity-20" />
@@ -270,7 +275,7 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
               <span className="text-xs font-bold">Estado</span>
               <select 
                 className="bg-white border border-border rounded-lg text-xs font-bold py-1 px-2 outline-none"
-                value={formData.estado} onChange={e => setFormData({...formData, estado: e.target.value as any})}
+                value={formData.estado} onChange={e => setFormData({...formData, estado: e.target.value as "activo" | "borrador"})}
               >
                 <option value="activo">Activo</option>
                 <option value="borrador">Borrador</option>

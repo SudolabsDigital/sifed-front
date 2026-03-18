@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { getStorageUrl, cn } from "@/lib/utils";
+import { getStorageUrl, cn, shouldUnoptimize } from "@/lib/utils";
 import { User } from "lucide-react";
 
 interface SmartProfileImageProps {
@@ -43,7 +43,7 @@ export default function SmartProfileImage({
         className
       )}
       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      unoptimized={process.env.NODE_ENV === 'development'}
+      unoptimized={shouldUnoptimize(src)}
       onError={() => setError(true)}
     />
   );

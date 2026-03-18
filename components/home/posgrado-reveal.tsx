@@ -3,9 +3,8 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
-import { Info, Users, ArrowRight } from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 interface ProgramaResumen {
   id: number;

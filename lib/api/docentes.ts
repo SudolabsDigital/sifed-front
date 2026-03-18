@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 import { fetchPublic } from "@/lib/fetch-public";
+import { PaginatedDocentes } from "@/types/docente";
 
 export interface Docente {
   id: number;
@@ -32,7 +33,7 @@ const getAuthHeader = () => {
 export const docentesApi = {
   // === PUBLIC PORTAL API ===
   getPortalList: async (params = {}) => {
-    return await fetchPublic<any>('portal/docentes', { params: params as Record<string, string | number | boolean> });
+    return await fetchPublic<PaginatedDocentes>('portal/docentes', { params: params as Record<string, string | number | boolean> });
   },
 
   getPortalSlug: async (slug: string) => {
@@ -48,7 +49,7 @@ export const docentesApi = {
     return response.data;
   },
 
-  getOne: async (id: string | number) => {
+  getById: async (id: string | number) => {
     const response = await axios.get(`${API_URL}/admin/docentes/${id}`, {
       headers: getAuthHeader(),
     });
@@ -84,7 +85,7 @@ export const docentesApi = {
   },
 
   toggleVisibility: async (id: string | number, field: string, value: boolean) => {
-    const response = await axios.patch(
+    const response = await axios.post(
       `${API_URL}/admin/docentes/${id}/toggle-visibility`,
       { field, value },
       { headers: getAuthHeader() }
@@ -101,4 +102,3 @@ export const docentesApi = {
     return response.data;
   },
 };
-

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { 
-  Building, BookOpen, Users, Phone, Save, 
+  Building, Users, Phone, Save, 
   Loader2, ImageIcon, Eye, Plus, X, Trash2
 } from "lucide-react";
 import { unidadPosgradoApi, Autoridad, DirectorioContacto } from "@/lib/api/unidad-posgrado";
@@ -44,11 +44,7 @@ export default function UnidadPosgradoAdminPage() {
   const [organigramaFile, setOrganigramaFile] = useState<File | null>(null);
   const [currentOrganigrama, setCurrentOrganigrama] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const data = await unidadPosgradoApi.getAdmin();
       setFormData({
@@ -66,12 +62,16 @@ export default function UnidadPosgradoAdminPage() {
       setAutoridades(data.autoridades_json || []);
       setDirectorio(data.directorio_json || []);
       setCurrentOrganigrama(data.organigrama_url);
-    } catch (err) {
+    } catch {
       showToast("Error al cargar la información institucional.", "error");
     } finally {
       setLoading(false);
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

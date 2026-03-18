@@ -12,7 +12,7 @@ import {
   Download
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { galeriasApi } from "@/lib/api/galerias";
 import { getStorageUrl, cn } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
@@ -20,7 +20,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const router = useRouter();
   const [photoIndex, setPhotoIndex] = useState<number | null>(null);
 
   const { data: galeria, isLoading, error } = useSWR(
@@ -117,12 +116,17 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
               onClick={() => setPhotoIndex(index)}
               className="relative group cursor-zoom-in rounded-2xl overflow-hidden border border-border bg-brand-50 break-inside-avoid"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={getStorageUrl(foto.archivo_url)} 
-                alt={foto.titulo_foto || galeria.titulo} 
-                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+              <div className="relative w-full h-auto min-h-[200px]">
+                <Image 
+                  src={getStorageUrl(foto.archivo_url)} 
+                  alt={foto.titulo_foto || galeria.titulo} 
+                  width={800}
+                  height={600}
+                  unoptimized={process.env.NODE_ENV === 'development'}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
               <div className="absolute inset-0 bg-brand-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                  <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
                     <Maximize2 className="w-5 h-5" />
@@ -170,17 +174,21 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-full max-h-[80vh] flex items-center justify-center"
+              className="relative w-full h-full flex items-center justify-center p-4 md:p-20"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img 
-                src={getStorageUrl(fotos[photoIndex].archivo_url)} 
-                alt="Lightbox View" 
-                className="max-w-full max-h-[80vh] object-contain shadow-2xl rounded-lg"
-              />
+              <div className="relative w-full h-full max-w-[90vw] max-h-[80vh]">
+                <Image 
+                  src={getStorageUrl(fotos[photoIndex].archivo_url)} 
+                  alt="Lightbox View" 
+                  fill
+                  priority
+                  unoptimized={process.env.NODE_ENV === 'development'}
+                  className="object-contain shadow-2xl rounded-lg"
+                />
+              </div>
               
               {/* Image info bar */}
-              <div className="absolute -bottom-16 left-0 right-0 flex items-center justify-between text-white/70 px-2">
+              <div className="absolute bottom-4 left-0 right-0 flex items-center justify-between text-white/70 px-8">
                  <div className="space-y-1">
                     <p className="text-sm font-bold text-white">Foto {photoIndex + 1} de {fotos.length}</p>
                     <p className="text-xs">{galeria.titulo}</p>
@@ -198,19 +206,25 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
               </div>
             </motion.div>
 
-            {/* Thumbnail Strip (Optional, for desktop) */}
+            {/* Thumbnail Strip */}
             <div className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 gap-2 p-2 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5">
                {fotos.map((f, i) => (
                  <button 
                   key={f.id}
                   onClick={() => setPhotoIndex(i)}
                   className={cn(
-                    "w-12 h-12 rounded-lg overflow-hidden transition-all",
+                    "w-12 h-12 rounded-lg overflow-hidden transition-all relative",
                     photoIndex === i ? "ring-2 ring-uncp-gold scale-110" : "opacity-40 hover:opacity-100"
                   )}
                  >
-                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                   <img src={getStorageUrl(f.archivo_url)} alt="Thumbnail" className="w-full h-full object-cover" />
+                   <Image 
+                    src={getStorageUrl(f.archivo_url)} 
+                    alt="Thumbnail" 
+                    fill
+                    sizes="48px"
+                    unoptimized={process.env.NODE_ENV === 'development'}
+                    className="object-cover" 
+                   />
                  </button>
                ))}
             </div>
