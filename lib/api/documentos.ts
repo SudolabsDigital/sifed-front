@@ -2,27 +2,20 @@ import { DocumentoNormativo } from "@/types/documento-normativo";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
+import { fetchPublic } from "@/lib/fetch-public";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const documentosApi = {
   // --- PORTAL (Público) ---
   getPublicos: async (params?: { categoria_principal?: string; sub_categoria?: string; search?: string }): Promise<DocumentoNormativo[]> => {
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-
-    const response = await axios.get(`${baseUrl}/portal/documentos-normativos`, { params });
-    return response.data.data; // .data is standard for Laravel Resources
+    const response = await fetchPublic<{ data: DocumentoNormativo[] }>('portal/documentos-normativos', { params: params as Record<string, string | number | boolean> });
+    return response.data; // .data is standard for Laravel Resources
   },
 
   getPublicoBySlug: async (slug: string): Promise<DocumentoNormativo> => {
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-
-    const response = await axios.get(`${baseUrl}/portal/documentos-normativos/${slug}`);
-    return response.data.data;
+    const response = await fetchPublic<{ data: DocumentoNormativo }>(`portal/documentos-normativos/${slug}`);
+    return response.data;
   },
 
   // --- ADMIN (Protegido) ---

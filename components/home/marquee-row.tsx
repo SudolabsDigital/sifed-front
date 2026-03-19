@@ -44,7 +44,8 @@ export default function MarqueeRow({ images, direction = "left", speed = 30 }: M
               src={getStorageUrl(img.url)}
               alt={img.title}
               fill
-              unoptimized
+              unoptimized={process.env.NODE_ENV === 'development'}
+              sizes="(max-width: 768px) 256px, 320px"
               className="object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-5">

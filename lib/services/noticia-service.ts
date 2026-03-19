@@ -1,6 +1,7 @@
 import api from '@/lib/api';
 import { Noticia, NoticiaResponse } from '@/types/noticia';
 import { NoticiaCategoria } from '@/types/noticia-categoria';
+import { fetchPublic } from '@/lib/fetch-public';
 
 // Helper para normalizar respuestas de API
 function unwrapResponse<T>(response: unknown): T {
@@ -19,8 +20,10 @@ function unwrapResponse<T>(response: unknown): T {
 export const NoticiaService = {
   // Public Portal Methods
   getAllPublic: async (page = 1, categoria?: string): Promise<NoticiaResponse> => {
-    const url = `/portal/noticias?page=${page}${categoria ? `&categoria=${categoria}` : ''}`;
-    const { data } = await api.get<unknown>(url);
+    const params: Record<string, string | number> = { page };
+    if (categoria) params.categoria = categoria;
+    const data = await fetchPublic<unknown>('portal/noticias', { params });
+    
     if (Array.isArray(data)) {
         return { data: data as Noticia[], meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, links: { first: '', last: '', prev: null, next: null } };
     }
@@ -28,13 +31,12 @@ export const NoticiaService = {
   },
 
   getBySlugPublic: async (slug: string): Promise<Noticia> => {
-    const { data } = await api.get<unknown>(`/portal/noticias/${slug}`);
+    const data = await fetchPublic<unknown>(`portal/noticias/${slug}`);
     return unwrapResponse<Noticia>(data);
   },
 
   getCategoriesWithNews: async (): Promise<NoticiaCategoria[]> => {
-    const { data } = await api.get<NoticiaCategoria[]>('/portal/noticias-categorias');
-    return data;
+    return await fetchPublic<NoticiaCategoria[]>('portal/noticias-categorias');
   },
 
   // Admin Methods

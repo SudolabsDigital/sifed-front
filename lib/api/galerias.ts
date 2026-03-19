@@ -1,4 +1,5 @@
 import api from "@/lib/api";
+import { fetchPublic } from "@/lib/fetch-public";
 
 export interface GaleriaFoto {
   id: number;
@@ -93,15 +94,13 @@ export const galeriasApi = {
    * Obtener galería pública por slug (Portal)
    */
   getBySlug: async (slug: string) => {
-    const response = await api.get<Galeria>(`/portal/galerias/${slug}`);
-    return response.data;
+    return await fetchPublic<Galeria>(`portal/galerias/${slug}`);
   },
 
   /**
    * Obtener todas las galerías públicas (Portal)
    */
   getPublic: async (params?: Record<string, unknown>) => {
-    const response = await api.get<GaleriaResponse>("/portal/galerias", { params });
-    return response.data;
+    return await fetchPublic<GaleriaResponse>('portal/galerias', { params: params as Record<string, string | number | boolean> });
   },
 };

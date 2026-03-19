@@ -4,6 +4,7 @@ import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 import { ProgramType, ProgramData } from "@/types/programa";
 import { getStorageUrl } from "@/lib/utils";
 import { ProgramaDetallesJson, ProgramaPlanEstudioJson, ProgramaConfigVisibilidad, HorarioModulo } from "@/types/admin-programa";
+import { fetchPublic } from "@/lib/fetch-public";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -143,20 +144,10 @@ export const programasApi = {
 
   // Public Methods
   getPublicAll: async (params: Record<string, unknown> = {}) => {
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-      
-    const response = await axios.get(`${baseUrl}/portal/programas`, { params });
-    return response.data;
+    return await fetchPublic<Programa[]>('portal/programas', { params: params as Record<string, string | number | boolean> });
   },
 
   getPublicBySlug: async (slug: string): Promise<Programa> => {
-    const baseUrl = typeof window === 'undefined' 
-      ? process.env.NEXT_PUBLIC_BACKEND_URL + '/api' 
-      : API_URL;
-      
-    const response = await axios.get(`${baseUrl}/portal/programas/${slug}`);
-    return response.data;
+    return await fetchPublic<Programa>(`portal/programas/${slug}`);
   }
 };

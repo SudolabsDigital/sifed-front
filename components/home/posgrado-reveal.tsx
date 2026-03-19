@@ -34,14 +34,14 @@ function ProgramCard({ programa }: { programa: ProgramaResumen }) {
       href={`${basePath}/${programa.slug}`}
       className="group relative block aspect-[16/10] w-[380px] shrink-0 overflow-hidden rounded-xl border border-white/10 bg-brand-900 shadow-2xl transition-all duration-500 hover:border-uncp-gold/40"
     >
-      <Image 
-        src={programa.imagen} 
-        alt={programa.titulo} 
-        fill 
-        unoptimized
-        className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0 opacity-60 group-hover:opacity-100" 
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent z-10" />
+      <Image
+        src={programa.imagen}
+        alt={programa.titulo}
+        fill
+        unoptimized={process.env.NODE_ENV === 'development'}
+        sizes="(max-width: 768px) 100vw, 380px"
+        className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0 opacity-60 group-hover:opacity-100"
+      />      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent z-10" />
       <div className="absolute inset-x-0 bottom-0 z-20 p-6">
         <h4 className="font-serif text-lg md:text-xl font-black text-white leading-tight drop-shadow-lg group-hover:text-uncp-gold transition-colors">
           {programa.titulo}
