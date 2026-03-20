@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Building, Users, Phone, Save, 
-  Loader2, ImageIcon, Eye, Plus, X, Trash2
+  Loader2, ImageIcon, Eye, Plus, X, Trash2, GraduationCap, Upload, FileText
 } from "lucide-react";
 import { unidadPosgradoApi, Autoridad, DirectorioContacto } from "@/lib/api/unidad-posgrado";
 import { useToast } from "@/components/ui/toast";
@@ -44,6 +44,29 @@ export default function UnidadPosgradoAdminPage() {
   const [organigramaFile, setOrganigramaFile] = useState<File | null>(null);
   const [currentOrganigrama, setCurrentOrganigrama] = useState<string | null>(null);
 
+  // ESTADOS DE ADMISIÓN
+  const [admisionData, setAdmisionData] = useState({
+    periodo_actual: "",
+    whatsapp_contacto: "",
+    documentos: {
+      maestria: "",
+      doctorado: "",
+      diplomado: "",
+      curso: ""
+    }
+  });
+  const [admisionFiles, setAdmisionFiles] = useState<{
+    maestria: File | null;
+    doctorado: File | null;
+    diplomado: File | null;
+    curso: File | null;
+  }>({ maestria: null, doctorado: null, diplomado: null, curso: null });
+
+  const maestriaRef = useRef<HTMLInputElement>(null);
+  const doctoradoRef = useRef<HTMLInputElement>(null);
+  const diplomadoRef = useRef<HTMLInputElement>(null);
+  const cursoRef = useRef<HTMLInputElement>(null);
+
   const fetchData = useCallback(async () => {
     try {
       const data = await unidadPosgradoApi.getAdmin();
@@ -62,6 +85,16 @@ export default function UnidadPosgradoAdminPage() {
       setAutoridades(data.autoridades_json || []);
       setDirectorio(data.directorio_json || []);
       setCurrentOrganigrama(data.organigrama_url);
+      
+      if (data.admision_json) {
+        setAdmisionData({
+          periodo_actual: data.admision_json.periodo_actual || "2026-I",
+          whatsapp_contacto: data.admision_json.whatsapp_contacto || "51949260658",
+          documentos: data.admision_json.documentos || {
+            maestria: "", doctorado: "", diplomado: "", curso: ""
+          }
+        });
+      }
     } catch {
       showToast("Error al cargar la información institucional.", "error");
     } finally {
@@ -98,9 +131,23 @@ export default function UnidadPosgradoAdminPage() {
         form.append("organigrama", organigramaFile);
       }
 
+      // == DATOS DE ADMISIÓN ==
+      form.append("admision_json", JSON.stringify({
+        periodo_actual: admisionData.periodo_actual,
+        whatsapp_contacto: admisionData.whatsapp_contacto,
+        // Los documentos existentes se enviarán dentro del JSON para que Laravel los mantenga si no hay archivo nuevo
+        documentos: admisionData.documentos
+      }));
+
+      if (admisionFiles.maestria) form.append("documento_maestria", admisionFiles.maestria);
+      if (admisionFiles.doctorado) form.append("documento_doctorado", admisionFiles.doctorado);
+      if (admisionFiles.diplomado) form.append("documento_diplomado", admisionFiles.diplomado);
+      if (admisionFiles.curso) form.append("documento_curso", admisionFiles.curso);
+
       await unidadPosgradoApi.update(form);
       showToast("Información institucional actualizada exitosamente.", "success");
       setAutoridadesFiles({}); 
+      setAdmisionFiles({ maestria: null, doctorado: null, diplomado: null, curso: null });
       router.refresh(); 
       fetchData(); 
     } catch (err) {
@@ -180,6 +227,7 @@ export default function UnidadPosgradoAdminPage() {
     { id: "identidad", label: "Identidad", icon: <Building className="w-4 h-4" /> },
     { id: "autoridades", label: "Autoridades", icon: <Users className="w-4 h-4" /> },
     { id: "directorio", label: "Directorio", icon: <Phone className="w-4 h-4" /> },
+    { id: "admision", label: "Admisión Global", icon: <GraduationCap className="w-4 h-4" /> },
   ];
 
   return (
@@ -553,6 +601,102 @@ export default function UnidadPosgradoAdminPage() {
                     <p className="text-sm text-muted-foreground">No hay contactos registrados.</p>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* TAB: ADMISIÓN GLOBAL */}
+          {activeTab === "admision" && (
+            <div className="bg-white p-8 rounded-2xl border border-border shadow-sm space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-brand-50 rounded-xl border border-brand-100">
+                  <GraduationCap className="w-6 h-6 text-brand-600" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-brand-950 text-xl">Configuración de Admisión</h3>
+                  <p className="text-xs text-muted-foreground">Datos globales que aparecen en las secciones de inscripción de todos los programas.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Periodo Académico Actual</label>
+                  <input
+                    type="text"
+                    placeholder="Ej: 2026-I"
+                    className="w-full px-4 py-3 bg-muted/30 border border-border rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm font-bold"
+                    value={admisionData.periodo_actual}
+                    onChange={(e) => setAdmisionData({...admisionData, periodo_actual: e.target.value})}
+                  />
+                  <p className="text-[10px] text-muted-foreground italic">Este texto aparecerá en los títulos y banners de admisión.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">WhatsApp de Contacto (Soporte)</label>
+                  <div className="relative">
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="51999888777"
+                      className="w-full pl-11 pr-4 py-3 bg-muted/30 border border-border rounded-xl focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition-all text-sm font-bold"
+                      value={admisionData.whatsapp_contacto}
+                      onChange={(e) => setAdmisionData({...admisionData, whatsapp_contacto: e.target.value})}
+                    />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground italic">Formato: Código país + número (ej: 51949260658)</p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-dashed border-border">
+                <h4 className="text-sm font-black text-brand-950 uppercase tracking-wider mb-6 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-brand-500" /> Guías de Admisión (PDF)
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[
+                    { key: 'maestria' as const, label: 'Guía de Maestría', ref: maestriaRef },
+                    { key: 'doctorado' as const, label: 'Guía de Doctorado', ref: doctoradoRef },
+                    { key: 'diplomado' as const, label: 'Guía de Diplomado', ref: diplomadoRef },
+                    { key: 'curso' as const, label: 'Guía de Cursos/Talleres', ref: cursoRef }
+                  ].map((item) => (
+                    <div key={item.key} className="p-5 rounded-2xl border border-border bg-neutral-50/50 space-y-4 hover:border-brand-200 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-brand-900 uppercase tracking-tight">{item.label}</span>
+                        {admisionData.documentos[item.key] && (
+                          <a 
+                            href={getStorageUrl(admisionData.documentos[item.key])} 
+                            target="_blank" 
+                            className="text-[10px] font-bold text-brand-600 hover:underline flex items-center gap-1"
+                          >
+                            <Eye className="w-3 h-3" /> Ver Actual
+                          </a>
+                        )}
+                      </div>
+
+                      <div 
+                        onClick={() => item.ref.current?.click()}
+                        className={cn(
+                          "cursor-pointer border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all",
+                          admisionFiles[item.key] ? "border-brand-500 bg-brand-50/30" : "border-gray-200 bg-white hover:border-brand-300"
+                        )}
+                      >
+                        <Upload className={cn("w-5 h-5", admisionFiles[item.key] ? "text-brand-600" : "text-muted-foreground")} />
+                        <span className="text-[10px] font-bold text-center break-all">
+                          {admisionFiles[item.key] ? admisionFiles[item.key]?.name : "Subir nuevo PDF"}
+                        </span>
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept=".pdf" 
+                          ref={item.ref}
+                          onChange={(e) => {
+                            if (e.target.files?.[0]) setAdmisionFiles({...admisionFiles, [item.key]: e.target.files[0]});
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
