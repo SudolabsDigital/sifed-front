@@ -24,8 +24,10 @@ export function getStorageUrl(path?: string | null): string {
   // REGLA CRÍTICA DE ASSETS HÍBRIDOS (SIFED)
   // Si la ruta NO empieza con /storage/, es un asset estático que vive en Next.js /public
   // Ej: "/images/galeria/foto.webp"
+  // NO debemos usar encodeURI aquí porque next/image lo codificará internamente,
+  // y si lo pre-codificamos, generaremos un doble escape (ej. %2520 en vez de %20)
   if (!path.startsWith("/storage/")) {
-    return encodeURI(path).replace(/,/g, '%2C');
+    return path;
   }
   
   // Si empieza con /storage/, es un asset dinámico de Laravel.
@@ -40,8 +42,8 @@ export function getStorageUrl(path?: string | null): string {
   
   const finalUrl = `${baseUrl}/${cleanPath}`;
 
-  // Codificar para evitar problemas con espacios en los nombres de archivos en next/image
-  return encodeURI(finalUrl);
+  // Para URLs externas de Laravel devolvemos la ruta como absolute string.
+  return finalUrl;
 }
 
 /**
