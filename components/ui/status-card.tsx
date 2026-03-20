@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { LucideIcon, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ export default function StatusCard({
         
         {/* Branding */}
         <div className="flex items-center gap-3 mb-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
+            <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
         </div>
 
         {/* Icono Flotante */}

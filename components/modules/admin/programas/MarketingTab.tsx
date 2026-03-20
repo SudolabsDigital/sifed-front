@@ -2,6 +2,8 @@
 
 import { Image as ImageIcon, Trash2 } from "lucide-react";
 import { ProgramaAdminFormData } from "@/types/admin-programa";
+import { useToast } from "@/hooks/use-toast";
+import { convertToWebP } from "@/lib/image-utils";
 
 interface MarketingTabProps {
   formData: ProgramaAdminFormData;
@@ -11,22 +13,44 @@ interface MarketingTabProps {
   setFotoHeroPreview: (url: string | null) => void;
 }
 
-export function MarketingTab({ 
-  formData, 
+export function MarketingTab({
+  formData,
   setFormData,
   setFotoHeroFile,
   fotoHeroPreview,
   setFotoHeroPreview
 }: MarketingTabProps) {
+  const { showToast, removeToast } = useToast();
 
-  const handleHeroChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHeroChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFotoHeroFile(file);
-      setFotoHeroPreview(URL.createObjectURL(file));
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("El banner es muy pesado. Máximo 5MB.", "error");
+        return;
+      }
+
+      const loadingToastId = showToast("Optimizando banner para la web...", "loading");
+
+      try {
+        // Usamos el intent HERO (0.90 de calidad) porque son banners muy grandes
+        const webpFile = await convertToWebP(file, 'HERO');
+        setFotoHeroFile(webpFile);
+        setFotoHeroPreview(URL.createObjectURL(webpFile));
+
+        removeToast(loadingToastId);
+        showToast("Banner optimizado con éxito", "success");
+      } catch (error) {
+        console.error("Error optimizando banner:", error);
+        removeToast(loadingToastId);
+        showToast("Error al optimizar el banner", "error");
+
+        // Fallback al original
+        setFotoHeroFile(file);
+        setFotoHeroPreview(URL.createObjectURL(file));
+      }
     }
   };
-
   const clearHero = () => {
     setFotoHeroFile(null);
     setFotoHeroPreview(null);

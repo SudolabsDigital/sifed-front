@@ -2,7 +2,7 @@ import { NoticiaService } from '@/lib/services/noticia-service';
 import { NewsCard } from './NewsCard';
 import { ArrowRight, Calendar, ChevronRight } from 'lucide-react';
 import { getStorageUrl } from '@/lib/utils';
-import Image from 'next/image';
+import { UnoptImage } from "@/components/ui/unopt-image";
 import Link from 'next/link';
 
 export async function NewsCollage() {
@@ -69,11 +69,10 @@ export async function NewsCollage() {
                   {/* Thumbnail */}
                   <div className="shrink-0 w-24 h-24 md:w-32 md:h-32 relative rounded-xl overflow-hidden shadow-sm">
                     {item.imagen_url ? (
-                      <Image
+                      <UnoptImage
                         src={getStorageUrl(item.imagen_url)}
                         alt={item.titulo}
                         fill
-                        unoptimized={process.env.NODE_ENV === 'development'}
                         sizes="(max-width: 768px) 96px, 128px"
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
                       />

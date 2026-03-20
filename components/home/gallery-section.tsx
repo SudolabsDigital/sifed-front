@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 
 const images = [
   "foto1.jpg",
@@ -31,7 +31,7 @@ export default function GallerySection() {
               key={index}
               className="group relative overflow-hidden rounded-2xl shadow-md"
             >
-              <Image
+              <UnoptImage
                 src={`/galeria/${img}`}
                 alt={`Galería ${index + 1}`}
                 width={500}

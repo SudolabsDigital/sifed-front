@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import {
   ArrowRight, ChevronRight, ChevronLeft, BookOpen,
   ClipboardList, Clock, GraduationCap, Layers, LucideIcon,
@@ -102,9 +102,8 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
         <div className="flex h-full w-full touch-pan-y">
           {slides.map((s, idx) => (
             <div className="flex-[0_0_100%] min-w-0 relative h-full" key={s.id}>
-              <Image
+              <UnoptImage
                 src={s.src} alt={s.alt} fill
-                unoptimized={process.env.NODE_ENV === 'development'}
                 quality={85}
                 sizes="100vw"
                 className={cn(

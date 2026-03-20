@@ -7,6 +7,7 @@ export interface AdmissionData {
   examDate: string;
   documentUrl: string;
   description: string;
+  whatsappNumber?: string;
 }
 
 export const ADMISSION_CONFIG: Record<"maestria" | "doctorado", AdmissionData> = {

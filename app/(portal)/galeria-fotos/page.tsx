@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import useSWR from "swr";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { 
   Camera, 
-  ImageIcon,
-  Maximize2,
   X,
   ChevronLeft,
   ChevronRight,
   ZoomIn,
   ZoomOut,
   RefreshCcw,
-  Download,
   Search,
   Clock
 } from "lucide-react";
@@ -43,7 +41,7 @@ export default function GaleriaFotosPage() {
     { keepPreviousData: true }
   );
 
-  const galeriasRaw = data?.data || [];
+  const galeriasRaw = useMemo(() => data?.data || [], [data]);
 
   const filteredPhotos = useMemo(() => {
     return galeriasRaw.flatMap((galeria: Galeria) => {
@@ -88,10 +86,19 @@ export default function GaleriaFotosPage() {
     setZoomLevel(prev => e.deltaY < 0 ? Math.min(prev + 0.2, 5) : Math.max(prev - 0.2, 1));
   };
 
-  const nextPhoto = () => photoIndex !== null && setPhotoIndex((photoIndex + 1) % filteredPhotos.length);
-  const prevPhoto = () => photoIndex !== null && setPhotoIndex((photoIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
+  const nextPhoto = useCallback(() => {
+    if (photoIndex !== null) {
+      setPhotoIndex((photoIndex + 1) % filteredPhotos.length);
+      setZoomLevel(1);
+    }
+  }, [photoIndex, filteredPhotos.length]);
 
-  useEffect(() => { setZoomLevel(1); }, [photoIndex]);
+  const prevPhoto = useCallback(() => {
+    if (photoIndex !== null) {
+      setPhotoIndex((photoIndex - 1 + filteredPhotos.length) % filteredPhotos.length);
+      setZoomLevel(1);
+    }
+  }, [photoIndex, filteredPhotos.length]);
 
   return (
     <div className="min-h-screen bg-white pb-20">
@@ -166,7 +173,6 @@ export default function GaleriaFotosPage() {
                    <div className="h-px bg-brand-100 flex-1 opacity-50" />
                 </div>
 
-                {/* MASONRY COLLAGE RESTAURADO */}
                 <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
                   <AnimatePresence mode="popLayout">
                     {filteredPhotos.filter(p => p.grupoId === grupo).map((foto) => (
@@ -179,12 +185,16 @@ export default function GaleriaFotosPage() {
                         onClick={() => setPhotoIndex(filteredPhotos.findIndex(p => p.id === foto.id))}
                         className="group relative cursor-zoom-in rounded-3xl overflow-hidden border border-border bg-brand-50 break-inside-avoid shadow-sm hover:shadow-2xl transition-all duration-500"
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                          src={getStorageUrl(foto.archivo_url)} 
-                          alt="Gallery" 
-                          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
-                        />
+                        <div className="relative w-full h-auto min-h-[200px]">
+                          <UnoptImage 
+                            src={getStorageUrl(foto.archivo_url)} 
+                            alt={foto.galeriaTitulo || "Gallery Image"} 
+                            width={500}
+                            height={500}
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                            className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+                          />
+                        </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
                           <p className="text-white font-bold text-[9px] uppercase tracking-widest mb-1">{foto.galeriaTitulo}</p>
                           <p className="text-white/60 text-[8px] font-medium">{foto.galeriaFecha.split('T')[0]}</p>
@@ -199,7 +209,6 @@ export default function GaleriaFotosPage() {
         )}
       </section>
 
-      {/* LIGHTBOX PRO (Sin cambios, es eficaz) */}
       <AnimatePresence>
         {photoIndex !== null && (
           <motion.div 
@@ -221,7 +230,7 @@ export default function GaleriaFotosPage() {
                     <button onClick={() => setZoomLevel(prev => Math.max(prev - 0.5, 1))} className="p-2 text-white/60 hover:text-white"><ZoomOut className="w-4 h-4" /></button>
                     <button onClick={() => setZoomLevel(1)} className="p-2 text-white/60 hover:text-white"><RefreshCcw className="w-4 h-4" /></button>
                   </div>
-                  <a href={getStorageUrl(filteredPhotos[photoIndex].archivo_url)} download target="_blank" className="px-6 py-3 rounded-xl bg-uncp-gold text-brand-950 font-black text-[10px] uppercase">Descargar</a>
+                  <a href={getStorageUrl(filteredPhotos[photoIndex].archivo_url)} download target="_blank" className="px-6 py-3 rounded-xl bg-uncp-gold text-brand-950 font-black text-[10px] uppercase transition-all hover:bg-white hover:text-brand-950">Descargar</a>
                </div>
             </div>
 
@@ -233,14 +242,35 @@ export default function GaleriaFotosPage() {
                 key={photoIndex} drag={zoomLevel > 1} dragConstraints={{ left: -1000, right: 1000, top: -1000, bottom: 1000 }} dragElastic={0.1}
                 animate={{ scale: zoomLevel }} className="relative cursor-grab active:cursor-grabbing flex items-center justify-center"
               >
-                <img src={getStorageUrl(filteredPhotos[photoIndex].archivo_url)} alt="Full" className="max-w-[95vw] max-h-[85vh] w-auto h-auto object-contain shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none transition-all duration-300" />
+                <div className="relative max-w-[95vw] max-h-[85vh] w-[1200px] h-[800px]">
+                  <UnoptImage 
+                    src={getStorageUrl(filteredPhotos[photoIndex].archivo_url)} 
+                    alt="Full View" 
+                    fill
+                    priority
+                    className="object-contain shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none transition-all duration-300" 
+                  />
+                </div>
               </motion.div>
             </div>
 
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 p-2 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 max-w-[90vw] overflow-x-auto no-scrollbar">
                {filteredPhotos.map((f, i) => (
-                 <button key={f.id} onClick={() => setPhotoIndex(i)} className={cn("w-12 h-12 rounded-lg overflow-hidden transition-all flex-shrink-0", photoIndex === i ? "ring-2 ring-uncp-gold scale-110" : "opacity-30 hover:opacity-100")}>
-                   <img src={getStorageUrl(f.archivo_url)} alt="Thumb" className="w-full h-full object-cover" />
+                 <button 
+                   key={f.id} 
+                   onClick={() => {
+                     setPhotoIndex(i);
+                     setZoomLevel(1);
+                   }} 
+                   className={cn("w-12 h-12 rounded-lg overflow-hidden transition-all flex-shrink-0 relative", photoIndex === i ? "ring-2 ring-uncp-gold scale-110" : "opacity-30 hover:opacity-100")}
+                 >
+                   <UnoptImage 
+                    src={getStorageUrl(f.archivo_url)} 
+                    alt="Thumb" 
+                    fill
+                    sizes="48px"
+                    className="object-cover" 
+                   />
                  </button>
                ))}
             </div>

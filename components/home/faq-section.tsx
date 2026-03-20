@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { cn } from "@/lib/utils";
 
 const faqs = [
@@ -61,7 +61,7 @@ export default function FAQSection() {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-10 w-full max-w-[450px] lg:max-w-none flex items-end"
             >
-              <Image 
+              <UnoptImage 
                 src="/images/Img-alumnos-Admision.webp" 
                 alt="Estudiantes de Posgrado UNCP" 
                 width={600} 

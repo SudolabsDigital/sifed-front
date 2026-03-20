@@ -23,7 +23,7 @@ export async function fetchPublic<T>(
     }
   }
 
-  // Configurar las opciones por defecto
+  // Configurar las opciones por defecto para On-Demand Revalidation
   const fetchOptions: RequestInit = {
     ...options,
     headers: {
@@ -31,11 +31,9 @@ export async function fetchPublic<T>(
       'Accept': 'application/json',
       ...options?.headers,
     },
-    // Si no se especifica otra cosa, revalidamos cada 60 segundos por defecto
-    next: {
-      revalidate: options?.next?.revalidate ?? 60,
-      ...options?.next
-    }
+    // Por defecto forzamos el caché para que solo expire con el webhook de On-Demand
+    cache: options?.cache ?? 'force-cache',
+    next: options?.next,
   };
 
   try {

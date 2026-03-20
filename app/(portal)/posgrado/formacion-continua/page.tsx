@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Cursos y talleres de actualización profesional para potenciar tus habilidades educativas.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function FormacionContinuaPage() {
   let formacionContinua: ProgramData[] = [];

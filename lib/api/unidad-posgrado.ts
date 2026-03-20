@@ -31,6 +31,16 @@ export interface UnidadPosgrado {
   identidad_json: Record<string, unknown> | null;
   autoridades_json: Autoridad[] | null;
   directorio_json: DirectorioContacto[] | null;
+  admision_json: {
+    periodo_actual: string;
+    whatsapp_contacto: string;
+    documentos: {
+      maestria: string;
+      doctorado: string;
+      diplomado: string;
+      curso: string;
+    };
+  } | null;
   organigrama_url: string | null;
   video_institucional_url: string | null;
   config_visibilidad: {
@@ -38,6 +48,7 @@ export interface UnidadPosgrado {
     mostrar_vision?: boolean;
     mostrar_autoridades?: boolean;
     mostrar_directorio?: boolean;
+    mostrar_organigrama?: boolean;
   } | null;
 }
 

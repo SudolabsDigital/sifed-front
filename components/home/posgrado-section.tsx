@@ -43,9 +43,10 @@ export default async function PosgradoSection() {
   }
 
   return (
-    <PosgradoReveal 
-      maestrias={maestrias} 
-      doctorados={doctorados} 
-    />
-  );
-}
+    <div className="relative">
+      <PosgradoReveal
+        maestrias={maestrias} 
+        doctorados={doctorados}
+      />
+    </div>
+  );}

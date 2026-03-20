@@ -5,7 +5,7 @@ import { ProgramData, HorarioModulo, HorarioClase } from "@/types/programa";
 import ProgramHero from "./program-hero";
 import CurriculumTable from "./curriculum-table";
 import AdmissionUnifiedSection from "./admission-unified-section";
-import { ADMISSION_CONFIG } from "@/data/admission-config";
+import { ADMISSION_CONFIG, AdmissionData } from "@/data/admission-config";
 import {
   Target,
   Users,
@@ -19,19 +19,21 @@ import {
   CreditCard,
   FileCheck
 } from "lucide-react";
-import { useState } from "react";import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface ProgramDetailLayoutProps {
   program: ProgramData;
+  globalAdmissionData?: AdmissionData;
 }
 
 type TabId = "info" | "perfiles" | "curriculum" | "horarios" | "inversion";
 
-export default function ProgramDetailLayout({ program }: ProgramDetailLayoutProps) {
+export default function ProgramDetailLayout({ program, globalAdmissionData }: ProgramDetailLayoutProps) {
   const [activeTab, setActiveTab] = useState<TabId>("info");
 
   const fallbackAdmissionData = program.tipo === "maestria" ? ADMISSION_CONFIG.maestria : ADMISSION_CONFIG.doctorado;
-  const admissionData = {
+  const admissionData = globalAdmissionData || {
     ...fallbackAdmissionData,
     // Aquí se podrían sobrescribir datos de admissionData con program.admision si fuera necesario
   };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Props {
@@ -61,7 +61,7 @@ export default function GalleryGrid({ folder, images, title, description }: Prop
               onClick={() => open(index)}
             >
               {/* Imagen en máxima calidad */}
-              <Image
+              <UnoptImage
                 src={`/galeria/${folder}/${img}`}
                 alt={img}
                 width={2000}
@@ -106,7 +106,7 @@ export default function GalleryGrid({ folder, images, title, description }: Prop
 
           {/* Imagen Full Calidad */}
           <div className="max-w-[92vw] max-h-[90vh]">
-            <Image
+            <UnoptImage
               src={`/galeria/${folder}/${images[activeIndex]}`}
               alt=""
               width={3000}

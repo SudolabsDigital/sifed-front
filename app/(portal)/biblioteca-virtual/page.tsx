@@ -1,15 +1,13 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import useSWR from "swr";
 import { 
   Library, 
   Search, 
-  FileText,
   User,
   Download,
   BookOpen,
-  RefreshCcw,
   Calendar,
   Quote,
   ArrowUpRight,
@@ -18,6 +16,7 @@ import {
   ChevronUp
 } from "lucide-react";
 import Link from "next/link";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { bibliotecaApi } from "@/lib/api/biblioteca";
 import { getStorageUrl, cn } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
@@ -37,7 +36,7 @@ function ExpansibleDescription({ text }: { text: string }) {
           animate={{ height: isExpanded ? "auto" : (isLongText ? 80 : "auto") }}
           className={cn(
             "text-brand-900/70 text-base md:text-lg leading-relaxed font-medium pl-4 italic overflow-hidden relative",
-            !isExpanded && isLongText && "mask-fade-bottom" // Clase personalizada o inline para el fade
+            !isExpanded && isLongText && "mask-fade-bottom"
           )}
         >
           {text}
@@ -67,21 +66,21 @@ export default function BibliotecaVirtualPage() {
   const [categoriaActiva, setCategoriaActiva] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data, isLoading, isValidating } = useSWR(
+  const { data, isLoading } = useSWR(
     ['/api/portal/biblioteca', { search: searchQuery, categoria_id: categoriaActiva }],
     ([, params]) => bibliotecaApi.getPublic(params),
     { keepPreviousData: true }
   );
 
-  const recursos = data?.recursos?.data || [];
+  const rawRecursos = useMemo(() => data?.recursos?.data || [], [data]);
   const categorias = data?.categorias || [];
 
   const filteredRecursos = useMemo(() => {
-    return recursos.filter(r => 
+    return rawRecursos.filter(r => 
       r.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
       r.descripcion?.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [recursos, searchQuery]);
+  }, [rawRecursos, searchQuery]);
 
   return (
     <div className="min-h-screen bg-white pb-32">
@@ -139,7 +138,7 @@ export default function BibliotecaVirtualPage() {
       </section>
 
       <section className="max-w-7xl mx-auto px-6 py-16">
-        {isLoading && recursos.length === 0 ? (
+        {isLoading && rawRecursos.length === 0 ? (
           <div className="py-20"><Loader text="Sincronizando..." /></div>
         ) : (
           <div className="flex flex-col gap-6">
@@ -156,7 +155,13 @@ export default function BibliotecaVirtualPage() {
                   <div className="px-6 py-4 md:px-8 md:py-6 flex flex-col md:flex-row gap-6 items-start md:items-center bg-brand-50/20 border-b border-brand-50/50">
                     <div className="w-16 h-24 shrink-0 relative rounded-lg overflow-hidden shadow-lg border-2 border-white transform group-hover:scale-105 transition-transform">
                       {item.imagen_portada_url ? (
-                        <img src={getStorageUrl(item.imagen_portada_url)} alt="Cover" className="w-full h-full object-cover" />
+                        <UnoptImage 
+                          src={getStorageUrl(item.imagen_portada_url)} 
+                          alt={item.titulo} 
+                          fill
+                          sizes="64px"
+                          className="object-cover" 
+                        />
                       ) : (
                         <div className="w-full h-full bg-brand-100 flex items-center justify-center text-brand-300"><Book className="w-6 h-6" /></div>
                       )}
@@ -175,9 +180,15 @@ export default function BibliotecaVirtualPage() {
                         href={`/posgrado/plana-docente/${item.docente.slug}`} 
                         className="flex items-center gap-3 p-2 pr-4 bg-white/80 hover:bg-white rounded-2xl border border-brand-100 shadow-sm transition-all group/docente hover:border-uncp-gold/50"
                       >
-                         <div className="w-10 h-10 rounded-xl bg-brand-50 overflow-hidden border border-brand-100 shrink-0">
+                         <div className="w-10 h-10 rounded-xl bg-brand-50 overflow-hidden border border-brand-100 shrink-0 relative">
                             {item.docente?.foto_url ? (
-                              <img src={getStorageUrl(item.docente.foto_url)} alt="Docente" className="w-full h-full object-cover" />
+                              <UnoptImage 
+                                src={getStorageUrl(item.docente.foto_url)} 
+                                alt={item.docente.nombre_completo} 
+                                fill
+                                sizes="40px"
+                                className="object-cover" 
+                              />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-brand-300"><User className="w-5 h-5" /></div>
                             )}
@@ -188,7 +199,7 @@ export default function BibliotecaVirtualPage() {
                          </div>
                       </Link>
                     ) : (
-                      <div className="flex items-center gap-3 p-2 pr-4 bg-brand-50/50 rounded-2xl border border-brand-100 opacity-80">
+                      <div className="flex items-center gap-3 p-2 pr-4 bg-brand-50/50 rounded-2xl border border-border opacity-80">
                          <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-300 shrink-0"><User className="w-5 h-5" /></div>
                          <div className="min-w-0">
                             <p className="text-[7px] font-black uppercase tracking-tighter text-brand-400 mb-0.5">Sugerencia de:</p>

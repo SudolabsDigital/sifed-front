@@ -9,6 +9,7 @@ import { NoticiaCategoria } from "@/types/noticia-categoria";
 import { Save, Upload, ImageIcon, Loader2, Clock, User, Hash, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { convertToWebP } from "@/lib/image-utils";
 
 interface NoticiaFormProps {
   initialData?: Noticia;
@@ -16,15 +17,15 @@ interface NoticiaFormProps {
 
 export function NoticiaForm({ initialData }: NoticiaFormProps) {
   const router = useRouter();
-  const { showToast } = useToast();
+  const { showToast, removeToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const [preview, setPreview] = useState<string | null>(initialData?.imagen_url || null);
   const [categorias, setCategorias] = useState<NoticiaCategoria[]>([]);
   const [selectedCategoriaId, setSelectedCategoriaId] = useState<string>(initialData?.noticia_categoria_id?.toString() || "");
-  
-  const isEditing = !!initialData;
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
+  const isEditing = !!initialData;
   useEffect(() => {
     // Cargamos categorías para el selector
     const fetchCategories = async () => {
@@ -50,7 +51,17 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
     setFormErrors({});
 
     const formData = new FormData(e.currentTarget);
-    
+
+    // Inyectar el archivo de imagen convertido (si existe)
+    if (imageFile) {
+        formData.set('imagen', imageFile);
+    } else {
+        const originalFile = formData.get('imagen') as File;
+        if (!originalFile || originalFile.size === 0) {
+           formData.delete('imagen');
+        }
+    }
+
     // Manejo de checkbox
     if (!formData.has('destacada')) {
         formData.append('destacada', '0');
@@ -70,7 +81,7 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
       router.refresh();
     } catch (error: unknown) {
       console.error("Error saving noticia:", error);
-      
+
       const axiosError = error as { response?: { status: number; data: { errors: Record<string, string[]> } } };
       if (axiosError.response?.status === 422) {
         setFormErrors(axiosError.response.data.errors || {});
@@ -83,29 +94,49 @@ export function NoticiaForm({ initialData }: NoticiaFormProps) {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validar tamaño (5MB)
+      // Validar tamaño (5MB) del original
       if (file.size > 5 * 1024 * 1024) {
-        alert("La imagen no debe superar los 5MB");
+        showToast("La imagen no debe superar los 5MB", "warning");
         e.target.value = "";
         return;
       }
-      
+
       // Validar tipo
       const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
       if (!validTypes.includes(file.type)) {
-        alert("Formato no compatible. Solo JPG, PNG o WEBP.");
+        showToast("Formato no compatible. Solo JPG, PNG o WEBP.", "warning");
         e.target.value = "";
         return;
       }
 
-      const url = URL.createObjectURL(file);
-      setPreview(url);
+      const loadingToastId = showToast("Optimizando imagen para la web...", "loading");
+
+      try {
+        // Convertir a WebP inteligentemente según la intención (Noticias = CONTENT = 0.80)
+        const webpFile = await convertToWebP(file, 'CONTENT');
+
+        setImageFile(webpFile);
+        const url = URL.createObjectURL(webpFile);
+        setPreview(url);
+
+        removeToast(loadingToastId);
+        showToast("Imagen optimizada con éxito", "success");
+      } catch (error) {
+        console.error("Error optimizando imagen:", error);
+        removeToast(loadingToastId);
+        showToast("Error al optimizar la imagen", "error");
+
+        // Fallback: usar original si falla la conversión
+        setImageFile(file);
+        setPreview(URL.createObjectURL(file));
+      }
+    } else {
+        setImageFile(null);
     }
   };
-
   return (
     <form 
       key={initialData?.id || 'new-noticia'}

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { 
   Save, 
   X, 
@@ -10,13 +11,14 @@ import {
   Trash2, 
   Plus,
   Loader2,
-  Calendar,
-  AlertCircle
+  Calendar
 } from "lucide-react";
 import { galeriasApi, Galeria, GaleriaFoto } from "@/lib/api/galerias";
-import { getStorageUrl, cn } from "@/lib/utils";
+import { getStorageUrl } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiError } from "@/lib/error-handler";
+import { AxiosError } from "axios";
+import { convertToWebP } from "@/lib/image-utils";
 
 interface GaleriaFormProps {
   initialData?: Galeria;
@@ -25,7 +27,7 @@ interface GaleriaFormProps {
 
 export default function GaleriaForm({ initialData, isEditing = false }: GaleriaFormProps) {
   const router = useRouter();
-  const { showToast } = useToast();
+  const { showToast, removeToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeletingPhoto, setIsDeletingPhoto] = useState<number | null>(null);
 
@@ -37,7 +39,7 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
     fecha_evento: initialData?.fecha_evento 
       ? initialData.fecha_evento.split('T')[0] 
       : new Date().toLocaleDateString('en-CA'), // Formato YYYY-MM-DD local
-    estado: initialData?.estado || "activo",
+    estado: (initialData?.estado as "activo" | "borrador") || "activo",
     orden: initialData?.orden || 0,
   });
 
@@ -54,43 +56,81 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-  const handlePortadaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePortadaChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         showToast(`La portada es muy pesada. Máximo 5MB.`, "error");
         return;
       }
-      setPortadaFile(file);
-      setPortadaPreview(URL.createObjectURL(file));
+      
+      const loadingToastId = showToast("Optimizando portada para la web...", "loading");
+      
+      try {
+        const webpFile = await convertToWebP(file, 'GALLERY');
+        setPortadaFile(webpFile);
+        setPortadaPreview(URL.createObjectURL(webpFile));
+        
+        removeToast(loadingToastId);
+        showToast("Portada optimizada con éxito", "success");
+      } catch (error) {
+        console.error("Error optimizando portada:", error);
+        removeToast(loadingToastId);
+        showToast("Error al optimizar la portada", "error");
+        
+        // Fallback
+        setPortadaFile(file);
+        setPortadaPreview(URL.createObjectURL(file));
+      }
     }
   };
 
-  const handlePhotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotosChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const loadingToastId = showToast(`Optimizando ${files.length} imagen(es)...`, "loading");
+
     const validFiles: File[] = [];
     const validPreviews: string[] = [];
     
     let rejectedCount = 0;
     let duplicateCount = 0;
 
-    files.forEach(file => {
+    // Procesamos en serie o en paralelo, Promise.all es mejor para velocidad
+    const processPromises = files.map(async (file) => {
       // 1. Validar Peso
       if (file.size > MAX_FILE_SIZE) {
         rejectedCount++;
-        return;
+        return null;
       }
 
-      // 2. Validar Duplicados (por nombre y tamaño en la selección actual y previa)
+      // 2. Validar Duplicados
       const isDuplicate = newPhotos.some(p => p.name === file.name && p.size === file.size);
       if (isDuplicate) {
         duplicateCount++;
-        return;
+        return null;
       }
 
-      validFiles.push(file);
-      validPreviews.push(URL.createObjectURL(file));
+      try {
+         const webpFile = await convertToWebP(file, 'GALLERY');
+         return webpFile;
+      } catch (error) {
+         console.error("Error convirtiendo foto a WebP:", error);
+         return file;
+      }
     });
+
+    const processedFiles = await Promise.all(processPromises);
+
+    processedFiles.forEach(file => {
+       if (file) {
+          validFiles.push(file);
+          validPreviews.push(URL.createObjectURL(file));
+       }
+    });
+
+    removeToast(loadingToastId);
 
     if (rejectedCount > 0) {
       showToast(`${rejectedCount} imágenes fueron rechazadas por superar los 5MB.`, "error");
@@ -98,8 +138,9 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
     if (duplicateCount > 0) {
       showToast(`${duplicateCount} imágenes ya están en la lista de subida.`, "warning");
     }
-
+    
     if (validFiles.length > 0) {
+      showToast(`${validFiles.length} imágenes optimizadas y listas.`, "success");
       setNewPhotos(prev => [...prev, ...validFiles]);
       setNewPhotosPreviews(prev => [...prev, ...validPreviews]);
     }
@@ -155,9 +196,9 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
       }
       router.push("/admin/portal/galerias");
       router.refresh();
-    } catch (err: any) {
+    } catch (err) {
       // Manejo inteligente de errores de validación de Laravel para archivos
-      if (err.response?.status === 422) {
+      if (err instanceof AxiosError && err.response?.status === 422) {
         const errors = err.response.data.errors;
         Object.keys(errors).forEach(key => {
           if (key.startsWith('fotos.')) {
@@ -275,8 +316,12 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             {/* Existing Photos */}
             {existingPhotos.map((foto) => (
               <div key={foto.id} className="aspect-square rounded-xl border border-border overflow-hidden relative group bg-muted/20">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={getStorageUrl(foto.archivo_url)} alt="Foto" className="w-full h-full object-cover" />
+                <UnoptImage 
+                  src={getStorageUrl(foto.archivo_url)} 
+                  alt="Foto" 
+                  fill
+                  className="w-full h-full object-cover" 
+                />
                 <button 
                   type="button"
                   disabled={isDeletingPhoto === foto.id}
@@ -291,8 +336,12 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             {/* New Photos Previews */}
             {newPhotosPreviews.map((preview, index) => (
               <div key={`new-${index}`} className="aspect-square rounded-xl border-2 border-brand-200 overflow-hidden relative group bg-brand-50/30">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={preview} alt="Nuevo" className="w-full h-full object-cover" />
+                <UnoptImage 
+                  src={preview} 
+                  alt="Nuevo" 
+                  fill
+                  className="w-full h-full object-cover" 
+                />
                 <div className="absolute top-2 left-2">
                    <span className="bg-brand-600/90 backdrop-blur-sm text-[8px] text-white px-2 py-0.5 rounded-full font-black uppercase tracking-tighter">Nueva</span>
                 </div>
@@ -335,8 +384,12 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             className="aspect-[4/3] rounded-2xl border-2 border-dashed border-border overflow-hidden relative group cursor-pointer hover:border-brand-500 transition-all bg-muted/30"
           >
             {portadaPreview ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={portadaPreview} alt="Portada" className="w-full h-full object-cover" />
+              <UnoptImage 
+                src={portadaPreview} 
+                alt="Portada" 
+                fill
+                className="w-full h-full object-cover" 
+              />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground p-4 text-center">
                 <Upload className="w-8 h-8 mb-2 opacity-50" />
@@ -370,7 +423,7 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
               <select 
                 className="bg-white border border-border rounded-lg text-xs font-bold py-1.5 pl-2 pr-6 outline-none focus:ring-2 focus:ring-brand-500/20"
                 value={formData.estado}
-                onChange={e => setFormData({...formData, estado: e.target.value as any})}
+                onChange={e => setFormData({...formData, estado: e.target.value as "activo" | "borrador"})}
               >
                 <option value="activo">Activo</option>
                 <option value="borrador">Borrador</option>

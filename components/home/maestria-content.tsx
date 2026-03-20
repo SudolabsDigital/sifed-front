@@ -486,7 +486,7 @@ export default function MaestriaContent() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-2xl bg-uncp-gold px-6 py-3 text-sm font-black uppercase tracking-wider text-brand-950 transition hover:brightness-110"
                 >
-                  <MessageCircle className="h-4 w-4" /> WhatsApp: 949 260 658
+                  <MessageCircle className="h-4 w-4" /> WhatsApp: Soporte Posgrado
                 </a>
                 <a
                   href="https://uncpadmision.edu.pe/posgrado/registration/login.php"
@@ -572,7 +572,7 @@ export default function MaestriaContent() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-8 py-4 text-sm font-black uppercase tracking-wider text-white transition hover:bg-white/20"
             >
-              <MessageCircle className="h-4 w-4" /> 949 260 658
+              <MessageCircle className="h-4 w-4" /> Soporte Posgrado
             </a>
             <a
               href="mailto:UPGEDUCACION@UNCP.EDU.PE"

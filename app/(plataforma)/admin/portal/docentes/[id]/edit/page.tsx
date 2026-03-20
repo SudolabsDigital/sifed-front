@@ -59,7 +59,7 @@ export default function EditDocentePage({ params }: EditDocentePageProps) {
 
     const fetchDocente = async () => {
       try {
-        const docente = await docentesApi.getOne(id);
+        const docente = await docentesApi.getById(id);
         
         if (ignore) return;
 

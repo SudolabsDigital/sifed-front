@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { ChevronDown, LogIn, ChevronRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
@@ -186,7 +186,7 @@ export default function Header() {
           {/* BRAND */}
           <Link href="/" className="flex items-center gap-2 lg:gap-4 flex-shrink-0 cursor-pointer group relative z-50 max-w-[85%] lg:max-w-none">
             {/* Logo Posgrado */}
-            <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación UNCP" width={60} height={60} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-8 w-auto lg:h-10" : "h-10 w-auto lg:h-10")} />
+            <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación UNCP" width={60} height={60} className={cn("transition-all duration-500 object-contain shrink-0", scrolled ? "h-8 w-auto lg:h-10" : "h-10 w-auto lg:h-10")} />
             
             {/* Texto */}
             <div className="flex items-center gap-2 lg:gap-3 overflow-hidden">
@@ -246,7 +246,7 @@ export default function Header() {
                             {/* COLUMNA DESTACADA */}
                             <div className="w-1/4 bg-brand-50/50 p-10 border-r border-border/50 flex flex-col justify-between shrink-0 relative">
                                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
-                                   <Image src="/images/logo-posgrado-educacion.webp" alt="" width={200} height={200} />
+                                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Logo de fondo" width={200} height={200} style={{ width: 'auto', height: 'auto' }} />
                                 </div>
                                 <div className="relative z-10">
                                     <span className="text-[10px] font-black text-brand-600 uppercase tracking-[0.3em] mb-4 block">Destacado</span>
@@ -367,7 +367,7 @@ export default function Header() {
                       className="flex items-center gap-3 p-3 bg-brand-50 rounded-xl"
                     >
                       <div className="h-8 w-8 rounded-lg bg-white p-1 flex items-center justify-center border border-brand-100">
-                        <Image src={item.featured.image} alt="" width={20} height={20} className="object-contain" />
+                        <UnoptImage src={item.featured.image} alt="" width={20} height={20} className="object-contain" />
                       </div>
                       <div>
                         <span className="text-xs font-black text-brand-600 uppercase tracking-wider block">Principal</span>

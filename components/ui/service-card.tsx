@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { motion } from "framer-motion";
 import { Lock, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -58,7 +58,7 @@ export default function ServiceCard({
 
       {/* Contenedor del Logo (Identidad UNCP) */}
       <div className="mb-6 relative h-14 w-14 transition-transform duration-500 group-hover:scale-110">
-        <Image
+        <UnoptImage
           src={imageSrc}
           alt={title}
           fill

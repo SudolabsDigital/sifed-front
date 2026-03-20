@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Talleres prácticos y aplicados para docentes e investigadores.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function TalleresPage() {
   let talleres: ProgramData[] = [];

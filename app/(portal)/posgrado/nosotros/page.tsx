@@ -1,12 +1,12 @@
 import { Metadata } from "next";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { unidadPosgradoApi, UnidadPosgrado, Autoridad } from "@/lib/api/unidad-posgrado";
 import PageHero from "@/components/ui/page-hero";
 import { Target, Flag, Phone, Mail, FileText, Building2 } from "lucide-react";
-import { getStorageUrl, cn } from "@/lib/utils";
+import { getStorageUrl } from "@/lib/utils";
 import SmartProfileImage from "@/components/ui/smart-profile-image";
 
-export const revalidate = 60; // ISR cada 60 segundos
+
 
 export const metadata: Metadata = {
   title: "Unidad de Posgrado | SIFED UNCP",
@@ -32,7 +32,7 @@ export default async function NosotrosPage() {
   const showVision = config?.mostrar_vision !== false;
   const showAutoridades = config?.mostrar_autoridades !== false;
   const showDirectorio = config?.mostrar_directorio !== false;
-  const showOrganigrama = (config as any)?.mostrar_organigrama !== false;
+  const showOrganigrama = config?.mostrar_organigrama !== false;
 
   const autoridades = unidad?.autoridades_json || [];
   const directorio = unidad?.directorio_json || [];
@@ -150,11 +150,10 @@ export default async function NosotrosPage() {
                   Estructura Organizativa
                 </h3>
                 <div className="relative aspect-video rounded-xl overflow-hidden bg-brand-50 mb-2">
-                  <Image 
+                  <UnoptImage 
                     src={getStorageUrl(unidad.organigrama_url)} 
                     alt="Organigrama" 
-                    fill 
-                    unoptimized={process.env.NODE_ENV === 'development'}
+                    fill
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-brand-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
