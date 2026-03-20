@@ -18,6 +18,7 @@ import { getStorageUrl } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { handleApiError } from "@/lib/error-handler";
 import { AxiosError } from "axios";
+import { convertToWebP } from "@/lib/image-utils";
 
 interface GaleriaFormProps {
   initialData?: Galeria;
@@ -26,7 +27,7 @@ interface GaleriaFormProps {
 
 export default function GaleriaForm({ initialData, isEditing = false }: GaleriaFormProps) {
   const router = useRouter();
-  const { showToast } = useToast();
+  const { showToast, removeToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeletingPhoto, setIsDeletingPhoto] = useState<number | null>(null);
 
@@ -55,43 +56,81 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-  const handlePortadaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePortadaChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
         showToast(`La portada es muy pesada. Máximo 5MB.`, "error");
         return;
       }
-      setPortadaFile(file);
-      setPortadaPreview(URL.createObjectURL(file));
+      
+      const loadingToastId = showToast("Optimizando portada para la web...", "loading");
+      
+      try {
+        const webpFile = await convertToWebP(file, 'GALLERY');
+        setPortadaFile(webpFile);
+        setPortadaPreview(URL.createObjectURL(webpFile));
+        
+        removeToast(loadingToastId);
+        showToast("Portada optimizada con éxito", "success");
+      } catch (error) {
+        console.error("Error optimizando portada:", error);
+        removeToast(loadingToastId);
+        showToast("Error al optimizar la portada", "error");
+        
+        // Fallback
+        setPortadaFile(file);
+        setPortadaPreview(URL.createObjectURL(file));
+      }
     }
   };
 
-  const handlePhotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotosChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const loadingToastId = showToast(`Optimizando ${files.length} imagen(es)...`, "loading");
+
     const validFiles: File[] = [];
     const validPreviews: string[] = [];
     
     let rejectedCount = 0;
     let duplicateCount = 0;
 
-    files.forEach(file => {
+    // Procesamos en serie o en paralelo, Promise.all es mejor para velocidad
+    const processPromises = files.map(async (file) => {
       // 1. Validar Peso
       if (file.size > MAX_FILE_SIZE) {
         rejectedCount++;
-        return;
+        return null;
       }
 
-      // 2. Validar Duplicados (por nombre y tamaño en la selección actual y previa)
+      // 2. Validar Duplicados
       const isDuplicate = newPhotos.some(p => p.name === file.name && p.size === file.size);
       if (isDuplicate) {
         duplicateCount++;
-        return;
+        return null;
       }
 
-      validFiles.push(file);
-      validPreviews.push(URL.createObjectURL(file));
+      try {
+         const webpFile = await convertToWebP(file, 'GALLERY');
+         return webpFile;
+      } catch (error) {
+         console.error("Error convirtiendo foto a WebP:", error);
+         return file;
+      }
     });
+
+    const processedFiles = await Promise.all(processPromises);
+
+    processedFiles.forEach(file => {
+       if (file) {
+          validFiles.push(file);
+          validPreviews.push(URL.createObjectURL(file));
+       }
+    });
+
+    removeToast(loadingToastId);
 
     if (rejectedCount > 0) {
       showToast(`${rejectedCount} imágenes fueron rechazadas por superar los 5MB.`, "error");
@@ -99,8 +138,9 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
     if (duplicateCount > 0) {
       showToast(`${duplicateCount} imágenes ya están en la lista de subida.`, "warning");
     }
-
+    
     if (validFiles.length > 0) {
+      showToast(`${validFiles.length} imágenes optimizadas y listas.`, "success");
       setNewPhotos(prev => [...prev, ...validFiles]);
       setNewPhotosPreviews(prev => [...prev, ...validPreviews]);
     }

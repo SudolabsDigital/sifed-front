@@ -2,6 +2,8 @@
 
 import { LayoutTemplate, Image as ImageIcon, Trash2 } from "lucide-react";
 import { ProgramaAdminFormData } from "@/types/admin-programa";
+import { useToast } from "@/hooks/use-toast";
+import { convertToWebP } from "@/lib/image-utils";
 
 interface HeroContenidoTabProps {
   formData: ProgramaAdminFormData;
@@ -12,22 +14,43 @@ interface HeroContenidoTabProps {
   setFotoPortadaPreview: (url: string | null) => void;
 }
 
-export function HeroContenidoTab({ 
+export function HeroContenidoTab({
   formData, 
   setFormData,
   setFotoPortadaFile,
   fotoPortadaPreview,
   setFotoPortadaPreview
 }: HeroContenidoTabProps) {
+  const { showToast, removeToast } = useToast();
 
-  const handlePortadaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePortadaChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFotoPortadaFile(file);
-      setFotoPortadaPreview(URL.createObjectURL(file));
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("La imagen es muy pesada. Máximo 5MB.", "error");
+        return;
+      }
+
+      const loadingToastId = showToast("Optimizando cabecera para la web...", "loading");
+
+      try {
+        const webpFile = await convertToWebP(file, 'HERO');
+        setFotoPortadaFile(webpFile);
+        setFotoPortadaPreview(URL.createObjectURL(webpFile));
+
+        removeToast(loadingToastId);
+        showToast("Cabecera optimizada con éxito", "success");
+      } catch (error) {
+        console.error("Error optimizando cabecera:", error);
+        removeToast(loadingToastId);
+        showToast("Error al optimizar la cabecera", "error");
+
+        // Fallback al original
+        setFotoPortadaFile(file);
+        setFotoPortadaPreview(URL.createObjectURL(file));
+      }
     }
   };
-
   const clearPortada = () => {
     setFotoPortadaFile(null);
     setFotoPortadaPreview(null);
