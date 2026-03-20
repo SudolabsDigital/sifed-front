@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "El máximo grado académico orientado a la investigación científica y producción académica de alto impacto.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function DoctoradosPage() {
   let doctorados: ProgramData[] = [];

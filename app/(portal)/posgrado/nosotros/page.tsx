@@ -6,7 +6,7 @@ import { Target, Flag, Phone, Mail, FileText, Building2 } from "lucide-react";
 import { getStorageUrl } from "@/lib/utils";
 import SmartProfileImage from "@/components/ui/smart-profile-image";
 
-export const revalidate = 60; // ISR cada 60 segundos
+
 
 export const metadata: Metadata = {
   title: "Unidad de Posgrado | SIFED UNCP",

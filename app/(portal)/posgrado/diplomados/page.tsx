@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Explora nuestros diplomados de especialización para potenciar tus habilidades educativas.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function DiplomadosPage() {
   let diplomados: ProgramData[] = [];

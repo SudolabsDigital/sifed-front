@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Explora nuestras maestrías en Gestión, Educación Superior, Psicología y Enseñanza Estratégica.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function MaestríasPage() {
   let maestrias: ProgramData[] = [];

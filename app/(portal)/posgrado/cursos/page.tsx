@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Cursos cortos de actualización en nuevas metodologías y herramientas educativas.",
 };
 
-export const revalidate = 3600;
+
 
 export default async function CursosPage() {
   let cursos: ProgramData[] = [];
