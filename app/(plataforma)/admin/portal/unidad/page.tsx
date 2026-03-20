@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import useSWR from "swr";
 import { 
   Building, Users, Phone, Save, 
   Loader2, ImageIcon, Eye, Plus, X, Trash2, GraduationCap, Upload, FileText
@@ -15,9 +15,7 @@ import { handleApiError } from "@/lib/error-handler";
 import { AxiosError } from "axios";
 
 export default function UnidadPosgradoAdminPage() {
-  const router = useRouter();
   const { showToast } = useToast();
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("identidad");
   
@@ -67,14 +65,21 @@ export default function UnidadPosgradoAdminPage() {
   const diplomadoRef = useRef<HTMLInputElement>(null);
   const cursoRef = useRef<HTMLInputElement>(null);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const data = await unidadPosgradoApi.getAdmin();
+  const { data: unidadData, isLoading, mutate } = useSWR(
+    '/api/admin/unidad-posgrado',
+    unidadPosgradoApi.getAdmin,
+    { revalidateOnFocus: false }
+  );
+
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (unidadData && !initialized) {
       setFormData({
-        mision: data.mision || "",
-        vision: data.vision || "",
-        historia: data.historia || "",
-        config_visibilidad: data.config_visibilidad || {
+        mision: unidadData.mision || "",
+        vision: unidadData.vision || "",
+        historia: unidadData.historia || "",
+        config_visibilidad: unidadData.config_visibilidad || {
           mostrar_mision: true,
           mostrar_vision: true,
           mostrar_autoridades: true,
@@ -82,30 +87,22 @@ export default function UnidadPosgradoAdminPage() {
           mostrar_organigrama: true,
         }
       });
-      setAutoridades(data.autoridades_json || []);
-      setDirectorio(data.directorio_json || []);
-      setCurrentOrganigrama(data.organigrama_url);
+      setAutoridades(unidadData.autoridades_json || []);
+      setDirectorio(unidadData.directorio_json || []);
+      setCurrentOrganigrama(unidadData.organigrama_url);
       
-      if (data.admision_json) {
+      if (unidadData.admision_json) {
         setAdmisionData({
-          periodo_actual: data.admision_json.periodo_actual || "2026-I",
-          whatsapp_contacto: data.admision_json.whatsapp_contacto || "51949260658",
-          documentos: data.admision_json.documentos || {
+          periodo_actual: unidadData.admision_json.periodo_actual || "2026-I",
+          whatsapp_contacto: unidadData.admision_json.whatsapp_contacto || "51949260658",
+          documentos: unidadData.admision_json.documentos || {
             maestria: "", doctorado: "", diplomado: "", curso: ""
           }
         });
       }
-    } catch {
-      showToast("Error al cargar la información institucional.", "error");
-    } finally {
-      setLoading(false);
+      setInitialized(true);
     }
-  }, [showToast]);
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [unidadData, initialized]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,8 +146,7 @@ export default function UnidadPosgradoAdminPage() {
       showToast("Información institucional actualizada exitosamente.", "success");
       setAutoridadesFiles({}); 
       setAdmisionFiles({ maestria: null, doctorado: null, diplomado: null, curso: null });
-      router.refresh(); 
-      fetchData(); 
+      mutate(); 
     } catch (err) {
       // Capturar errores de validación 422 para mostrar feedback inteligente en los inputs
       if (err instanceof AxiosError && err.response?.status === 422) {
@@ -216,7 +212,7 @@ export default function UnidadPosgradoAdminPage() {
     setAutoridadesFiles({ ...autoridadesFiles, [index]: file });
   };
 
-  if (loading) {
+  if (isLoading && !initialized) {
     return (
       <div className="flex h-96 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
