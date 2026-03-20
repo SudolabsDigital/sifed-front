@@ -8,7 +8,7 @@ interface AdmissionUnifiedSectionProps {
 }
 
 export default function AdmissionUnifiedSection({ data }: AdmissionUnifiedSectionProps) {
-  const whatsappNumber = "51949260658";
+  const whatsappNumber = data.whatsappNumber || "51949260658";
   const whatsappMessage = encodeURIComponent(`Hola, necesito ayuda con el proceso de inscripción para ${data.type === 'maestria' ? 'la Maestría' : 'el Doctorado'}.`);
 
   return (
@@ -69,7 +69,7 @@ export default function AdmissionUnifiedSection({ data }: AdmissionUnifiedSectio
               </div>
               <div>
                 <span className="block text-xl font-black uppercase tracking-wider mb-1">¿Necesita Ayuda?</span>
-                <span className="text-sm font-medium text-emerald-50 italic">WhatsApp: 949 260 658</span>
+                <span className="text-sm font-medium text-emerald-50 italic">WhatsApp: {whatsappNumber}</span>
               </div>
             </a>
 

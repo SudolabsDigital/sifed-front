@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import useSWR from "swr";
 import { 
   ArrowUp, 
   Phone, 
@@ -10,6 +11,7 @@ import {
   Headset
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { unidadPosgradoApi } from "@/lib/api/unidad-posgrado";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -27,6 +29,14 @@ export default function FloatingActions() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const { data: unidadData } = useSWR(
+    '/api/public/unidad-posgrado',
+    unidadPosgradoApi.getPublic,
+    { revalidateOnFocus: false }
+  );
+
+  const whatsappNumber = unidadData?.admision_json?.whatsapp_contacto || "51949260658";
+
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
@@ -43,7 +53,7 @@ export default function FloatingActions() {
     {
       icon: <WhatsAppIcon className="w-6 h-6" />,
       label: "WhatsApp",
-      href: "https://wa.me/51949260658",
+      href: `https://wa.me/${whatsappNumber}`,
       color: "bg-emerald-500",
       delay: 0.1
     },
