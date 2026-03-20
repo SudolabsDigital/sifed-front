@@ -16,7 +16,7 @@ import {
   ChevronUp
 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { bibliotecaApi } from "@/lib/api/biblioteca";
 import { getStorageUrl, cn } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
@@ -155,11 +155,10 @@ export default function BibliotecaVirtualPage() {
                   <div className="px-6 py-4 md:px-8 md:py-6 flex flex-col md:flex-row gap-6 items-start md:items-center bg-brand-50/20 border-b border-brand-50/50">
                     <div className="w-16 h-24 shrink-0 relative rounded-lg overflow-hidden shadow-lg border-2 border-white transform group-hover:scale-105 transition-transform">
                       {item.imagen_portada_url ? (
-                        <Image 
+                        <UnoptImage 
                           src={getStorageUrl(item.imagen_portada_url)} 
                           alt={item.titulo} 
                           fill
-                          unoptimized={process.env.NODE_ENV === 'development'}
                           sizes="64px"
                           className="object-cover" 
                         />
@@ -183,11 +182,10 @@ export default function BibliotecaVirtualPage() {
                       >
                          <div className="w-10 h-10 rounded-xl bg-brand-50 overflow-hidden border border-brand-100 shrink-0 relative">
                             {item.docente?.foto_url ? (
-                              <Image 
+                              <UnoptImage 
                                 src={getStorageUrl(item.docente.foto_url)} 
                                 alt={item.docente.nombre_completo} 
                                 fill
-                                unoptimized={process.env.NODE_ENV === 'development'}
                                 sizes="40px"
                                 className="object-cover" 
                               />

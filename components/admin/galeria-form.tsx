@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { 
   Save, 
   X, 
@@ -276,11 +276,10 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             {/* Existing Photos */}
             {existingPhotos.map((foto) => (
               <div key={foto.id} className="aspect-square rounded-xl border border-border overflow-hidden relative group bg-muted/20">
-                <Image 
+                <UnoptImage 
                   src={getStorageUrl(foto.archivo_url)} 
                   alt="Foto" 
                   fill
-                  unoptimized
                   className="w-full h-full object-cover" 
                 />
                 <button 
@@ -297,11 +296,10 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             {/* New Photos Previews */}
             {newPhotosPreviews.map((preview, index) => (
               <div key={`new-${index}`} className="aspect-square rounded-xl border-2 border-brand-200 overflow-hidden relative group bg-brand-50/30">
-                <Image 
+                <UnoptImage 
                   src={preview} 
                   alt="Nuevo" 
                   fill
-                  unoptimized
                   className="w-full h-full object-cover" 
                 />
                 <div className="absolute top-2 left-2">
@@ -346,11 +344,10 @@ export default function GaleriaForm({ initialData, isEditing = false }: GaleriaF
             className="aspect-[4/3] rounded-2xl border-2 border-dashed border-border overflow-hidden relative group cursor-pointer hover:border-brand-500 transition-all bg-muted/30"
           >
             {portadaPreview ? (
-              <Image 
+              <UnoptImage 
                 src={portadaPreview} 
                 alt="Portada" 
                 fill
-                unoptimized
                 className="w-full h-full object-cover" 
               />
             ) : (

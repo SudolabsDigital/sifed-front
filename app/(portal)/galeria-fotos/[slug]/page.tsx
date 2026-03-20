@@ -12,7 +12,7 @@ import {
   Download
 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { galeriasApi } from "@/lib/api/galerias";
 import { getStorageUrl, cn } from "@/lib/utils";
 import Loader from "@/components/ui/loader";
@@ -117,12 +117,11 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
               className="relative group cursor-zoom-in rounded-2xl overflow-hidden border border-border bg-brand-50 break-inside-avoid"
             >
               <div className="relative w-full h-auto min-h-[200px]">
-                <Image 
+                <UnoptImage 
                   src={getStorageUrl(foto.archivo_url)} 
                   alt={foto.titulo_foto || galeria.titulo} 
                   width={800}
                   height={600}
-                  unoptimized={process.env.NODE_ENV === 'development'}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -177,12 +176,11 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
               className="relative w-full h-full flex items-center justify-center p-4 md:p-20"
             >
               <div className="relative w-full h-full max-w-[90vw] max-h-[80vh]">
-                <Image 
+                <UnoptImage 
                   src={getStorageUrl(fotos[photoIndex].archivo_url)} 
                   alt="Lightbox View" 
                   fill
                   priority
-                  unoptimized={process.env.NODE_ENV === 'development'}
                   className="object-contain shadow-2xl rounded-lg"
                 />
               </div>
@@ -217,12 +215,11 @@ export default function DetalleGaleriaPage({ params }: { params: Promise<{ slug:
                     photoIndex === i ? "ring-2 ring-uncp-gold scale-110" : "opacity-40 hover:opacity-100"
                   )}
                  >
-                   <Image 
+                   <UnoptImage 
                     src={getStorageUrl(f.archivo_url)} 
                     alt="Thumbnail" 
                     fill
                     sizes="48px"
-                    unoptimized={process.env.NODE_ENV === 'development'}
                     className="object-cover" 
                    />
                  </button>

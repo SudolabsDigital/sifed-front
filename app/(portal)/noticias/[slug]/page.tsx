@@ -1,5 +1,5 @@
 import { NoticiaService } from '@/lib/services/noticia-service';
-import Image from 'next/image';
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { Calendar, Clock } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
@@ -91,11 +91,10 @@ export default async function NoticiaDetallePage({ params }: PageProps) {
       <div className="container mx-auto px-4 max-w-6xl mb-16">
         <div className="relative aspect-video w-full overflow-hidden rounded-2xl md:rounded-3xl bg-neutral-900 shadow-2xl ring-1 ring-black/5">
           {noticia.imagen_url ? (
-            <Image
+            <UnoptImage
               src={noticia.imagen_url}
               alt={noticia.titulo}
               fill
-              unoptimized
               className="object-contain md:object-cover"
               priority
             />

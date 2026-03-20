@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import useSWR from "swr";
 import { 
   Save, 
@@ -252,11 +252,10 @@ export default function BibliotecaForm({ initialData, isEditing = false }: Bibli
             className="aspect-[3/4] rounded-xl border-2 border-dashed border-border overflow-hidden relative group cursor-pointer hover:border-brand-500 transition-all bg-muted/30"
           >
             {portadaPreview ? (
-              <Image 
+              <UnoptImage 
                 src={portadaPreview} 
                 alt="Preview" 
                 fill
-                unoptimized
                 className="w-full h-full object-cover" 
               />
             ) : (

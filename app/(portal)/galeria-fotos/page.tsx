@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback } from "react";
 import useSWR from "swr";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { 
   Camera, 
   X,
@@ -186,12 +186,11 @@ export default function GaleriaFotosPage() {
                         className="group relative cursor-zoom-in rounded-3xl overflow-hidden border border-border bg-brand-50 break-inside-avoid shadow-sm hover:shadow-2xl transition-all duration-500"
                       >
                         <div className="relative w-full h-auto min-h-[200px]">
-                          <Image 
+                          <UnoptImage 
                             src={getStorageUrl(foto.archivo_url)} 
                             alt={foto.galeriaTitulo || "Gallery Image"} 
                             width={500}
                             height={500}
-                            unoptimized={process.env.NODE_ENV === 'development'}
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                             className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
                           />
@@ -244,12 +243,11 @@ export default function GaleriaFotosPage() {
                 animate={{ scale: zoomLevel }} className="relative cursor-grab active:cursor-grabbing flex items-center justify-center"
               >
                 <div className="relative max-w-[95vw] max-h-[85vh] w-[1200px] h-[800px]">
-                  <Image 
+                  <UnoptImage 
                     src={getStorageUrl(filteredPhotos[photoIndex].archivo_url)} 
                     alt="Full View" 
                     fill
                     priority
-                    unoptimized={process.env.NODE_ENV === 'development'}
                     className="object-contain shadow-[0_0_100px_rgba(0,0,0,0.5)] rounded-lg pointer-events-none transition-all duration-300" 
                   />
                 </div>
@@ -266,12 +264,11 @@ export default function GaleriaFotosPage() {
                    }} 
                    className={cn("w-12 h-12 rounded-lg overflow-hidden transition-all flex-shrink-0 relative", photoIndex === i ? "ring-2 ring-uncp-gold scale-110" : "opacity-30 hover:opacity-100")}
                  >
-                   <Image 
+                   <UnoptImage 
                     src={getStorageUrl(f.archivo_url)} 
                     alt="Thumb" 
                     fill
                     sizes="48px"
-                    unoptimized={process.env.NODE_ENV === 'development'}
                     className="object-cover" 
                    />
                  </button>

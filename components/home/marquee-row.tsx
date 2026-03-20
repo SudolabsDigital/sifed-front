@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { getStorageUrl } from "@/lib/utils";
 
 interface MarqueeRowProps {
@@ -40,11 +40,10 @@ export default function MarqueeRow({ images, direction = "left", speed = 30 }: M
             key={`${img.url}-${idx}`} 
             className="relative h-40 w-64 md:h-52 md:w-80 shrink-0 overflow-hidden rounded-2xl border border-white/5 bg-brand-900 shadow-xl"
           >
-            <Image
+            <UnoptImage
               src={getStorageUrl(img.url)}
               alt={img.title}
               fill
-              unoptimized={process.env.NODE_ENV === 'development'}
               sizes="(max-width: 768px) 256px, 320px"
               className="object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
             />

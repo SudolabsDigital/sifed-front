@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
 import { Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -33,11 +33,10 @@ function ProgramCard({ programa }: { programa: ProgramaResumen }) {
       href={`${basePath}/${programa.slug}`}
       className="group relative block aspect-[16/10] w-[380px] shrink-0 overflow-hidden rounded-xl border border-white/10 bg-brand-900 shadow-2xl transition-all duration-500 hover:border-uncp-gold/40"
     >
-      <Image
+      <UnoptImage
         src={programa.imagen}
         alt={programa.titulo}
         fill
-        unoptimized={process.env.NODE_ENV === 'development'}
         sizes="(max-width: 768px) 100vw, 380px"
         className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[20%] group-hover:grayscale-0 opacity-60 group-hover:opacity-100"
       />      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent z-10" />
@@ -111,7 +110,7 @@ export default function PosgradoReveal({ maestrias, doctorados }: PosgradoReveal
         
         <div className="absolute inset-0 bg-brand-950/40 z-0" />
         <motion.div style={{ scale: backgroundScale }} className="absolute inset-0 z-0">
-          <Image src="/images/fondouncp1920x1080.webp" alt="" fill className="object-cover opacity-10 grayscale" priority />
+          <UnoptImage src="/images/fondouncp1920x1080.webp" alt="" fill className="object-cover opacity-10 grayscale" priority />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-brand-950/20 to-transparent z-10" />
         </motion.div>
 
@@ -122,7 +121,7 @@ export default function PosgradoReveal({ maestrias, doctorados }: PosgradoReveal
             <div className="col-span-12 lg:col-span-3 flex flex-col justify-center">
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
                 <div className="mb-12 h-16 w-16 relative">
-                   <Image src="/images/logo-posgrado-educacion.webp" alt="Logo" fill className="object-contain" />
+                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Logo" fill className="object-contain" />
                 </div>
                 <h2 className="font-serif text-5xl md:text-7xl font-black text-white leading-[0.85] tracking-tighter mb-8">
                   OFERTA <br />

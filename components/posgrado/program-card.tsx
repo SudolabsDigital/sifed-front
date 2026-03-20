@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, GraduationCap, Image as ImageIcon } from "lucide-react";
@@ -33,12 +33,11 @@ export default function ProgramCard({ program }: ProgramCardProps) {
       {/* Portada */}
       <div className="relative h-64 overflow-hidden bg-muted/20 flex items-center justify-center">
         {program.imagenPortada && !imgError ? (
-          <Image
+          <UnoptImage
             src={getStorageUrl(program.imagenPortada)}
             alt={program.titulo}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
-            unoptimized
             onError={() => setImgError(true)}
           />
         ) : (

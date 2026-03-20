@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import "./sdl-footer.css"; // Importación directa del CSS para aislarlo del resto de SIFED
 
 /* Tipos */
@@ -55,7 +55,7 @@ export default function SdlFooter({
           className="sdl-footer__brand"
         >
           <div className="sdl-footer__logo-wrapper">
-            <Image
+            <UnoptImage
               src="/images/logo-sudolabs.webp"
               alt="Sudolabs"
               width={32}

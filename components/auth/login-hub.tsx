@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import LoginForm from "@/components/auth/login-form";
 import ServiceCard from "@/components/ui/service-card";
 import { useAuth } from "@/hooks/use-auth";
@@ -130,7 +130,7 @@ export default function LoginHub() {
 
             <div className="flex items-center gap-6">
               <div className="flex items-center">
-                <Image src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
+                <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
               </div>
               <div>
                 <h1 className="font-serif text-3xl font-black text-brand-950 leading-none tracking-tighter">SIFED</h1>
@@ -164,7 +164,7 @@ export default function LoginHub() {
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-100 to-uncp-gold animate-pulse" />
                     <div className="absolute inset-1 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-brand-50">
                       {user.foto_url ? (
-                        <Image src={getStorageUrl(user.foto_url)} alt={user.name} fill className="object-cover" />
+                        <UnoptImage src={getStorageUrl(user.foto_url)} alt={user.name} fill className="object-cover" />
                       ) : (
                         <UserIcon className="h-10 w-10 text-brand-200" />
                       )}

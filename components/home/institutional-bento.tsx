@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 
 interface Photo {
   id: number;
@@ -26,11 +26,10 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
         transition={{ duration: 0.8 }}
         className="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-[2.5rem] shadow-2xl border border-brand-100"
       >
-        <Image
+        <UnoptImage
           src={photos[0].url}
           alt={photos[0].title}
           fill
-          unoptimized={process.env.NODE_ENV === 'development'}
           sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-1000 group-hover:scale-105"
         />        <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
@@ -56,11 +55,10 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
       >
         {photos[1] && (
           <>
-            <Image 
+            <UnoptImage 
               src={photos[1].url} 
               alt={photos[1].title} 
-              fill 
-              unoptimized={process.env.NODE_ENV === 'development'}
+              fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover opacity-80 transition-all duration-700 group-hover:scale-110 group-hover:opacity-100"
             />
@@ -85,11 +83,10 @@ export default function InstitutionalBento({ photos }: InstitutionalBentoProps) 
             className="relative h-48 md:h-full group overflow-hidden rounded-[2rem] border border-brand-100 shadow-lg"
           >
             {photos[idx] && (
-              <Image 
+              <UnoptImage 
                 src={photos[idx].url} 
                 alt={photos[idx].title} 
-                fill 
-                unoptimized={process.env.NODE_ENV === 'development'}
+                fill
                 sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 hover:scale-110"
               />

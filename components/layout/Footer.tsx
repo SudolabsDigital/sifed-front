@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import Link from "next/link";
 import { 
   MonitorPlay, 
@@ -20,7 +20,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-4 mb-8">
                <div className="flex items-center">
-                  <Image src="/images/logo-posgrado-educacion.webp" alt="Logo Posgrado Educación UNCP" width={72} height={72} className="object-contain" />
+                  <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Logo Posgrado Educación UNCP" width={72} height={72} className="object-contain" />
                </div>
                <div className="flex flex-col justify-center">
                   <span className="text-[7px] font-black uppercase tracking-widest text-muted-foreground leading-tight">UNCP</span>

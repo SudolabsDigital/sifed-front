@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { Newspaper, MonitorPlay, ArrowRight } from "lucide-react";
 
 export default function EcosistemaSection() {
@@ -17,7 +17,7 @@ export default function EcosistemaSection() {
               {/* CARD 1: PORTAL */}
               <div className="group relative flex flex-col rounded-[2rem] border-2 border-background bg-background p-8 shadow-sm transition-all hover:border-brand-300 hover:shadow-2xl hover:shadow-brand-950/5 cursor-pointer">
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                   <Image src="/images/logo-posgrado-educacion.webp" alt="" width={180} height={180} />
+                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="" width={180} height={180} />
                 </div>
                 
                 <div className="relative z-10 flex-1 flex flex-col justify-between">
@@ -52,7 +52,7 @@ export default function EcosistemaSection() {
                 <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-brand-600 rounded-full blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
                 
                 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-30 transition-all duration-1000 transform group-hover:scale-110 grayscale group-hover:grayscale-0">
-                   <Image src="/images/logo-posgrado-educacion.webp" alt="" width={160} height={160} className="object-contain" />
+                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="" width={160} height={160} className="object-contain" />
                 </div>
 
                 <div className="relative z-10 flex-1 flex flex-col justify-between">

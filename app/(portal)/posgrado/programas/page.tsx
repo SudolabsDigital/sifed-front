@@ -1,7 +1,7 @@
 import PageHero from "@/components/ui/page-hero";
 import { BookOpen, GraduationCap, Award, Zap, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -70,7 +70,7 @@ export default function ProgramasHubPage() {
                 className="group relative h-[350px] md:h-[400px] overflow-hidden rounded-[2.5rem] flex flex-col justify-end p-8 md:p-12 transition-all duration-700 hover:shadow-2xl shadow-xl"
               >
                 {/* Background Image with Overlays */}
-                <Image 
+                <UnoptImage 
                   src={cat.image} 
                   alt={cat.title} 
                   fill 

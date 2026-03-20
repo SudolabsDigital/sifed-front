@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { UnoptImage } from "@/components/ui/unopt-image";
 import { getStorageUrl, cn, shouldUnoptimize } from "@/lib/utils";
 import { User } from "lucide-react";
 
@@ -33,7 +33,7 @@ export default function SmartProfileImage({
   // cover y top garantizan que la foto de 9:16 llene el contenedor (sin dejar franjas vacías)
   // y ancla la imagen arriba para que la cara siempre sea visible, recortando por la cadera si es necesario.
   return (
-    <Image
+    <UnoptImage
       src={getStorageUrl(src)}
       alt={alt}
       fill

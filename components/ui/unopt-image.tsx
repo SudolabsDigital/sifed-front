@@ -1,8 +1,9 @@
 import Image, { ImageProps } from "next/image";
 import { getStorageUrl, shouldUnoptimize } from "@/lib/utils";
 
-interface UnoptImageProps extends Omit<ImageProps, "src"> {
+interface UnoptImageProps extends Omit<ImageProps, "src" | "alt"> {
   src?: string | null;
+  alt: string; // Hacemos alt explícitamente requerido para accesibilidad
 }
 
 /**
@@ -11,7 +12,7 @@ interface UnoptImageProps extends Omit<ImageProps, "src"> {
  * 2. Desactivación de optimización (unoptimized) en desarrollo o IPs locales.
  * 3. Graceful degradation si src es nulo o indefinido.
  */
-export function UnoptImage({ src, unoptimized, ...props }: UnoptImageProps) {
+export function UnoptImage({ src, unoptimized, alt, ...props }: UnoptImageProps) {
   // Si no hay src, podemos retornar un placeholder o simplemente no renderizar la imagen
   if (!src) return null;
 
@@ -23,6 +24,7 @@ export function UnoptImage({ src, unoptimized, ...props }: UnoptImageProps) {
   return (
     <Image 
       src={getStorageUrl(src)} 
+      alt={alt}
       unoptimized={shouldSkipOptimization} 
       {...props} 
     />
