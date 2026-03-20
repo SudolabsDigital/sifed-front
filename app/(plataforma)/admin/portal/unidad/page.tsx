@@ -7,7 +7,7 @@ import {
   Loader2, ImageIcon, Eye, Plus, X, Trash2, GraduationCap, Upload, FileText
 } from "lucide-react";
 import { unidadPosgradoApi, Autoridad, DirectorioContacto } from "@/lib/api/unidad-posgrado";
-import { useToast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 import { BackButton } from "@/components/ui/BackButton";
 import { cn, getStorageUrl } from "@/lib/utils";
 import TabSelector from "@/components/ui/tab-selector";
@@ -104,7 +104,8 @@ export default function UnidadPosgradoAdminPage() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
