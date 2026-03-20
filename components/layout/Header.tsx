@@ -246,7 +246,7 @@ export default function Header() {
                             {/* COLUMNA DESTACADA */}
                             <div className="w-1/4 bg-brand-50/50 p-10 border-r border-border/50 flex flex-col justify-between shrink-0 relative">
                                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] pointer-events-none">
-                                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="" width={200} height={200} />
+                                   <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Logo de fondo" width={200} height={200} style={{ width: 'auto', height: 'auto' }} />
                                 </div>
                                 <div className="relative z-10">
                                     <span className="text-[10px] font-black text-brand-600 uppercase tracking-[0.3em] mb-4 block">Destacado</span>
