@@ -1,10 +1,13 @@
-"use client";
-
-import useSWR from "swr";
 import { NoticiaService } from "@/lib/services/noticia-service";
 import CategorySection from "@/components/ui/category-section";
 import PageHero from "@/components/ui/page-hero";
-import Loader from "@/components/ui/loader";
+import { Metadata } from "next";
+import { NoticiaCategoria } from "@/types/noticia-categoria";
+
+export const metadata: Metadata = {
+  title: "Noticias | Facultad de Educación UNCP",
+  description: "Un portal dedicado a la difusión del conocimiento, logros institucionales y la vibrante vida universitaria de nuestra comunidad.",
+};
 
 // Mapeo de estilos visuales para la Exhibición de Arte Digital
 const VISUAL_STYLES: Record<string, { accent: string, bg: string, text: string, border: string }> = {
@@ -34,21 +37,13 @@ const VISUAL_STYLES: Record<string, { accent: string, bg: string, text: string, 
   }
 };
 
-export default function NoticiasPage() {
-  const { data: categorias = [], isLoading } = useSWR(
-    '/portal/noticias-categorias',
-    NoticiaService.getCategoriesWithNews,
-    { keepPreviousData: true }
-  );
-
-  if (isLoading && categorias.length === 0) {
-    return (
-      <Loader 
-        text="Preparando Exhibición Editorial..." 
-        size="lg" 
-        className="min-h-screen"
-      />
-    );
+export default async function NoticiasPage() {
+  let categorias: NoticiaCategoria[] = [];
+  
+  try {
+    categorias = await NoticiaService.getCategoriesWithNews();
+  } catch (error) {
+    console.error("Error fetching categorias with news:", error);
   }
 
   return (
@@ -64,16 +59,23 @@ export default function NoticiasPage() {
       />
 
       <div className="bg-white min-h-screen">
-        {categorias.map((cat, index) => (
-          <CategorySection 
-            key={cat.id}
-            titulo={cat.nombre}
-            noticias={cat.noticias || []}
-            descripcion={cat.descripcion || ""}
-            isReversed={index % 2 !== 0}
-            colorScheme={VISUAL_STYLES[cat.estilo_visual] || VISUAL_STYLES.green}
-          />
-        ))}
+        {categorias.length > 0 ? (
+          categorias.map((cat, index) => (
+            <CategorySection 
+              key={cat.id}
+              titulo={cat.nombre}
+              noticias={cat.noticias || []}
+              descripcion={cat.descripcion || ""}
+              isReversed={index % 2 !== 0}
+              colorScheme={VISUAL_STYLES[cat.estilo_visual] || VISUAL_STYLES.green}
+            />
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center py-32 text-center">
+            <h3 className="text-2xl font-serif font-bold text-brand-950 mb-2">Aún no hay noticias publicadas</h3>
+            <p className="text-muted-foreground">Vuelve pronto para enterarte de las novedades de nuestra facultad.</p>
+          </div>
+        )}
       </div>
     </>
   );

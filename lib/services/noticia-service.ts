@@ -22,7 +22,7 @@ export const NoticiaService = {
   getAllPublic: async (page = 1, categoria?: string): Promise<NoticiaResponse> => {
     const params: Record<string, string | number> = { page };
     if (categoria) params.categoria = categoria;
-    const data = await fetchPublic<unknown>('portal/noticias', { params });
+    const data = await fetchPublic<unknown>('portal/noticias', { params, next: { tags: ['noticias'] } });
     
     if (Array.isArray(data)) {
         return { data: data as Noticia[], meta: { current_page: 1, last_page: 1, per_page: 100, total: data.length }, links: { first: '', last: '', prev: null, next: null } };
@@ -31,12 +31,12 @@ export const NoticiaService = {
   },
 
   getBySlugPublic: async (slug: string): Promise<Noticia> => {
-    const data = await fetchPublic<unknown>(`portal/noticias/${slug}`);
+    const data = await fetchPublic<unknown>(`portal/noticias/${slug}`, { next: { tags: ['noticias'] } });
     return unwrapResponse<Noticia>(data);
   },
 
   getCategoriesWithNews: async (): Promise<NoticiaCategoria[]> => {
-    return await fetchPublic<NoticiaCategoria[]>('portal/noticias-categorias');
+    return await fetchPublic<NoticiaCategoria[]>('portal/noticias-categorias', { next: { tags: ['noticias'] } });
   },
 
   // Admin Methods
