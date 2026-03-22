@@ -3,8 +3,8 @@ import { UnoptImage } from "@/components/ui/unopt-image";
 import { Calendar, Clock } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { NewsToolbar } from '@/components/portal/news/NewsToolbar';
-import { BackButton } from '@/components/ui/BackButton';
+import { NewsToolbar } from '@/components/portal/news/news-toolbar';
+import { BackButton } from '@/components/ui/back-button';
 import { Noticia } from '@/types/noticia';
 
 interface PageProps {

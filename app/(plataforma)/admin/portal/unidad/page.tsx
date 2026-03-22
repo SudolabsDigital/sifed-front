@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { unidadPosgradoApi, Autoridad, DirectorioContacto } from "@/lib/api/unidad-posgrado";
 import { useToast } from "@/hooks/use-toast";
-import { BackButton } from "@/components/ui/BackButton";
+import { BackButton } from "@/components/ui/back-button";
 import { cn, getStorageUrl } from "@/lib/utils";
 import TabSelector from "@/components/ui/tab-selector";
 import { handleApiError } from "@/lib/error-handler";

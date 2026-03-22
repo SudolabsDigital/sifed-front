@@ -6,18 +6,18 @@ import { Info, BookOpen, Clock, Wallet, Settings, Save, X, Megaphone, Users } fr
 import { useToast } from "@/hooks/use-toast";
 import { programasApi } from "@/lib/api/programas";
 import TabSelector from "@/components/ui/tab-selector";
-import { BackButton } from "@/components/ui/BackButton";
+import { BackButton } from "@/components/ui/back-button";
 import Loader from "@/components/ui/loader";
 
-import { InfoGeneralTab } from "@/components/modules/admin/programas/InfoGeneralTab";
-import { MarketingTab } from "@/components/modules/admin/programas/MarketingTab";
-import { HeroContenidoTab } from "@/components/modules/admin/programas/HeroContenidoTab";
-import { AcercaDeTab } from "@/components/modules/admin/programas/AcercaDeTab";
-import { PlanEstudioTab } from "@/components/modules/admin/programas/PlanEstudioTab";
-import { HorariosTab } from "@/components/modules/admin/programas/HorariosTab";
-import { AdmisionTab } from "@/components/modules/admin/programas/AdmisionTab";
-import { ConfigTab } from "@/components/modules/admin/programas/ConfigTab";
-import { PerfilesTab } from "@/components/modules/admin/programas/PerfilesTab";
+import { InfoGeneralTab } from "@/components/modules/admin/programas/info-general-tab";
+import { MarketingTab } from "@/components/modules/admin/programas/marketing-tab";
+import { HeroContenidoTab } from "@/components/modules/admin/programas/hero-contenido-tab";
+import { AcercaDeTab } from "@/components/modules/admin/programas/acerca-de-tab";
+import { PlanEstudioTab } from "@/components/modules/admin/programas/plan-estudio-tab";
+import { HorariosTab } from "@/components/modules/admin/programas/horarios-tab";
+import { AdmisionTab } from "@/components/modules/admin/programas/admision-tab";
+import { ConfigTab } from "@/components/modules/admin/programas/config-tab";
+import { PerfilesTab } from "@/components/modules/admin/programas/perfiles-tab";
 import { getStorageUrl } from "@/lib/utils";
 import { LayoutTemplate, FileText } from "lucide-react";
 import { ProgramaAdminFormData } from "@/types/admin-programa";
