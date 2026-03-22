@@ -33,7 +33,9 @@ export async function fetchPublic<T>(
     },
     // Por defecto forzamos el caché para que solo expire con el webhook de On-Demand
     cache: options?.cache ?? 'force-cache',
-    next: options?.next,
+    next: {
+      ...options?.next,
+    },
   };
 
   try {
