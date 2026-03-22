@@ -1,5 +1,5 @@
 import { NoticiaService } from '@/lib/services/noticia-service';
-import { NewsCard } from './NewsCard';
+import { NewsCard } from './news-card';
 import { ArrowRight, Calendar, ChevronRight } from 'lucide-react';
 import { getStorageUrl } from '@/lib/utils';
 import { UnoptImage } from "@/components/ui/unopt-image";

@@ -1,6 +1,6 @@
 "use client";
 
-import GalleryGrid from "@/components/gallery/GalleryGrid";
+import GalleryGrid from "@/components/gallery/gallery-grid";
 import PageHero from "@/components/ui/page-hero";
 
 export default function SustentacionesPage() {

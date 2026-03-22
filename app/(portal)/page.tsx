@@ -1,6 +1,6 @@
 import HeroSection from "@/components/home/hero-section";
 import InstitutionalShowcase from "@/components/home/institutional-showcase";
-import { NewsCollage } from "@/components/portal/news/NewsCollage";
+import { NewsCollage } from "@/components/portal/news/news-collage";
 import EcosistemaSection from "@/components/home/ecosistema-section";
 import ProgramSelectorSection from "@/components/home/program-selector-section";
 import PosgradoSection from "@/components/home/posgrado-section";

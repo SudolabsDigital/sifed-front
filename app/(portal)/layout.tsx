@@ -1,6 +1,6 @@
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import SdlFooter from "@/components/layout/SdlFooter";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
+import SdlFooter from "@/components/layout/sdl-footer";
 import FloatingActions from "@/components/ui/floating-actions";
 
 export default function PortalLayout({

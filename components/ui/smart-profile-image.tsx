@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { UnoptImage } from "@/components/ui/unopt-image";
-import { getStorageUrl, cn, shouldUnoptimize } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
 
 interface SmartProfileImageProps {
@@ -22,29 +22,28 @@ export default function SmartProfileImage({
 }: SmartProfileImageProps) {
   const [error, setError] = useState(false);
 
-  if (!src || error) {
-    return (
-      <div className={cn("absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-brand-50", className)}>
+  return (
+    <div className={cn("absolute inset-0 w-full h-full bg-brand-50 overflow-hidden", className)}>
+      {/* Placeholder de fondo: Siempre presente por si la imagen tarda o falla */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center opacity-40">
         <User className="w-1/3 h-1/3 text-brand-200" />
       </div>
-    );
-  }
 
-  // cover y top garantizan que la foto de 9:16 llene el contenedor (sin dejar franjas vacías)
-  // y ancla la imagen arriba para que la cara siempre sea visible, recortando por la cadera si es necesario.
-  return (
-    <UnoptImage
-      src={getStorageUrl(src)}
-      alt={alt}
-      fill
-      className={cn(
-        objectFit === "cover" ? "object-cover" : "object-contain",
-        objectPosition === "top" ? "object-top" : objectPosition === "bottom" ? "object-bottom" : "object-center",
-        className
+      {/* Imagen real: Solo se renderiza si hay src y no hay error crítico */}
+      {src && !error && (
+        <UnoptImage
+          src={src}
+          alt={alt}
+          fill
+          className={cn(
+            "transition-opacity duration-500",
+            objectFit === "cover" ? "object-cover" : "object-contain",
+            objectPosition === "top" ? "object-top" : objectPosition === "bottom" ? "object-bottom" : objectPosition === "center" ? "object-center" : "object-top"
+          )}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          onError={() => setError(true)}
+        />
       )}
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      unoptimized={shouldUnoptimize(src)}
-      onError={() => setError(true)}
-    />
+    </div>
   );
 }
