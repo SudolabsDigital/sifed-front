@@ -23,6 +23,8 @@ export async function fetchPublic<T>(
     }
   }
 
+  const isServer = typeof window === 'undefined';
+
   // Configurar las opciones por defecto para On-Demand Revalidation
   const fetchOptions: RequestInit = {
     ...options,
@@ -31,9 +33,14 @@ export async function fetchPublic<T>(
       'Accept': 'application/json',
       ...options?.headers,
     },
-    // Por defecto forzamos el caché para que solo expire con el webhook de On-Demand
-    cache: options?.cache ?? 'force-cache',
-    next: options?.next,
+    // En el servidor forzamos el caché para que solo expire con el webhook de On-Demand
+    // En el cliente dejamos que SWR y el navegador manejen el cache normal
+    cache: isServer ? (options?.cache ?? 'force-cache') : 'default',
+    ...(isServer && {
+      next: {
+        ...options?.next,
+      },
+    }),
   };
 
   try {

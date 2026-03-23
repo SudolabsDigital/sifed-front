@@ -219,3 +219,15 @@ export default async function DocenteProfilePage({ params }: PageProps) {
     </>
   );
 }
+
+export async function generateStaticParams() {
+  try {
+    const response = await docentesApi.getPortalList({ per_page: 100 });
+    return response.data.map((d: Docente) => ({
+      slug: d.slug,
+    }));
+  } catch {
+    return [];
+  }
+}
+

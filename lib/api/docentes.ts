@@ -33,11 +33,16 @@ const getAuthHeader = () => {
 export const docentesApi = {
   // === PUBLIC PORTAL API ===
   getPortalList: async (params = {}) => {
-    return await fetchPublic<PaginatedDocentes>('portal/docentes', { params: params as Record<string, string | number | boolean> });
+    return await fetchPublic<PaginatedDocentes>('portal/docentes', { 
+      params: params as Record<string, string | number | boolean>,
+      next: { tags: ['docentes'] }
+    });
   },
 
   getPortalSlug: async (slug: string) => {
-    return await fetchPublic<Docente>(`portal/docentes/${slug}`);
+    return await fetchPublic<Docente>(`portal/docentes/${slug}`, { 
+      next: { tags: ['docentes'] }
+    });
   },
 
   // === ADMIN API ===

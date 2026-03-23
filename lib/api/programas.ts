@@ -144,10 +144,10 @@ export const programasApi = {
 
   // Public Methods
   getPublicAll: async (params: Record<string, unknown> = {}) => {
-    return await fetchPublic<Programa[]>('portal/programas', { params: params as Record<string, string | number | boolean> });
+    return await fetchPublic<Programa[]>('portal/programas', { params: params as Record<string, string | number | boolean>, next: { tags: ['programas'] } });
   },
 
   getPublicBySlug: async (slug: string): Promise<Programa> => {
-    return await fetchPublic<Programa>(`portal/programas/${slug}`);
+    return await fetchPublic<Programa>(`portal/programas/${slug}`, { next: { tags: ['programas'] } });
   }
 };

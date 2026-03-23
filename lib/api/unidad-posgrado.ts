@@ -60,7 +60,7 @@ const getAuthHeader = () => {
 export const unidadPosgradoApi = {
   // === PUBLIC PORTAL API ===
   getPublic: async () => {
-    return await fetchPublic<UnidadPosgrado>('portal/unidad-posgrado');
+    return await fetchPublic<UnidadPosgrado>('portal/unidad-posgrado', { next: { tags: ['unidad-posgrado'] } });
   },
 
   // === ADMIN API ===
