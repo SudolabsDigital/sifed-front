@@ -9,12 +9,17 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const documentosApi = {
   // --- PORTAL (Público) ---
   getPublicos: async (params?: { categoria_principal?: string; sub_categoria?: string; search?: string }): Promise<DocumentoNormativo[]> => {
-    const response = await fetchPublic<{ data: DocumentoNormativo[] }>('portal/documentos-normativos', { params: params as Record<string, string | number | boolean> });
+    const response = await fetchPublic<{ data: DocumentoNormativo[] }>('portal/documentos-normativos', { 
+      params: params as Record<string, string | number | boolean>,
+      next: { tags: ['documentos-normativos'] }
+    });
     return response.data; // .data is standard for Laravel Resources
   },
 
   getPublicoBySlug: async (slug: string): Promise<DocumentoNormativo> => {
-    const response = await fetchPublic<{ data: DocumentoNormativo }>(`portal/documentos-normativos/${slug}`);
+    const response = await fetchPublic<{ data: DocumentoNormativo }>(`portal/documentos-normativos/${slug}`, {
+      next: { tags: ['documentos-normativos'] }
+    });
     return response.data;
   },
 
