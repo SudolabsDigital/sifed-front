@@ -88,8 +88,13 @@ export const bibliotecaApi = {
     await api.delete(`/admin/biblioteca-categorias/${id}`);
   },
 
-  // --- Portal Público ---
+  /**
+   * Obtener recursos para el portal público (con cache e ISR)
+   */
   getPublic: async (params?: Record<string, unknown>) => {
-    return await fetchPublic<PublicBibliotecaResponse>('portal/biblioteca', { params: params as Record<string, string | number | boolean> });
+    return await fetchPublic<PublicBibliotecaResponse>('portal/biblioteca', { 
+      params: params as Record<string, string | number | boolean>,
+      next: { tags: ['biblioteca'] }
+    });
   },
 };
