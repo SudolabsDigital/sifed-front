@@ -94,13 +94,13 @@ export const galeriasApi = {
    * Obtener galería pública por slug (Portal)
    */
   getBySlug: async (slug: string) => {
-    return await fetchPublic<Galeria>(`portal/galerias/${slug}`);
+    return await fetchPublic<Galeria>(`portal/galerias/${slug}`, { next: { tags: ['galerias'] } });
   },
 
   /**
    * Obtener todas las galerías públicas (Portal)
    */
   getPublic: async (params?: Record<string, unknown>) => {
-    return await fetchPublic<GaleriaResponse>('portal/galerias', { params: params as Record<string, string | number | boolean> });
+    return await fetchPublic<GaleriaResponse>('portal/galerias', { params: params as Record<string, string | number | boolean>, next: { tags: ['galerias'] } });
   },
 };
