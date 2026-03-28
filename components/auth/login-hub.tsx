@@ -100,7 +100,7 @@ export default function LoginHub() {
 
   if (user && user.roles.includes("admin")) {
     services.splice(services.length - 1, 0, {
-      title: "Gestión SIFED",
+      title: "Gestión UP Educación",
       subtitle: "Control Maestro",
       href: "/admin",
       requiresAuth: true,
@@ -129,15 +129,14 @@ export default function LoginHub() {
             </Link>
 
             <div className="flex items-center gap-6">
-              <div className="flex items-center">
-                <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
-              </div>
-              <div>
-                <h1 className="font-serif text-3xl font-black text-brand-950 leading-none tracking-tighter">SIFED</h1>
-                <p className="text-[9px] font-black text-brand-600 uppercase tracking-[0.3em] mt-1.5">Ecosistema Digital</p>
-              </div>
+            <div className="flex items-center">
+              <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={72} height={72} className="object-contain" />
             </div>
-          </motion.div>
+            <div>
+              <h1 className="font-serif text-3xl font-black text-brand-950 leading-none tracking-tighter">UP Educación</h1>
+              <p className="text-[9px] font-black text-brand-600 uppercase tracking-[0.3em] mt-1.5">Ecosistema Digital</p>
+            </div>
+            </div>          </motion.div>
 
           {/* Área de Formulario / Perfil */}
           <div ref={loginRef} className="my-12">

@@ -56,7 +56,7 @@ const accessLinks = [
   },
   {
     title: "Aula Virtual",
-    desc: "Plataforma de aprendizaje SIFED.",
+    desc: "Plataforma de aprendizaje UP Educación.",
     icon: <MonitorPlay aria-hidden="true" className="w-5 h-5" />,
     href: "/login",
     color: "bg-brand-950 text-amber-500"

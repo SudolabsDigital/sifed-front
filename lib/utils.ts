@@ -21,7 +21,7 @@ export function getStorageUrl(path?: string | null): string {
     return path;
   }
 
-  // REGLA CRÍTICA DE ASSETS HÍBRIDOS (SIFED)
+  // REGLA CRÍTICA DE ASSETS HÍBRIDOS (UP Educación)
   // Si la ruta NO empieza con /storage/, es un asset estático que vive en Next.js /public
   // Ej: "/images/galeria/foto.webp"
   // NO debemos usar encodeURI aquí porque next/image lo codificará internamente,

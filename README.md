@@ -1,4 +1,4 @@
-# SIFED Frontend (Portal & Dashboard)
+# UP Educación Frontend (Portal & Dashboard)
 
 Interfaz de usuario para el Sistema de Gestión Académica - Facultad de Educación UNCP.
 Construido con **Next.js 16**, **Tailwind CSS v4** y **React 19**.

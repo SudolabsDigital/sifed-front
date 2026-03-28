@@ -73,7 +73,7 @@ export default function StatusCard({
 
         {/* Footer info */}
         <div className="mt-16 text-[10px] text-muted-foreground/40 font-mono uppercase tracking-widest">
-           SIFED &bull; UNCP &bull; 2026
+           UP Educación &bull; UNCP &bull; 2026
         </div>
       </div>
     </div>

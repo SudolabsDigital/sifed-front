@@ -92,7 +92,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
           <div className="flex items-center gap-3">
              <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="Posgrado Educación" width={36} height={36} className="object-contain" />
              <div className="flex flex-col">
-                <span className="font-serif font-bold text-lg leading-none tracking-tight">SIFED</span>
+                <span className="font-serif font-bold text-lg leading-none tracking-tight">UP Educación</span>
                 <span className="text-[9px] text-brand-400 uppercase tracking-wider font-bold">Admin Panel</span>
              </div>
           </div>
@@ -202,7 +202,7 @@ export function DashboardSidebar({ items, open, setOpen }: SidebarProps) {
                  </div>
                  <div className="overflow-hidden">
                     <p className="text-xs font-bold text-white truncate">{user?.name || 'Administrador'}</p>
-                    <p className="text-[10px] text-brand-400 truncate">{user?.email || 'admin@sifed.edu'}</p>
+                    <p className="text-[10px] text-brand-400 truncate">{user?.email || 'admin@upeducacion.edu'}</p>
                  </div>
               </div>
               

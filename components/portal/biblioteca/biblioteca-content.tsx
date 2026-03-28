@@ -236,7 +236,7 @@ export default function BibliotecaContent({ initialData }: BibliotecaContentProp
       </section>
 
       <section className="py-20 opacity-20 text-center select-none">
-         <h2 className="text-2xl font-serif font-bold text-brand-950 uppercase tracking-[0.5em]">Repositorio SIFED</h2>
+         <h2 className="text-2xl font-serif font-bold text-brand-950 uppercase tracking-[0.5em]">Repositorio UP Educación</h2>
       </section>
     </div>
   );

@@ -17,12 +17,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const docente: Docente = await docentesApi.getPortalSlug(resolvedParams.slug);
     return {
-      title: `${docente.nombre_completo} | Plana Docente | SIFED`,
+      title: `${docente.nombre_completo} | Plana Docente | UP Educación`,
       description: docente.biografia?.substring(0, 160) || `Perfil de ${docente.nombre_completo}, docente en la Universidad Nacional del Centro del Perú.`,
     };
   } catch {
     return {
-      title: "Docente no encontrado | SIFED",
+      title: "Docente no encontrado | UP Educación",
     };
   }
 }
