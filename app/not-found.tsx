@@ -2,7 +2,7 @@ import StatusCard from "@/components/ui/status-card";
 import { MapPinOff } from "lucide-react";
 
 export const metadata = {
-  title: "Página no encontrada | SIFED",
+  title: "Página no encontrada | UP Educación",
 };
 
 export default function NotFound() {

@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     // Intentar leer el body si es JSON
-    let body: any = {};
+    let body: Record<string, string> = {};
     try {
       body = await request.json();
-    } catch (e) {
+    } catch {
       // Ignorar si no hay body JSON
     }
 

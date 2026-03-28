@@ -15,17 +15,78 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SIFED | Facultad de Educación",
-  description: "Sistema Integrado de Gestión Académica - UNCP",
+  metadataBase: new URL("https://upeducacion-uncp.edu.pe"),
+  title: {
+    default: "UP Educación | Posgrado Facultad de Educación UNCP",
+    template: "%s | UP Educación",
+  },
+  description: "Unidad de Posgrado de la Facultad de Educación - Universidad Nacional del Centro del Perú. Excelencia académica en maestrías, doctorados y formación continua.",
+  keywords: ["Posgrado Educación", "Maestrías UNCP", "Doctorados Educación", "Huancayo", "Educación Superior", "UP Educación"],
+  authors: [{ name: "Facultad de Educación - UNCP" }],
+  creator: "Facultad de Educación - UNCP",
+  publisher: "UNCP",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_PE",
+    url: "https://upeducacion-uncp.edu.pe",
+    siteName: "UP Educación UNCP",
+    title: "UP Educación | Posgrado Facultad de Educación UNCP",
+    description: "Formamos líderes en educación con estándares de calidad internacional. Explora nuestras maestrías y doctorados.",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "UP Educación - Facultad de Educación UNCP",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "UP Educación | Posgrado Facultad de Educación UNCP",
+    description: "Excelencia académica en posgrado para profesionales de la educación.",
+    images: ["/twitter-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
-export default function RootLayout({
+import { getOrganizationJsonLd, getWebsiteJsonLd } from "@/components/seo/json-ld";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = await getOrganizationJsonLd();
+  const websiteJsonLd = getWebsiteJsonLd();
+
   return (
     <html lang="es" className={`${playfair.variable} ${jakarta.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </head>
       <body className="font-sans antialiased selection:bg-brand-600 selection:text-white">
         {children}
       </body>

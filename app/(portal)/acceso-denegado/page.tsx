@@ -2,7 +2,7 @@ import StatusCard from "@/components/ui/status-card";
 import { ShieldAlert } from "lucide-react";
 
 export const metadata = {
-  title: "Acceso Restringido | SIFED",
+  title: "Acceso Restringido | UP Educación",
 };
 
 export default function ForbiddenPage() {

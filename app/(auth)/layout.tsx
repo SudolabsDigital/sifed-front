@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Autenticación | SIFED",
+  title: "Autenticación | UP Educación",
   description: "Acceso seguro a la plataforma SIFED.",
 };
 
