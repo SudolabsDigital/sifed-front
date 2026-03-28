@@ -60,7 +60,7 @@ export default function EcosistemaSection() {
                       <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white border border-white/10 backdrop-blur-md group-hover:bg-brand-600 group-hover:border-brand-500 transition-all">
                          <MonitorPlay className="h-7 w-7" strokeWidth={1.5} />
                       </div>
-                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-3">Intranet SIFED</h3>
+                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-3">Intranet UP Educación</h3>
                       <p className="text-sm md:text-base text-brand-50/80 leading-relaxed mb-6">
                         Gestión académica privada. Accede de forma segura a tus cursos, notas, matrícula y trámites digitales.
                       </p>

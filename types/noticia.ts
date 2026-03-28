@@ -17,6 +17,8 @@ export interface Noticia {
   fecha_humana: string;
   destacada: boolean;
   estado: 'borrador' | 'publicado';
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface NoticiaResponse {

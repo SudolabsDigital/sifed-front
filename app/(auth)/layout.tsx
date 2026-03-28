@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Autenticación | SIFED",
-  description: "Acceso seguro a la plataforma SIFED.",
+  title: "Autenticación | UP Educación",
+  description: "Acceso seguro a la plataforma UP Educación.",
 };
 
 export default function AuthLayout({

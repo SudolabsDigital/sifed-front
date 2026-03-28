@@ -2,7 +2,7 @@ import StatusCard from "@/components/ui/status-card";
 import { HardHat } from "lucide-react";
 
 export const metadata = {
-  title: "Página en Construcción | SIFED",
+  title: "Página en Construcción | UP Educación",
 };
 
 export default function EnConstruccionPage() {

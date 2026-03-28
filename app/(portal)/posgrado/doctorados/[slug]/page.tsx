@@ -15,9 +15,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const rawProgram = await programasApi.getPublicBySlug(slug);
     if (!rawProgram || rawProgram.tipo !== "doctorado") return { title: "Programa no encontrado" };
+    
     return {
-      title: `${rawProgram.titulo} | Posgrado Educación UNCP`,
+      title: `${rawProgram.titulo} | Doctorados`,
       description: rawProgram.descripcion_corta,
+      openGraph: {
+        title: `${rawProgram.titulo} | Doctorados UP Educación`,
+        description: rawProgram.descripcion_corta,
+        url: `https://upeducacion-uncp.edu.pe/posgrado/doctorados/${slug}`,
+        images: [
+          {
+            url: rawProgram.imagen_portada_url || "/opengraph-image.png",
+            width: 1200,
+            height: 630,
+            alt: rawProgram.titulo,
+          },
+        ],
+      },
     };
   } catch {
     return { title: "Programa no encontrado" };

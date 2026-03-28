@@ -26,6 +26,7 @@ export interface Programa {
   horarios_json: HorarioModulo[];
   config_visibilidad: ProgramaConfigVisibilidad;
   created_at: string;
+  updated_at?: string;
 }
 
 export const mapToProgramData = (programa: Programa): ProgramData => {

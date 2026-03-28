@@ -9,7 +9,7 @@ import SmartProfileImage from "@/components/ui/smart-profile-image";
 
 
 export const metadata: Metadata = {
-  title: "Unidad de Posgrado | SIFED UNCP",
+  title: "Unidad de Posgrado | UP Educación",
   description: "Conoce nuestra historia, misión, visión y a las autoridades que lideran la Unidad de Posgrado de la Facultad de Educación de la UNCP.",
 };
 

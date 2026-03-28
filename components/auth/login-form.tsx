@@ -51,7 +51,7 @@ export default function LoginForm({ onLoginSuccess }: LoginFormProps) {
           Acceso al <span className="text-brand-600">Campus Virtual</span>
         </h3>
         <p className="text-[9px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5">
-          Facultad de Educación - SIFED
+          Facultad de Educación - UP Educación
         </p>
       </div>
 

@@ -19,10 +19,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!noticia) return {};
 
     return {
-      title: `${noticia.titulo} - Facultad de Educación`,
+      title: `${noticia.titulo}`,
       description: noticia.resumen || '',
       openGraph: {
-        images: [noticia.imagen_url || '/images/og-default.jpg'],
+        title: `${noticia.titulo} | Noticias UP Educación`,
+        description: noticia.resumen || '',
+        url: `https://upeducacion-uncp.edu.pe/noticias/${slug}`,
+        type: 'article',
+        publishedTime: noticia.created_at,
+        images: [
+          {
+            url: noticia.imagen_url || '/opengraph-image.png',
+            width: 1200,
+            height: 630,
+            alt: noticia.titulo,
+          },
+        ],
       },
     };
   } catch {
