@@ -15,18 +15,22 @@ const nextConfig: NextConfig = {
         hostname: 'picsum.photos',
       },
       {
+        protocol: 'https',
+        hostname: 'api.upeducacion-uncp.edu.pe', // Backend producción
+      },
+      {
         protocol: 'http',
-        hostname: 'localhost',
+        hostname: 'localhost', // Solo desarrollo local
         port: '8000',
       },
       {
         protocol: 'http',
-        hostname: '127.0.0.1',
+        hostname: '127.0.0.1', // Solo desarrollo local
         port: '8000',
       },
       {
         protocol: 'https',
-        hostname: '**.amazonaws.com', // Futura configuracion para S3 de aws
+        hostname: '**.amazonaws.com',
       }
     ],
   },
