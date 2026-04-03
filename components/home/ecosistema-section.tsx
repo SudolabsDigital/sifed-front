@@ -2,6 +2,8 @@ import Link from "next/link";
 import { UnoptImage } from "@/components/ui/unopt-image";
 import { Newspaper, MonitorPlay, ArrowRight } from "lucide-react";
 
+import { EXTERNAL_LINKS } from "@/lib/constants";
+
 export default function EcosistemaSection() {
   return (
     <section className="w-full bg-brand-50 min-h-screen flex items-center py-20 px-6 lg:px-12 border-b border-border overflow-hidden">
@@ -13,13 +15,13 @@ export default function EcosistemaSection() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6 h-full">
-              
+
               {/* CARD 1: PORTAL */}
               <div className="group relative flex flex-col rounded-[2rem] border-2 border-background bg-background p-8 shadow-sm transition-all hover:border-brand-300 hover:shadow-2xl hover:shadow-brand-950/5 cursor-pointer">
                 <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                    <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="" width={180} height={180} />
                 </div>
-                
+
                 <div className="relative z-10 flex-1 flex flex-col justify-between">
                    <div>
                       <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 border border-brand-100">
@@ -50,7 +52,7 @@ export default function EcosistemaSection() {
                 {/* Fondo decorativo */}
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-950 to-brand-800"></div>
                 <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-brand-600 rounded-full blur-[100px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                
+
                 <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-30 transition-all duration-1000 transform group-hover:scale-110 grayscale group-hover:grayscale-0">
                    <UnoptImage src="/images/logo-posgrado-educacion.webp" alt="" width={160} height={160} className="object-contain" />
                 </div>
@@ -76,9 +78,9 @@ export default function EcosistemaSection() {
                       </div>
                    </div>
                    <div className="mt-6 pt-6 border-t border-white/10">
-                      <Link href="/login" className="flex items-center justify-center w-full py-3 rounded-xl bg-brand-600 text-white font-black text-base hover:bg-white hover:text-brand-950 transition-all shadow-xl hover:shadow-brand-600/20">
+                      <a href={EXTERNAL_LINKS.AULA_VIRTUAL} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full py-3 rounded-xl bg-brand-600 text-white font-black text-base hover:bg-white hover:text-brand-950 transition-all shadow-xl hover:shadow-brand-600/20">
                           Iniciar Sesión Segura
-                      </Link>
+                      </a>
                    </div>
                 </div>
               </div>

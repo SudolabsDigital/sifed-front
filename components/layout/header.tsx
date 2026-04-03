@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { EXTERNAL_LINKS } from "@/lib/constants";
+
 // Estructura de datos optimizada y realista
 const menuItems = [
   {
@@ -301,13 +303,15 @@ export default function Header() {
 
           {/* ACTIONS & MOBILE TOGGLE */}
           <div className="flex items-center gap-3 lg:gap-4 relative z-50">
-             <Link 
-              href="/login" 
+             <a 
+              href={EXTERNAL_LINKS.AULA_VIRTUAL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden lg:flex group items-center gap-2 rounded-xl bg-brand-950 px-5 py-2.5 lg:px-6 lg:py-3 text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-brand-800 hover:shadow-xl hover:shadow-brand-950/20 hover:-translate-y-0.5 active:translate-y-0"
             >
               <LogIn className="h-4 w-4 text-uncp-gold group-hover:scale-110 transition-transform" />
-              <span>Intranet</span>
-            </Link>
+              <span>Aula Virtual</span>
+            </a>
 
             {/* Mobile Menu Button */}
             <button 
@@ -405,13 +409,15 @@ export default function Header() {
 
             {/* Mobile Footer Actions */}
             <div className="mt-8 pt-8 border-t border-border space-y-4">
-              <Link 
-                href="/login" 
+              <a 
+                href={EXTERNAL_LINKS.AULA_VIRTUAL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-4 text-base font-extrabold text-white shadow-lg active:scale-95 transition-transform"
               >
                 <LogIn className="h-5 w-5" />
-                Ingresar a Intranet
-              </Link>
+                Ingresar al Aula Virtual
+              </a>
             </div>
           </motion.div>
         )}

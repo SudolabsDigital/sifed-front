@@ -17,6 +17,8 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+import { EXTERNAL_LINKS } from "@/lib/constants";
+
 const accessLinks = [
   {
     title: "Admisión",
@@ -58,8 +60,9 @@ const accessLinks = [
     title: "Aula Virtual",
     desc: "Plataforma de aprendizaje UP Educación.",
     icon: <MonitorPlay aria-hidden="true" className="w-5 h-5" />,
-    href: "/login",
-    color: "bg-brand-950 text-amber-500"
+    href: EXTERNAL_LINKS.AULA_VIRTUAL,
+    color: "bg-brand-950 text-amber-500",
+    external: true
   }
 ];
 

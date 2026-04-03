@@ -66,6 +66,8 @@ export const metadata: Metadata = {
 };
 
 import { getOrganizationJsonLd, getWebsiteJsonLd } from "@/components/seo/json-ld";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default async function RootLayout({
   children,
@@ -89,6 +91,8 @@ export default async function RootLayout({
       </head>
       <body className="font-sans antialiased selection:bg-brand-600 selection:text-white">
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
