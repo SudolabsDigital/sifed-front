@@ -7,6 +7,7 @@ import PosgradoSection from "@/components/home/posgrado-section";
 import InfoSection from "@/components/home/info-section";
 import FAQSection from "@/components/home/faq-section";
 import QuickAccessSection from "@/components/home/quick-access-section";
+import SocialHubSection from "@/components/home/social-hub-section";
 
 export default function Home() {
   return (
@@ -18,6 +19,9 @@ export default function Home() {
 
       {/* OFERTA ACADÉMICA */}
       <PosgradoSection />
+      
+      {/* COMUNIDAD Y REDES */}
+      <SocialHubSection />
 
       <ProgramSelectorSection />
       <QuickAccessSection />

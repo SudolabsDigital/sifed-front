@@ -4,11 +4,12 @@ import {
   MonitorPlay, 
   BookOpen, 
   HelpCircle,
-  Mail, 
   Facebook,
   Youtube,
-  Linkedin
+  Linkedin,
+  Lock
 } from "lucide-react";
+import { EXTERNAL_LINKS, INTERNAL_LINKS } from "@/lib/constants";
 
 export default function Footer() {
   return (
@@ -33,21 +34,27 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
                <Link 
-                 href="https://facebook.com" 
+                 href={EXTERNAL_LINKS.FACEBOOK} 
+                 target="_blank"
+                 rel="noopener noreferrer"
                  aria-label="Visitar nuestra página de Facebook"
                  className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-brand-600 hover:text-white transition-all shadow-sm focus-visible:outline-brand-600 focus-visible:outline-2"
                >
                   <Facebook aria-hidden="true" className="h-5 w-5" />
                </Link>
                <Link 
-                 href="https://youtube.com" 
+                 href={EXTERNAL_LINKS.YOUTUBE} 
+                 target="_blank"
+                 rel="noopener noreferrer"
                  aria-label="Visitar nuestro canal de YouTube"
                  className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-red-600 hover:text-white transition-all shadow-sm focus-visible:outline-red-600 focus-visible:outline-2"
                >
                   <Youtube aria-hidden="true" className="h-5 w-5" />
                </Link>
                <Link 
-                 href="https://linkedin.com" 
+                 href={EXTERNAL_LINKS.LINKEDIN} 
+                 target="_blank"
+                 rel="noopener noreferrer"
                  aria-label="Visitar nuestro perfil de LinkedIn"
                  className="h-12 w-12 rounded-2xl bg-white border border-border flex items-center justify-center text-slate-600 hover:bg-blue-700 hover:text-white transition-all shadow-sm focus-visible:outline-blue-700 focus-visible:outline-2"
                >
@@ -82,10 +89,10 @@ export default function Footer() {
           <div>
             <h4 className="mb-8 text-xs font-black text-brand-950 uppercase tracking-[0.2em]">Ecosistema</h4>
             <ul className="space-y-4 text-sm font-bold text-slate-600">
-              <li><Link href="/login" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><MonitorPlay aria-hidden="true" className="h-4 w-4" /> Aula Virtual</Link></li>
+              <li><a href={EXTERNAL_LINKS.AULA_VIRTUAL} target="_blank" rel="noopener noreferrer" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><MonitorPlay aria-hidden="true" className="h-4 w-4" /> Aula Virtual</a></li>
               <li><Link href="/posgrado/admision" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><BookOpen aria-hidden="true" className="h-4 w-4" /> Guía de Inscripción</Link></li>
               <li><Link href="/documentos-normativos" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><HelpCircle aria-hidden="true" className="h-4 w-4" /> Soporte Académico</Link></li>
-              <li><Link href="mailto:posgrado@uncp.edu.pe" className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><Mail aria-hidden="true" className="h-4 w-4" /> Mesa de Partes</Link></li>
+              <li><Link href={INTERNAL_LINKS.ADMIN_LOGIN} className="hover:text-brand-600 transition-colors flex items-center gap-2 focus-visible:outline-brand-600"><Lock aria-hidden="true" className="h-4 w-4" /> Gestión Administrativa</Link></li>
             </ul>
           </div>
         </div>
@@ -96,7 +103,7 @@ export default function Footer() {
             <Link href="/privacidad" className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600">Privacidad</Link>
             <Link href="/terminos" className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600">Términos</Link>
             <Link 
-              href="https://reclamos.servicios.gob.pe/?institution_id=252" 
+              href={EXTERNAL_LINKS.RECLAMACIONES} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="hover:text-brand-950 transition-colors focus-visible:outline-brand-600"
