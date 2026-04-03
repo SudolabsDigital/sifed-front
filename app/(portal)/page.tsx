@@ -22,12 +22,14 @@ export default function Home() {
       
       {/* COMUNIDAD Y REDES */}
       <SocialHubSection />
-
-      <ProgramSelectorSection />
-      <QuickAccessSection />
       <FAQSection />
       <NewsCollage />
       <EcosistemaSection />
+      <ProgramSelectorSection />
+      <QuickAccessSection />
+
+
+
       <InfoSection />
     </>
   );

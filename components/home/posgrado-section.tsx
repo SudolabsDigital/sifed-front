@@ -1,6 +1,6 @@
 import { programasApi, Programa } from "@/lib/api/programas";
 import { getStorageUrl } from "@/lib/utils";
-import PosgradoReveal from "./posgrado-reveal";
+import PosgradoFluid from "./posgrado-fluid";
 
 interface ProgramaResumen {
   id: number;
@@ -16,7 +16,7 @@ export default async function PosgradoSection() {
 
   try {
     const allPrograms: Programa[] = await programasApi.getPublicAll();
-    
+
     maestrias = allPrograms
       .filter(p => p.tipo === "maestria")
       .map(p => ({
@@ -44,9 +44,11 @@ export default async function PosgradoSection() {
 
   return (
     <div className="relative">
-      <PosgradoReveal
+      <PosgradoFluid
         maestrias={maestrias} 
         doctorados={doctorados}
       />
     </div>
-  );}
+  );
+}
+
