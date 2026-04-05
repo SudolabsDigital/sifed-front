@@ -4,6 +4,8 @@ export interface DocumentoCategoria {
   id: number;
   nombre: string;
   slug: string;
+  orden: number;
+  is_active: boolean;
 }
 
 export interface DocumentoNormativo {

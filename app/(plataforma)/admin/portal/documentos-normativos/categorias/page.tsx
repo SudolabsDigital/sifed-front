@@ -103,7 +103,7 @@ export default function CategoriasDocumentosPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {categorias?.map((cat: any) => (
+              {categorias?.map((cat: { id: number; nombre: string; orden: number; is_active: boolean }) => (
                 <tr key={cat.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-6 py-4 w-24">
                     {editingId === cat.id ? (

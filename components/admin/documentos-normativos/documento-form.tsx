@@ -211,7 +211,7 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
             )}
           >
             <option value="" disabled>Seleccionar categoría...</option>
-            {categorias?.map((cat: any) => (
+            {categorias?.map((cat: { id: number; nombre: string }) => (
               <option key={cat.id} value={cat.id}>{cat.nombre}</option>
             ))}
           </select>

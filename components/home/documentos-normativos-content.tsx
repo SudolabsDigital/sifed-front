@@ -4,7 +4,7 @@ import PageHero from "@/components/ui/page-hero";
 import { DocumentoNormativo, DocumentoCategoria } from "@/types/documento-normativo";
 import { getStorageUrl, cn } from "@/lib/utils";
 import Link from "next/link";
-import { FileText, Hash, ExternalLink, Scale, FileSpreadsheet, FileSignature, Shield, GraduationCap, Gavel, BookOpen, ClipboardList, Expand, Eye } from "lucide-react";
+import { FileText, Hash, ExternalLink, Scale, FileSpreadsheet, FileSignature, Shield, BookOpen, ClipboardList, Expand, Eye } from "lucide-react";
 import DocumentosSearch from "./documentos-search";
 import { useState } from "react";
 

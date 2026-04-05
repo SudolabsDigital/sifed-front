@@ -1,4 +1,4 @@
-import { DocumentoNormativo } from "@/types/documento-normativo";
+import { DocumentoNormativo, DocumentoCategoria } from "@/types/documento-normativo";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
@@ -23,14 +23,14 @@ export const documentosApi = {
     return response.data;
   },
 
-  getCategoriasPublicas: async (): Promise<any[]> => {
-    const response = await fetchPublic<{ data: any[] }>('portal/documento-categorias', {
+  getCategoriasPublicas: async (): Promise<DocumentoCategoria[]> => {
+    const response = await fetchPublic<{ data: DocumentoCategoria[] }>('portal/documento-categorias', {
       next: { tags: ['documento-categorias'] }
     });
     return response.data;
   },
 
-  getCategoriasAdmin: async () => {
+  getCategoriasAdmin: async (): Promise<DocumentoCategoria[]> => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
     const response = await axios.get(`${API_URL}/admin/documento-categorias`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -38,7 +38,7 @@ export const documentosApi = {
     return response.data.data;
   },
 
-  createCategoria: async (data: any) => {
+  createCategoria: async (data: Record<string, unknown>) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
     const response = await axios.post(`${API_URL}/admin/documento-categorias`, data, {
       headers: { Authorization: `Bearer ${token}` }
@@ -46,7 +46,7 @@ export const documentosApi = {
     return response.data;
   },
 
-  updateCategoria: async (id: number, data: any) => {
+  updateCategoria: async (id: number, data: Record<string, unknown>) => {
     const token = Cookies.get(AUTH_COOKIE_NAME);
     const response = await axios.put(`${API_URL}/admin/documento-categorias/${id}`, data, {
       headers: { Authorization: `Bearer ${token}` }
