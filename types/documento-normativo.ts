@@ -1,12 +1,18 @@
-export type CategoriaPrincipal = 'normativa' | 'formato';
 export type EstadoDocumento = 'vigente' | 'derogado' | 'borrador';
+
+export interface DocumentoCategoria {
+  id: number;
+  nombre: string;
+  slug: string;
+}
 
 export interface DocumentoNormativo {
   id: number;
   titulo: string;
   descripcion: string | null;
   codigo: string | null;
-  categoria_principal: CategoriaPrincipal;
+  documento_categoria_id: number;
+  categoria?: DocumentoCategoria;
   sub_categoria: string | null;
   fecha_emision: string | null; // YYYY-MM-DD
   fecha_año: string | null; // YYYY

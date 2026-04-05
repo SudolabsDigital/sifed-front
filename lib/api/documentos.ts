@@ -8,7 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const documentosApi = {
   // --- PORTAL (Público) ---
-  getPublicos: async (params?: { categoria_principal?: string; sub_categoria?: string; search?: string }): Promise<DocumentoNormativo[]> => {
+  getPublicos: async (params?: { documento_categoria_id?: string | number; categoria_slug?: string; sub_categoria?: string; search?: string }): Promise<DocumentoNormativo[]> => {
     const response = await fetchPublic<{ data: DocumentoNormativo[] }>('portal/documentos-normativos', { 
       params: params as Record<string, string | number | boolean>,
       next: { tags: ['documentos-normativos'] }
@@ -21,6 +21,44 @@ export const documentosApi = {
       next: { tags: ['documentos-normativos'] }
     });
     return response.data;
+  },
+
+  getCategoriasPublicas: async (): Promise<any[]> => {
+    const response = await fetchPublic<{ data: any[] }>('portal/documento-categorias', {
+      next: { tags: ['documento-categorias'] }
+    });
+    return response.data;
+  },
+
+  getCategoriasAdmin: async () => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.get(`${API_URL}/admin/documento-categorias`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data.data;
+  },
+
+  createCategoria: async (data: any) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.post(`${API_URL}/admin/documento-categorias`, data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  },
+
+  updateCategoria: async (id: number, data: any) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    const response = await axios.put(`${API_URL}/admin/documento-categorias/${id}`, data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+  },
+
+  deleteCategoria: async (id: number) => {
+    const token = Cookies.get(AUTH_COOKIE_NAME);
+    await axios.delete(`${API_URL}/admin/documento-categorias/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
   },
 
   // --- ADMIN (Protegido) ---

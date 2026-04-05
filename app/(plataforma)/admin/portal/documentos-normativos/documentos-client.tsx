@@ -4,11 +4,20 @@ import { useState } from "react";
 import { useSWRConfig } from "swr";
 import useSWR from "swr";
 import { documentosApi } from "@/lib/api/documentos";
-import { DocumentoNormativo } from "@/types/documento-normativo";
-import { Plus, Search, FileText, FileSpreadsheet, Eye, EyeOff, Edit, Trash2, Loader2 } from "lucide-react";
+import { DocumentoNormativo, DocumentoCategoria } from "@/types/documento-normativo";
+import { Plus, Search, FileText, Eye, EyeOff, Edit, Trash2, Loader2, BookOpen, FileSpreadsheet, Tags } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { cn, getStorageUrl } from "@/lib/utils";
+
+// Mapeo simple de iconos según el slug de la categoría
+const getIconForCategory = (slug?: string) => {
+  if (!slug) return <FileText className="h-5 w-5 text-brand-600" />;
+  if (slug.includes('ley') || slug.includes('normativa')) return <BookOpen className="h-5 w-5 text-brand-600" />;
+  if (slug.includes('formato') || slug.includes('plantilla')) return <FileSpreadsheet className="h-5 w-5 text-uncp-gold" />;
+  return <FileText className="h-5 w-5 text-brand-600" />;
+};
 
 export function DocumentosClient() {
   const router = useRouter();
@@ -16,17 +25,24 @@ export function DocumentosClient() {
   const { mutate } = useSWRConfig();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [categoria, setCategoria] = useState<"normativa" | "formato" | "">("");
+  const [categoriaId, setCategoriaId] = useState<string>("");
 
+  // Obtener categorías dinámicas para los filtros
+  const { data: categoriasResponse } = useSWR(
+    '/api/admin/documento-categorias',
+    () => documentosApi.getCategoriasAdmin()
+  );
+  const categorias: DocumentoCategoria[] = categoriasResponse || [];
+
+  // Obtener los documentos
   const { data, isLoading } = useSWR(
-    ['/api/admin/documentos-normativos', page, search, categoria],
-    () => documentosApi.getAll({ 
-      page, 
+    ['/api/admin/documentos-normativos', page, search, categoriaId],
+    () => documentosApi.getAll({
+      page,
       search: search || undefined,
-      categoria_principal: categoria || undefined
+      documento_categoria_id: categoriaId || undefined
     })
   );
-
   const documentos = data?.data || [];
   const meta = data?.meta;
 
@@ -34,7 +50,7 @@ export function DocumentosClient() {
     try {
       await documentosApi.toggleVisibility(id, !isPublic);
       showToast("Visibilidad actualizada correctamente", "success");
-      mutate(['/api/admin/documentos-normativos', page, search, categoria]);
+      mutate(['/api/admin/documentos-normativos', page, search, categoriaId]);
     } catch (error) {
       console.error(error);
       showToast("Error al actualizar visibilidad", "error");
@@ -47,7 +63,7 @@ export function DocumentosClient() {
     try {
       await documentosApi.delete(id);
       showToast("Documento eliminado correctamente", "success");
-      mutate(['/api/admin/documentos-normativos', page, search, categoria]);
+      mutate(['/api/admin/documentos-normativos', page, search, categoriaId]);
     } catch (error) {
       console.error(error);
       showToast("Error al eliminar el documento", "error");
@@ -56,13 +72,23 @@ export function DocumentosClient() {
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Documentos Normativos</h2>
+      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-2 md:space-y-0">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Documentos Normativos</h2>
+          <p className="text-muted-foreground text-sm">Gestiona normativas, formatos oficiales, flujos y guías.</p>
+        </div>
         <div className="flex items-center space-x-2">
+          <Link 
+            href="/admin/portal/documentos-normativos/categorias"
+            className="inline-flex items-center gap-2 bg-white border border-border hover:bg-muted text-brand-950 px-4 py-2 rounded-lg font-medium transition-all text-sm shadow-sm"
+          >
+            <Tags className="w-4 h-4" />
+            Categorías
+          </Link>
           <button 
             type="button"
             onClick={() => router.push("/admin/portal/documentos-normativos/nuevo")}
-            className="flex items-center gap-2 bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700 transition-all text-sm font-medium"
+            className="flex items-center gap-2 bg-brand-600 text-white px-4 py-2 rounded-lg hover:bg-brand-700 transition-all text-sm font-medium shadow-sm"
           >
             <Plus className="h-4 w-4" /> Nuevo Documento
           </button>
@@ -79,28 +105,24 @@ export function DocumentosClient() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2 md:pb-0">
           <button 
             type="button"
-            className={cn("px-4 py-2 rounded-lg text-sm font-medium transition-all border", categoria === "" ? "bg-brand-950 text-white border-brand-950" : "bg-white text-brand-950 hover:bg-brand-50")}
-            onClick={() => { setCategoria(""); setPage(1); }}
+            className={cn("px-4 py-2 rounded-lg text-sm font-medium transition-all border whitespace-nowrap", categoriaId === "" ? "bg-brand-950 text-white border-brand-950" : "bg-white text-brand-950 hover:bg-brand-50")}
+            onClick={() => { setCategoriaId(""); setPage(1); }}
           >
             Todos
           </button>
-          <button 
-            type="button"
-            className={cn("px-4 py-2 rounded-lg text-sm font-medium transition-all border", categoria === "normativa" ? "bg-brand-950 text-white border-brand-950" : "bg-white text-brand-950 hover:bg-brand-50")}
-            onClick={() => { setCategoria("normativa"); setPage(1); }}
-          >
-            Normativas
-          </button>
-          <button 
-            type="button"
-            className={cn("px-4 py-2 rounded-lg text-sm font-medium transition-all border", categoria === "formato" ? "bg-brand-950 text-white border-brand-950" : "bg-white text-brand-950 hover:bg-brand-50")}
-            onClick={() => { setCategoria("formato"); setPage(1); }}
-          >
-            Formatos
-          </button>
+          {categorias.map(cat => (
+            <button 
+              key={cat.id}
+              type="button"
+              className={cn("px-4 py-2 rounded-lg text-sm font-medium transition-all border whitespace-nowrap", categoriaId === cat.id.toString() ? "bg-brand-950 text-white border-brand-950" : "bg-white text-brand-950 hover:bg-brand-50")}
+              onClick={() => { setCategoriaId(cat.id.toString()); setPage(1); }}
+            >
+              {cat.nombre}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -131,16 +153,16 @@ export function DocumentosClient() {
                 {documentos.map((doc: DocumentoNormativo) => (
                   <tr key={doc.id} className="transition-colors hover:bg-muted/30">
                     <td className="p-6 align-middle">
-                      {doc.categoria_principal === 'normativa' 
-                        ? <div className="h-10 w-10 bg-brand-50 rounded-lg flex items-center justify-center border border-brand-100"><FileText className="h-5 w-5 text-brand-600" /></div>
-                        : <div className="h-10 w-10 bg-amber-50 rounded-lg flex items-center justify-center border border-amber-100"><FileSpreadsheet className="h-5 w-5 text-uncp-gold" /></div>}
+                       <div className="h-10 w-10 bg-brand-50 rounded-lg flex items-center justify-center border border-brand-100">
+                          {getIconForCategory(doc.categoria?.slug)}
+                       </div>
                     </td>
                     <td className="px-6 py-4 align-middle font-medium whitespace-nowrap text-brand-950">{doc.codigo || '-'}</td>
                     <td className="px-6 py-4 align-middle min-w-[250px]">
                       <div className="font-bold text-brand-950 mb-1">{doc.titulo}</div>
-                      <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{doc.sub_categoria}</div>
+                      <div className="text-[10px] font-black text-brand-600 uppercase tracking-wider">{doc.categoria?.nombre || 'General'}</div>
                     </td>
-                    <td className="px-6 py-4 align-middle uppercase text-xs font-black tracking-widest text-brand-400">{doc.extension_archivo}</td>
+                    <td className="px-6 py-4 align-middle uppercase text-[10px] font-black tracking-widest text-brand-400">{doc.extension_archivo}</td>
                     <td className="px-6 py-4 align-middle">
                       <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] uppercase tracking-widest font-bold ring-1 ring-inset ${
                         doc.estado === 'vigente' ? 'bg-green-50 text-green-700 ring-green-600/20' : 

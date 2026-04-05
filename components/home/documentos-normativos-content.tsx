@@ -1,88 +1,53 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import useSWR from "swr";
-import { documentosApi } from "@/lib/api/documentos";
-import { getStorageUrl } from "@/lib/utils";
 import PageHero from "@/components/ui/page-hero";
-import { 
-  FileText, 
-  Download, 
-  Shield, 
-  ClipboardList, 
-  BookOpen, 
-  FileCheck,
-  Scale,
-  Gavel,
-  GraduationCap,
-  FileSpreadsheet,
-  FileSignature,
-  ExternalLink,
-  Eye,
-  Search,
-  X,
-  Loader2
-} from "lucide-react";
+import { DocumentoNormativo, DocumentoCategoria } from "@/types/documento-normativo";
+import { getStorageUrl, cn } from "@/lib/utils";
+import Link from "next/link";
+import { FileText, Hash, ExternalLink, Scale, FileSpreadsheet, FileSignature, Shield, GraduationCap, Gavel, BookOpen, ClipboardList, Expand, Eye } from "lucide-react";
+import DocumentosSearch from "./documentos-search";
+import { useState } from "react";
 
-// Mapeo dinámico de iconos y colores basado en subcategorías
-const getIconForCategory = (subCategoria: string | null) => {
-  if (!subCategoria) return FileText;
-  const lower = subCategoria.toLowerCase();
-  if (lower.includes("ley")) return Scale;
-  if (lower.includes("grado") || lower.includes("sunedu")) return GraduationCap;
-  if (lower.includes("estatuto")) return BookOpen;
-  if (lower.includes("ética") || lower.includes("etica")) return Shield;
-  if (lower.includes("posgrado")) return Gavel;
-  if (lower.includes("excel")) return FileSpreadsheet;
-  if (lower.includes("jurada") || lower.includes("solicitud")) return ClipboardList;
-  if (lower.includes("carta") || lower.includes("autorización")) return FileSignature;
+interface DocumentosNormativosContentProps {
+  documentos: DocumentoNormativo[];
+  categorias: DocumentoCategoria[];
+  currentCategoria: string;
+  searchQuery: string;
+}
+
+const getIconForCategoria = (slug: string) => {
+  if (slug.includes('ley') || slug.includes('normativa')) return Scale;
+  if (slug.includes('formato') || slug.includes('plantilla')) return FileSpreadsheet;
+  if (slug.includes('flujo')) return ClipboardList;
+  if (slug.includes('guia') || slug.includes('manual')) return BookOpen;
   return FileText;
 };
 
-const getColorForCategory = (subCategoria: string | null, isFormato = false) => {
-  if (isFormato) return "border-amber-200 hover:border-uncp-gold bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100";
-  
-  if (!subCategoria) return "bg-gray-50 text-gray-600 border-gray-200";
-  const lower = subCategoria.toLowerCase();
-  if (lower.includes("ley")) return "bg-blue-50 text-blue-600 border-blue-200";
-  if (lower.includes("grado") || lower.includes("sunedu")) return "bg-green-50 text-green-600 border-green-200";
-  if (lower.includes("estatuto")) return "bg-amber-50 text-amber-600 border-amber-200";
-  if (lower.includes("investigaci")) return "bg-purple-50 text-purple-600 border-purple-200";
-  if (lower.includes("ética") || lower.includes("etica")) return "bg-red-50 text-red-600 border-red-200";
-  if (lower.includes("posgrado")) return "bg-indigo-50 text-indigo-600 border-indigo-200";
-  
-  return "bg-gray-50 text-gray-600 border-gray-200";
-};
+export default function DocumentosNormativosContent({ 
+  documentos, 
+  categorias, 
+  currentCategoria, 
+  searchQuery 
+}: DocumentosNormativosContentProps) {
+  const [selectedDoc, setSelectedDoc] = useState<DocumentoNormativo | null>(null);
 
-export default function DocumentosNormativosContent() {
-  const [seccionActiva, setSeccionActiva] = useState<"normativa" | "formato">("normativa");
-  const [busqueda, setBusqueda] = useState("");
-
-  const { data: documentos, isLoading } = useSWR(
-    ['/api/portal/documentos-normativos', seccionActiva], 
-    () => documentosApi.getPublicos({ categoria_principal: seccionActiva })
-  );
-
-  const documentosFiltrados = useMemo(() => {
-    if (!documentos) return [];
-    if (!busqueda) return documentos;
+  const handleSelectDoc = (e: React.MouseEvent, doc: DocumentoNormativo) => {
+    // Si la pantalla es menor a 1024px (Mobile/Tablet), dejamos que el Link abra la nueva pestaña naturalmente.
+    if (window.innerWidth < 1024) {
+      return;
+    }
     
-    const termino = busqueda.toLowerCase();
-    return documentos.filter(doc =>
-      doc.titulo.toLowerCase().includes(termino) ||
-      (doc.descripcion && doc.descripcion.toLowerCase().includes(termino)) ||
-      (doc.sub_categoria && doc.sub_categoria.toLowerCase().includes(termino)) ||
-      (doc.codigo && doc.codigo.toLowerCase().includes(termino))
-    );
-  }, [busqueda, documentos]);
+    // En Desktop (lg), prevenimos la pestaña nueva y mostramos la previsualización en el panel
+    e.preventDefault(); 
+    setSelectedDoc(doc);
+  };
 
   return (
-    <main className="flex-1 w-full">
-      
+    <main className="flex-1 w-full bg-neutral-50/30">
       <PageHero
         title="DOCUMENTOS NORMATIVOS"
         subtitle="UNIDAD DE POSGRADO"
-        description="Accede a toda la normativa nacional, formatos oficiales, plantillas y documentos requeridos para tus trámites académicos. Todo en un solo lugar."
+        description="Accede de forma instantánea a toda la normativa nacional, formatos oficiales, diagramas de flujos y manuales requeridos para tus trámites académicos."
         imageSrc="/images/fondouncp1920x1080.webp"
         size="compact"
         align="center"
@@ -92,274 +57,263 @@ export default function DocumentosNormativosContent() {
         ]}
       />
 
-      {/* QUICK STATS - Standard Pattern */}
-      <section className="bg-white py-12 border-b border-border">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { numero: "06+", label: "Normas Nacionales" },
-              { numero: "08+", label: "Formatos Oficiales" },
-              { numero: "100%", label: "Versión Actual" },
-              { numero: "24/7", label: "Acceso Libre" }
-            ].map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group">
-                <div className="text-3xl md:text-4xl font-serif font-black text-brand-950 group-hover:text-brand-600 transition-colors">{stat.numero}</div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-brand-400 mt-2">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* NAVEGACIÓN DE PESTAÑAS */}
-      <section className="bg-white border-b-2 border-gray-200 shadow-sm">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          <div className="flex flex-wrap gap-4 py-6">
-            <button
-              onClick={() => setSeccionActiva("normativa")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all transform ${
-                seccionActiva === "normativa"
-                  ? "bg-brand-950 text-white shadow-2xl scale-105"
-                  : "bg-white text-muted-foreground hover:bg-brand-50 border border-border hover:border-brand-200"
-              }`}
-            >
-              <Scale className="h-4 w-4" />
-              Normativa Nacional
-            </button>
-            <button
-              onClick={() => setSeccionActiva("formato")}
-              className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all transform ${
-                seccionActiva === "formato"
-                  ? "bg-brand-950 text-white shadow-2xl scale-105"
-                  : "bg-white text-muted-foreground hover:bg-brand-50 border border-border hover:border-brand-200"
-              }`}
-            >
-              <FileSpreadsheet className="h-4 w-4" />
-              Formatos y Plantillas
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* BUSCADOR INTELIGENTE */}
-      <section className="bg-gradient-to-b from-white to-gray-50 border-b border-gray-200">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl py-6">
-          <div className="relative">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Buscar documentos, leyes, normas, formatos..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                className="w-full pl-12 pr-12 py-3 bg-white border-2 border-gray-200 rounded-2xl text-sm font-medium text-gray-900 placeholder-gray-500 focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100 transition-all"
-              />
-              {busqueda && (
-                <button
-                  onClick={() => setBusqueda("")}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                </button>
-              )}
-            </div>
-            {busqueda && !isLoading && (
-              <div className="absolute top-full left-0 right-0 mt-2 text-xs text-gray-500 font-medium">
-                {`${documentosFiltrados.length} documento${documentosFiltrados.length !== 1 ? 's' : ''} encontrado${documentosFiltrados.length !== 1 ? 's' : ''}`}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* RENDERIZADO DE RESULTADOS */}
-      <section className={`py-20 ${seccionActiva === 'normativa' ? 'bg-gray-50' : 'bg-white'}`}>
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
-          {/* Header de Sección */}
-          <div className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <div className={`h-1 w-12 rounded-full ${seccionActiva === 'normativa' ? 'bg-brand-600' : 'bg-uncp-gold'}`}></div>
-              <span className={`text-xs font-black uppercase tracking-widest ${seccionActiva === 'normativa' ? 'text-brand-600' : 'text-uncp-gold'}`}>
-                Sección 0{seccionActiva === 'normativa' ? '1' : '2'}
-              </span>
-            </div>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold text-brand-950 mb-4">
-              {seccionActiva === 'normativa' ? 'Normativa Nacional e Institucional' : 'Formatos y Plantillas Oficiales'}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl">
-              {seccionActiva === 'normativa' 
-                ? 'Documentos oficiales que regulan la educación universitaria a nivel nacional y las normas específicas de la UNCP.'
-                : 'Descarga plantillas y formatos oficiales para esquemas de tesis, solicitudes y todos los documentos necesarios para tus trámites.'}
-            </p>
-          </div>
-
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="h-10 w-10 text-brand-600 animate-spin mb-4" />
-              <p className="text-muted-foreground font-medium">Cargando documentos...</p>
-            </div>
-          ) : documentosFiltrados.length > 0 ? (
-            <div className={`grid ${seccionActiva === 'normativa' ? 'md:grid-cols-2 lg:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'} gap-6`}>
-              {documentosFiltrados.map((doc) => {
-                const IconComponent = getIconForCategory(doc.sub_categoria);
-                const fileUrl = getStorageUrl(doc.archivo_path);
-                
-                if (seccionActiva === 'normativa') {
-                  // VISTA NORMATIVA
-                  return (
-                    <a
-                      key={doc.id}
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group bg-white rounded-[2rem] overflow-hidden border border-gray-200 hover:border-brand-300 hover:shadow-2xl transition-all duration-300 cursor-pointer block"
-                    >
-                      <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className={`w-20 h-20 rounded-2xl ${getColorForCategory(doc.sub_categoria)} border-2 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                            <IconComponent className="h-10 w-10" />
-                          </div>
-                        </div>
-                        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs font-black text-brand-600 flex items-center gap-1 shadow-lg">
-                          <Eye className="h-3 w-3" />
-                          {doc.extension_archivo.toUpperCase()}
-                        </div>
-                      </div>
-                      <div className="p-8">
-                        <span className="text-xs font-bold text-brand-600 uppercase tracking-wide mb-2 block">
-                          {doc.sub_categoria || 'Normativa'}
-                        </span>
-                        <h3 className="font-bold text-xl text-brand-950 mb-3 group-hover:text-brand-600 transition-colors">
-                          {doc.titulo}
-                        </h3>
-                        {doc.descripcion && (
-                          <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-                            {doc.descripcion}
-                          </p>
+      <section className="py-12 md:py-20 relative">
+        <div className="container mx-auto px-6 lg:px-12 max-w-[1500px]">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Columna Izquierda: Filtros y Búsqueda (3 Columnas o 25%) */}
+            <aside className="lg:col-span-3 space-y-6 lg:sticky lg:top-32 hidden md:block">
+              {/* Navegación por Categorías */}
+              <div className="bg-white rounded-[2rem] border border-border shadow-sm overflow-hidden p-3">
+                <h3 className="px-5 py-4 font-black text-brand-950 uppercase tracking-widest text-[10px] opacity-60">Clasificación</h3>
+                <nav className="flex flex-col gap-1">
+                  <Link 
+                    href="/documentos-normativos" 
+                    scroll={false}
+                    className={cn(
+                      "px-5 py-3.5 rounded-2xl text-sm font-bold transition-all flex items-center gap-3",
+                      !currentCategoria 
+                        ? "bg-brand-950 text-white shadow-md scale-[1.02]" 
+                        : "text-muted-foreground hover:bg-neutral-50 hover:text-brand-950"
+                    )}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Todos los Documentos
+                  </Link>
+                  {categorias.map(cat => {
+                    const Icon = getIconForCategoria(cat.slug);
+                    const isActive = currentCategoria === cat.slug;
+                    return (
+                      <Link 
+                        key={cat.id} 
+                        href={`/documentos-normativos?categoria=${cat.slug}`} 
+                        scroll={false}
+                        className={cn(
+                          "px-5 py-3.5 rounded-2xl text-sm font-bold transition-all flex items-center gap-3",
+                          isActive 
+                            ? "bg-brand-950 text-white shadow-md scale-[1.02]" 
+                            : "text-muted-foreground hover:bg-neutral-50 hover:text-brand-950"
                         )}
-                        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                          <span className="text-xs font-bold text-gray-400">
-                            {doc.fecha_año ? `Año ${doc.fecha_año}` : 'Vigente'}
-                          </span>
-                          <span className="flex items-center gap-2 text-sm font-bold text-brand-600 group-hover:text-brand-800 transition-colors">
-                            <Download className="h-4 w-4" />
-                            Descargar
-                          </span>
-                        </div>
-                      </div>
-                    </a>
-                  );
-                } else {
-                  // VISTA FORMATOS
-                  return (
-                    <a
-                      key={doc.id}
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group bg-white rounded-[2rem] overflow-hidden border-2 border-amber-200 hover:border-uncp-gold hover:shadow-2xl transition-all duration-300 relative block cursor-pointer"
-                    >
-                      <div className="relative h-40 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-xl bg-white border-2 border-uncp-gold/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                            <IconComponent className="h-8 w-8 text-uncp-gold" />
-                          </div>
-                        </div>
-                        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1 text-xs font-black text-uncp-gold border border-uncp-gold/30 shadow-md">
-                          {doc.extension_archivo.toUpperCase()}
-                        </div>
-                      </div>
-                      <div className="p-6 flex flex-col h-[calc(100%-10rem)]">
-                        <span className="text-xs font-bold text-amber-600 uppercase tracking-wide mb-2 block">
-                          {doc.sub_categoria || 'Plantilla'}
-                        </span>
-                        <h3 className="font-bold text-base text-brand-950 mb-2 group-hover:text-uncp-gold transition-colors leading-tight">
-                          {doc.titulo}
-                        </h3>
-                        {doc.descripcion && (
-                          <p className="text-xs text-muted-foreground leading-relaxed mb-4 flex-1">
-                            {doc.descripcion}
-                          </p>
-                        )}
-                        <span className="w-full mt-auto flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-uncp-gold to-amber-500 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:scale-105 transition-all">
-                          <Download className="h-4 w-4" />
-                          Descargar
-                        </span>
-                      </div>
-                    </a>
-                  );
-                }
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              {seccionActiva === 'normativa' ? (
-                <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              ) : (
-                <FileSpreadsheet className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              )}
-              <p className="text-gray-500 font-medium">
-                No se encontraron documentos que coincidan con &quot;
-                <span className="font-bold text-gray-700">{busqueda}</span>
-                &quot;
-              </p>
-            </div>
-          )}
+                      >
+                        <Icon className={cn("h-4 w-4 transition-colors", isActive ? "text-uncp-gold" : "")} />
+                        {cat.nombre}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
 
-          {/* Bloque Informativo al final de la página */}
-          <div className="mt-16 bg-brand-950 rounded-[2.5rem] p-10 md:p-12 text-white relative overflow-hidden">
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
-              }}></div>
-            </div>
+              {/* Buscador */}
+              <div className="bg-white p-6 rounded-[2rem] border border-border shadow-sm">
+                <h3 className="font-black text-brand-950 uppercase tracking-widest text-[10px] opacity-60 mb-4">Filtrar Resultados</h3>
+                <DocumentosSearch initialQuery={searchQuery} />
+              </div>
 
-            <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <Shield className="h-6 w-6 text-uncp-gold" />
-                  <span className="text-xs font-black uppercase tracking-widest text-uncp-gold">
-                    Importante
-                  </span>
+              {/* Banner Promocional / Ayuda */}
+              <div className="bg-brand-950 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden group border border-brand-800">
+                <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-110 transition-transform duration-1000">
+                  <Shield className="h-48 w-48" />
                 </div>
-                <h3 className="font-serif text-3xl font-bold mb-4 text-white">
-                  ¿Necesitas ayuda con tu trámite?
-                </h3>
-                <p className="text-blue-100 leading-relaxed mb-6">
-                  Nuestro equipo de la Unidad de Posgrado está disponible para orientarte en el uso de estos documentos y resolver cualquier duda sobre los procedimientos.
-                </p>
-                <a 
-                  href="https://erpcampus.uncp.edu.pe/" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-uncp-gold text-brand-950 rounded-xl font-bold hover:bg-amber-400 transition-all"
-                >
-                  Contactar Mesa de Partes
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+                
+                <div className="space-y-6 relative z-10">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 border border-white/20 text-uncp-gold">
+                        <FileSignature className="h-5 w-5" strokeWidth={2.5} />
+                      </div>
+                      <h3 className="font-serif text-xl font-bold text-uncp-gold">Mesa de Partes Virtual</h3>
+                    </div>
+                    <p className="text-white text-sm leading-relaxed font-medium">
+                      Si necesitas orientación para presentar formatos, nuestro equipo está listo para ayudarte.
+                    </p>
+                  </div>
+                  
+                  <a 
+                    href="https://erpcampus.uncp.edu.pe/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 bg-uncp-gold text-brand-950 font-bold tracking-wide py-3.5 px-4 rounded-xl hover:bg-amber-400 hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm"
+                  >
+                    Ir a Mesa de Partes <ExternalLink className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </aside>
+
+            {/* Mobile Nav */}
+            <div className="md:hidden flex gap-2 overflow-x-auto pb-4 hide-scrollbar">
+               <Link 
+                  href="/documentos-normativos" 
+                  scroll={false}
+                  className={cn("px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest whitespace-nowrap", !currentCategoria ? "bg-brand-950 text-white" : "bg-white border border-border text-muted-foreground")}
+               >
+                 Todos
+               </Link>
+               {categorias.map(cat => (
+                 <Link 
+                    key={cat.id} 
+                    href={`/documentos-normativos?categoria=${cat.slug}`} 
+                    scroll={false}
+                    className={cn("px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest whitespace-nowrap", currentCategoria === cat.slug ? "bg-brand-950 text-white" : "bg-white border border-border text-muted-foreground")}
+                 >
+                   {cat.nombre}
+                 </Link>
+               ))}
+            </div>
+
+            {/* Columna Central: Feed de Documentos (5 Columnas o ~40%) */}
+            <section className="lg:col-span-5 space-y-4">
+              <div className="flex items-center justify-between mb-2 px-2">
+                 <h2 className="font-serif text-2xl font-bold text-brand-950">
+                    {currentCategoria ? categorias.find(c => c.slug === currentCategoria)?.nombre : 'Explorar Documentos'}
+                 </h2>
+                 <span className="text-xs font-bold text-muted-foreground bg-neutral-100 px-3 py-1 rounded-full">
+                    {documentos.length} result.
+                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { icon: FileText, label: "Documentos Verificados" },
-                  { icon: Shield, label: "Información Oficial" },
-                  { icon: Download, label: "Descarga Inmediata" },
-                  { icon: FileCheck, label: "Formatos Actualizados" }
-                ].map((item, idx) => {
-                  const IconItem = item.icon;
-                  return (
-                    <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                      <IconItem className="h-8 w-8 text-uncp-gold mb-3" />
-                      <div className="text-sm font-bold">{item.label}</div>
+              {documentos.length === 0 ? (
+                  <div className="bg-white p-16 rounded-[2rem] text-center border border-border border-dashed shadow-sm">
+                    <FileText className="mx-auto h-16 w-16 text-muted-foreground mb-6 opacity-20"/>
+                    <h3 className="font-bold text-xl text-brand-950 mb-2">No hay documentos</h3>
+                    <p className="text-muted-foreground font-medium">
+                      Intenta buscar con otros términos.
+                    </p>
+                  </div>
+              ) : (
+                  <div className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto pr-2 custom-scrollbar pb-10">
+                    {documentos.map(doc => {
+                        const Icon = getIconForCategoria(doc.categoria?.slug || '');
+                        const isDerogado = doc.estado === 'derogado';
+                        const isSelected = selectedDoc?.id === doc.id;
+                        
+                        return (
+                          <a 
+                            key={doc.id} 
+                            href={getStorageUrl(doc.archivo_path)} 
+                            onClick={(e) => handleSelectDoc(e, doc)}
+                            className={cn(
+                              "group block bg-white rounded-[2rem] p-6 border transition-all duration-300",
+                              isSelected ? "border-brand-500 shadow-md ring-4 ring-brand-500/10" : "border-border hover:border-brand-200 hover:shadow-md",
+                              isDerogado && !isSelected && "border-red-100 opacity-75 grayscale hover:grayscale-0 hover:opacity-100"
+                            )}
+                          >
+                            <div className="flex flex-col sm:flex-row gap-6 items-start">
+                                <div className={cn(
+                                  "shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center border transition-transform",
+                                  isSelected ? "bg-brand-600 text-white border-brand-600 scale-105" :
+                                  isDerogado ? "bg-red-50 text-red-600 border-red-100 group-hover:scale-105" : "bg-brand-50 text-brand-600 border-brand-100 group-hover:scale-105"
+                                )}>
+                                    <Icon className="h-7 w-7" />
+                                </div>
+                                
+                                <div className="flex-1 min-w-0 w-full">
+                                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">
+                                          {doc.categoria?.nombre || 'General'}
+                                        </span>
+                                        {doc.extension_archivo && (
+                                           <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground border px-2.5 py-1 rounded-full">
+                                             {doc.extension_archivo}
+                                           </span>
+                                        )}
+                                        {isDerogado && (
+                                           <span className="text-[10px] font-black uppercase tracking-widest text-red-600 bg-red-50 border border-red-100 px-2.5 py-1 rounded-full ml-auto">
+                                             Derogado
+                                           </span>
+                                        )}
+                                    </div>
+                                    
+                                    <h4 className={cn(
+                                      "font-bold text-lg mb-2 transition-colors leading-snug pr-4",
+                                      isSelected ? "text-brand-600" : "text-brand-950 group-hover:text-brand-600"
+                                    )}>
+                                      {doc.titulo}
+                                    </h4>
+                                    
+                                    {doc.codigo && (
+                                      <p className="text-xs font-bold text-brand-400 mb-3 flex items-center gap-1.5">
+                                        <Hash className="h-3.5 w-3.5" /> {doc.codigo}
+                                        {doc.fecha_año && <span className="opacity-50 mx-1">•</span>}
+                                        {doc.fecha_año && <span className="text-muted-foreground">{doc.fecha_año}</span>}
+                                      </p>
+                                    )}
+                                </div>
+                            </div>
+                          </a>
+                        );
+                    })}
+                  </div>
+              )}
+            </section>
+
+            {/* Columna Derecha: Previsualización (4 Columnas o ~35%) */}
+            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-32 h-[calc(100vh-140px)] flex flex-col">
+              <div className="bg-white rounded-[2rem] border border-border shadow-sm overflow-hidden flex-1 flex flex-col">
+                {selectedDoc ? (
+                  <>
+                    <div className="p-4 border-b border-border bg-neutral-50/50 flex items-center justify-between">
+                      <h3 className="font-bold text-brand-950 text-sm truncate pr-4">{selectedDoc.titulo}</h3>
+                      <a 
+                        href={getStorageUrl(selectedDoc.archivo_path)} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-brand-600 text-white rounded-lg text-xs font-bold hover:bg-brand-700 transition-colors"
+                      >
+                        <Expand className="h-3 w-3" /> Completo
+                      </a>
                     </div>
-                  );
-                })}
+                    <div className="flex-1 bg-neutral-100 relative">
+                      {selectedDoc.extension_archivo.toLowerCase() === 'pdf' ? (
+                        <iframe 
+                          src={getStorageUrl(selectedDoc.archivo_path)} 
+                          className="absolute inset-0 w-full h-full border-none"
+                          title="Previsualización PDF"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-white">
+                          <FileSpreadsheet className="h-16 w-16 text-uncp-gold mb-4 opacity-50" />
+                          <p className="font-bold text-brand-950 mb-2">Previsualización no disponible para archivos {selectedDoc.extension_archivo}</p>
+                          <p className="text-sm text-muted-foreground mb-6">Por favor descarga el archivo para verlo.</p>
+                          <a 
+                            href={getStorageUrl(selectedDoc.archivo_path)} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="bg-uncp-gold text-brand-950 font-bold px-6 py-2.5 rounded-xl hover:bg-amber-400 transition-colors shadow-md"
+                          >
+                            Descargar Archivo
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full p-8 text-center text-muted-foreground opacity-50">
+                    <Eye className="h-16 w-16 mb-4" />
+                    <p className="font-bold text-lg text-brand-950 mb-2">Panel de Previsualización</p>
+                    <p className="text-sm">Haz clic en cualquier documento de la lista para leerlo aquí sin salir de la página.</p>
+                  </div>
+                )}
               </div>
-            </div>
+            </aside>
+
           </div>
         </div>
       </section>
 
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: #cbd5e1;
+          border-radius: 20px;
+        }
+      `}</style>
     </main>
   );
 }
