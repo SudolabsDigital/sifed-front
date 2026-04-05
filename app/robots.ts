@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/plataforma/', '/api/'],
     },
-    sitemap: 'https://upeducacion-uncp.edu.pe/sitemap.xml',
+    sitemap: 'https://info.upeducacion-uncp.edu.pe/sitemap.xml',
   }
 }

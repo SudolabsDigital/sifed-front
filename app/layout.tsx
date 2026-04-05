@@ -15,7 +15,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://upeducacion-uncp.edu.pe"),
+  metadataBase: new URL("https://info.upeducacion-uncp.edu.pe"),
   title: {
     default: "UP Educación | Posgrado Facultad de Educación UNCP",
     template: "%s | UP Educación",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_PE",
-    url: "https://upeducacion-uncp.edu.pe",
+    url: "https://info.upeducacion-uncp.edu.pe",
     siteName: "UP Educación UNCP",
     title: "UP Educación | Posgrado Facultad de Educación UNCP",
     description: "Formamos líderes en educación con estándares de calidad internacional. Explora nuestras maestrías y doctorados.",
@@ -62,6 +62,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: "yzA2ZWzRlB8eDT5_m6Chc_JolLS80SgMNNlGWlsXXnA",
   },
 };
 

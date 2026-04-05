@@ -3,7 +3,7 @@ import { NoticiaService } from '@/lib/services/noticia-service'
 import { programasApi } from '@/lib/api/programas'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://upeducacion-uncp.edu.pe'
+  const baseUrl = 'https://info.upeducacion-uncp.edu.pe'
 
   // 1. Rutas Estáticas
   const staticRoutes = [
