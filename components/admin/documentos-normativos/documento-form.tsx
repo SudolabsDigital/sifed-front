@@ -5,10 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { documentosApi } from "@/lib/api/documentos";
 import { DocumentoNormativo } from "@/types/documento-normativo";
-import { Save, Upload, FileText, Loader2, Hash, AlertCircle } from "lucide-react";
+import { Save, Upload, FileText, Loader2, Hash, AlertCircle, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn, getStorageUrl } from "@/lib/utils";
 import useSWR from "swr";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { AUTH_COOKIE_NAME } from "@/lib/auth-config";
 
 interface DocumentoFormProps {
   initialData?: DocumentoNormativo;
@@ -29,6 +32,27 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
     () => documentosApi.getAll({ per_page: 1000 })
   );
   const allDocs = allDocsResponse?.data || [];
+
+  const { data: categorias, mutate: mutateCategorias } = useSWR(
+    '/api/admin/documento-categorias',
+    () => documentosApi.getCategoriasAdmin()
+  );
+
+  const handleQuickAddCategory = async () => {
+    const nombre = window.prompt("Nombre de la nueva categoría:");
+    if (!nombre) return;
+    try {
+      const token = Cookies.get(AUTH_COOKIE_NAME);
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/documento-categorias`, { nombre, is_active: true }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      mutateCategorias();
+      showToast("Categoría agregada correctamente", "success");
+    } catch(e) {
+      console.error(e);
+      showToast("Error al crear categoría", "error");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -80,7 +104,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validar tamaño (50MB)
       if (file.size > 50 * 1024 * 1024) {
         alert("El archivo no debe superar los 50MB");
         e.target.value = "";
@@ -127,7 +150,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
         </div>
       )}
       
-      {/* Título */}
       <div className="space-y-2">
         <label className="text-sm font-semibold text-brand-950">Título del Documento</label>
         <input 
@@ -149,7 +171,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Código */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-brand-950 flex items-center gap-2">
             <Hash className="h-3.5 w-3.5 text-brand-600" /> Código
@@ -168,42 +189,50 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
           )}
         </div>
 
-        {/* Categoría Principal */}
+        {/* Categoría Dinámica */}
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-brand-950">Categoría Principal</label>
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-semibold text-brand-950">Categoría</label>
+            <button 
+              type="button" 
+              onClick={handleQuickAddCategory}
+              className="text-xs flex items-center gap-1 text-brand-600 hover:text-brand-800"
+            >
+              <Plus className="h-3 w-3" /> Nueva
+            </button>
+          </div>
           <select 
-            name="categoria_principal"
+            name="documento_categoria_id"
             required
-            defaultValue={initialData?.categoria_principal || ""}
+            defaultValue={initialData?.documento_categoria_id || ""}
             className={cn(
               "w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-brand-500 outline-none bg-white",
-              formErrors.categoria_principal ? "border-red-500 bg-red-50/30" : "border-input"
+              formErrors.documento_categoria_id ? "border-red-500 bg-red-50/30" : "border-input"
             )}
           >
-            <option value="" disabled>Seleccionar...</option>
-            <option value="normativa">Normativa Nacional/Institucional</option>
-            <option value="formato">Formato o Plantilla</option>
+            <option value="" disabled>Seleccionar categoría...</option>
+            {categorias?.map((cat: { id: number; nombre: string }) => (
+              <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+            ))}
           </select>
-          {formErrors.categoria_principal && (
+          {formErrors.documento_categoria_id && (
             <p className="text-xs text-red-500 flex items-center gap-1 font-medium">
-              <AlertCircle className="h-3 w-3" /> {formErrors.categoria_principal[0]}
+              <AlertCircle className="h-3 w-3" /> {formErrors.documento_categoria_id[0]}
             </p>
           )}
         </div>
 
-        {/* Sub Categoría */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-brand-950">Sub Categoría</label>
           <input 
             name="sub_categoria"
             type="text" 
             defaultValue={initialData?.sub_categoria || ""}
-            placeholder="Ej: Ley Nacional, Formulario..."
+            placeholder="Ej: Formulario, Infografía..."
             className="w-full px-4 py-2 rounded-lg border border-input focus:ring-2 focus:ring-brand-500 outline-none"
           />
         </div>
 
-        {/* Fecha Emisión */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-brand-950">Fecha de Emisión</label>
           <input 
@@ -216,7 +245,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Estado */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-brand-950">Estado</label>
           <select 
@@ -230,7 +258,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
           </select>
         </div>
 
-        {/* Sustituye a */}
         <div className="space-y-2">
           <label className="text-sm font-semibold text-brand-950">Deroga o Sustituye a</label>
           <select 
@@ -247,7 +274,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
         </div>
       </div>
 
-      {/* Descripción */}
       <div className="space-y-2">
         <label className="text-sm font-semibold text-brand-950">Descripción Corta</label>
         <textarea 
@@ -259,7 +285,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
         />
       </div>
 
-      {/* Archivo */}
       <div className="space-y-2">
         <label className="text-sm font-semibold text-brand-950">Archivo del Documento (PDF, DOCX, XLSX)</label>
         <div className={cn(
@@ -274,9 +299,7 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
               <p className="text-sm font-medium text-brand-950">
                   {fileName ? fileName : (isEditing ? "Clic para reemplazar archivo" : "Clic para subir archivo")}
               </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                  Máx 50MB
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Máx 50MB</p>
           </div>
           
           <input 
@@ -295,7 +318,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
         )}
       </div>
 
-      {/* Checks */}
       <div className="flex items-center gap-3 bg-brand-50/50 p-4 rounded-lg border border-brand-100">
           <input 
               type="checkbox" 
@@ -309,7 +331,6 @@ export function DocumentoForm({ initialData }: DocumentoFormProps) {
           </label>
       </div>
 
-      {/* Actions */}
       <div className="flex items-center justify-end gap-4 pt-4 border-t border-border">
           <Link href="/admin/portal/documentos-normativos" className="px-6 py-2 text-sm font-medium text-muted-foreground hover:text-brand-950 transition-colors">
               Cancelar
